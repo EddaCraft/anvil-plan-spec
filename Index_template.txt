@@ -1,0 +1,41 @@
+[Plan Title]
+Problem & Success Criteria
+Problem: [What problem are we solving? Why does this work matter?]
+Success Criteria:
+•  [Measurable outcome 1]
+•  [Measurable outcome 2]
+•  [How we know we're done]
+System Map
+[High-level view of modules and their relationships]
+• [module-a] → depends on → [module-b]
+• [module-c] — standalone
+Milestones
+M1: [Milestone Name]
+• [What's included]
+• Target: [date or modules/features]
+M2: [Milestone Name]
+• [What's included]
+• Target: [date or modules/features]
+Modules
+[module-id]
+• Path: ./modules/[module-name].aps.md
+• Scope: [SCOPE]
+• Owner: @[username]
+• Status: Draft
+• Priority: [low|medium|high]
+• Tags: [tag1, tag2]
+• Dependencies: [other-module-id]
+[another-module-id]
+• Path: ./modules/[another-module].aps.md
+• Scope: [SCOPE2]
+• Owner: @[username]
+• Status: Draft
+• Priority: [low|medium|high]
+• Tags: [tag1, tag2]
+• Dependencies: (none)
+Decisions
+• D-001: [Short decision] — [rationale] (ADR-001)
+• D-002: [Another decision] — [rationale]
+Open Questions
+• [Unresolved question 1]
+• [Unresolved question 2]
