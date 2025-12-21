@@ -23,6 +23,7 @@ Produce a filled-in version of the Index sections:
 - Constraints (technical + product)
 - Named patterns (explicit names)
 - Modules list (each with: purpose, scope, owner TBC, dependencies)
+- Risks & mitigations
 - Open Questions
 - Decisions (including what must be decided before tasks are created)
 

@@ -12,8 +12,11 @@ MODE: Executable authority (single task)
 - Title
 - Intent
 - Expected outcome
+- Scope (what will change)
+- Non-scope (what will not change)
 - Steps (high-level, not code)
 - Files likely touched (best effort)
+- Dependencies (on other tasks, decisions, artefacts)
 - Validation (commands/tests)
 - Risks & mitigations
 - "If blocked" fallback (what to do next)

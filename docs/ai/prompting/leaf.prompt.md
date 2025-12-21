@@ -18,6 +18,7 @@ This document is **bounded and near-executable**, but should remain conservative
 Fill:
 - Module Overview
 - In Scope / Out of Scope
+- Interfaces/Contracts (inputs/outputs, dependencies, what this module exposes)
 - Named patterns that apply
 - Boundary rules (e.g. "Payments must not depend on Identity")
 - Acceptance criteria
@@ -34,4 +35,4 @@ Each task must include:
 - Files likely touched (best effort)
 - "Do not touch" boundaries
 - Validation (tests, checks)
-- Risk points
+- Risks & mitigations
