@@ -38,4 +38,4 @@ Optional fields:
 - Do not skip checkpoints
 
 ## Output
-Write steps in markdown matching the steps template.
+Write steps in markdown matching `templates/steps.template.md`.
