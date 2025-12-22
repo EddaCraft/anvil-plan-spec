@@ -3,6 +3,8 @@
 ROLE: Architect/Planner
 MODE: Bounded design, optionally task-drafting if Ready
 
+> For small, self-contained features, suggest `simple.template.md` instead.
+
 ## Guardrails
 
 - Default to conservative scope.

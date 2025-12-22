@@ -8,7 +8,7 @@ AI-assisted development.
 APS provides a structured way to:
 
 - **Plan work** before implementation begins
-- **Authorize tasks** that AI agents can execute
+- **Authorise tasks** that AI agents can execute
 - **Track execution** through observable checkpoints
 
 It acts as a trust layer between humans and AI — humans remain accountable
@@ -71,7 +71,7 @@ See [AGENTS.md](AGENTS.md) for collaboration rules when using AI in this repo.
 ## Principles
 
 1. **Specs describe intent** — what and why, not how
-2. **Tasks authorize execution** — no task, no implementation
+2. **Tasks authorise execution** — no task, no implementation
 3. **Humans remain accountable** — AI proposes, humans approve
 4. **Checkpoints are observable** — every step has a verifiable state
 

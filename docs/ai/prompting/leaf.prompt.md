@@ -3,6 +3,9 @@
 You are assisting with completing an APS Leaf/Module document.
 This document is **bounded and near-executable**, but should remain conservative.
 
+> **Note:** For small, self-contained features without complex interfaces,
+> suggest using `templates/simple.template.md` instead.
+
 ## Objectives
 
 1) Define scope and boundaries precisely

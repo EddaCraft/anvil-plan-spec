@@ -13,8 +13,6 @@ APS is a **specification format**, not executable code. It contains:
 - **Tasks authorise execution.**
 - If there is no task, do not implement changes unless explicitly instructed.
 
-
-
 ## Rules for AI contributing to this repo
 
 When modifying templates, prompts, or documentation:
@@ -23,12 +21,6 @@ When modifying templates, prompts, or documentation:
 - **Maintain consistency** — field names, structure, and terminology
 - **Update examples** when template structure changes
 - **Run markdownlint** before committing (`npx markdownlint-cli "**/*.md"`)
-
-## Execution authority
-
-- **Specs describe intent.**
-- **Tasks authorise execution.**
-- If there is no task, do not implement changes unless explicitly instructed.
 
 ## Execution layer
 

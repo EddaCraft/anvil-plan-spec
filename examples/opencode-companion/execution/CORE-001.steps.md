@@ -11,7 +11,7 @@
 
 ## Prerequisites
 
-- [ ] Tauri project initialized
+- [ ] Tauri project initialised
 - [ ] Zod package installed
 - [ ] Sample OpenCode config available for testing
 

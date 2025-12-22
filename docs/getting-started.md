@@ -41,12 +41,34 @@ Fill in:
 
 For each module in your Index, create a file in `plans/modules/`.
 
+**Choose your template:**
+
+- Use `templates/leaf.template.md` for modules with interfaces and boundaries
+- Use `templates/simple.template.md` for small, self-contained features
+
+### Leaf Template (full)
+
 Copy `templates/leaf.template.md` and fill in:
 
 1. **Purpose** — Why does this module exist?
 2. **In Scope / Out of Scope** — Clear boundaries
 3. **Interfaces** — What it depends on and exposes
-4. **Tasks** — Only when status is Ready
+4. **Boundary Rules** — Architectural constraints
+5. **Tasks** — Only when status is Ready
+
+### Simple Template (lightweight)
+
+Copy `templates/simple.template.md` for features that:
+
+- Don't have complex interfaces
+- Don't need boundary rules
+- Are self-contained (1-3 tasks)
+
+Fill in:
+
+1. **Purpose** — What problem it solves
+2. **Success Criteria** — How you know it's done
+3. **Tasks** — The work to do
 
 > **Tip:** Keep modules small. If you have >8 tasks, consider splitting.
 
