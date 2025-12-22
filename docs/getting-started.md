@@ -123,4 +123,3 @@ OpenCode/Claude users can use the variants in `docs/ai/prompting/opencode/`.
 
 - Review the [examples](../examples/) for complete worked examples
 - Read [AGENTS.md](../AGENTS.md) for AI collaboration rules
-- Check [docs/ai/policies/](ai/policies/) for anti-patterns to avoid

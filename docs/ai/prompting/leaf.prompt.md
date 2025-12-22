@@ -12,7 +12,6 @@ This document is **bounded and near-executable**, but should remain conservative
 
 ## Rules
 
-- Do not introduce AI anti-patterns (see docs/ai/policies/ai-anti-patterns.md)
 - Prefer small, reviewable changes
 - If a module is too large, recommend splitting
 

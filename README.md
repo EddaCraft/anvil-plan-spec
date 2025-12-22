@@ -1,6 +1,7 @@
 # Anvil Plan Spec (APS)
 
-A lightweight specification format for planning and task authorization in AI-assisted development.
+A lightweight specification format for planning and task authorisation in
+AI-assisted development.
 
 ## What is APS?
 
@@ -10,7 +11,8 @@ APS provides a structured way to:
 - **Authorize tasks** that AI agents can execute
 - **Track execution** through observable checkpoints
 
-It acts as a trust layer between humans and AI — humans remain accountable for decisions while AI assists with planning and implementation.
+It acts as a trust layer between humans and AI — humans remain accountable
+for decisions while AI assists with planning and implementation.
 
 ## Hierarchy
 
@@ -19,7 +21,7 @@ graph TD
     A[Index] -->|contains| B[Leaf/Module]
     B -->|contains| C[Task]
     C -->|executed via| D[Steps]
-    
+
     A -.-|"non-executable<br/>describes intent"| A
     B -.-|"executable if Ready<br/>bounded scope"| B
     C -.-|"execution authority<br/>single outcome"| C
@@ -55,7 +57,7 @@ See [Getting Started](docs/getting-started.md) for a complete walkthrough.
 ## Examples
 
 - [User Authentication](examples/user-auth/) — Adding auth to an existing app
-- [OpenCode Companion App](examples/opencode-companion/) — Building a new companion tool
+- [OpenCode Companion App](examples/opencode-companion/) — Building a companion tool
 
 ## AI Guidance
 
@@ -63,7 +65,8 @@ APS includes prompts for AI assistants:
 
 - [docs/ai/prompting/](docs/ai/prompting/) — Tool-agnostic prompts
 - [docs/ai/prompting/opencode/](docs/ai/prompting/opencode/) — OpenCode/Claude variants
-- [docs/ai/policies/](docs/ai/policies/) — Anti-patterns and boundary rules
+
+See [AGENTS.md](AGENTS.md) for collaboration rules when using AI in this repo.
 
 ## Principles
 
@@ -72,9 +75,25 @@ APS includes prompts for AI assistants:
 3. **Humans remain accountable** — AI proposes, humans approve
 4. **Checkpoints are observable** — every step has a verifiable state
 
+## Project Structure
+
+```text
+your-project/
+├── plans/
+│   ├── index.aps.md              # Main plan
+│   ├── modules/                  # Leaf modules
+│   │   ├── auth.aps.md
+│   │   └── payments.aps.md
+│   ├── execution/                # Step files
+│   │   └── AUTH-001.steps.md
+│   └── decisions/                # ADRs (optional)
+│       └── 001-use-jwt.md
+```
+
 ## Versioning
 
-This project does not currently publish versioned releases. The `main` branch is considered stable. See [CHANGELOG.md](CHANGELOG.md) for recent changes.
+This project does not currently publish versioned releases. The `main` branch
+is considered stable. See [CHANGELOG.md](CHANGELOG.md) for recent changes.
 
 ## Contributing
 

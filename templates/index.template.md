@@ -1,4 +1,4 @@
-<!-- APS: See docs/ai/prompting/ for AI guidance. Anti-patterns: docs/ai/policies/ai-anti-patterns.md -->
+<!-- APS: See docs/ai/prompting/ for AI guidance -->
 <!-- This document is non-executable. -->
 
 # [Plan Title]

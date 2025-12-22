@@ -7,7 +7,6 @@ MODE: Bounded design, optionally task-drafting if Ready
 
 - Default to conservative scope.
 - Highlight boundary rules ("must not depend on...").
-- Reference docs/ai/policies/ai-anti-patterns.md.
 - If you propose tasks, each must be small and independently reviewable.
 
 ## Produce
