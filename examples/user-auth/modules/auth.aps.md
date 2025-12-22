@@ -27,9 +27,11 @@ Handle user registration and credential verification. This module owns password 
 ## Interfaces
 
 **Depends on:**
+
 - Database — user table with email, password_hash columns
 
 **Exposes:**
+
 - `registerUser(email, password)` → User
 - `verifyCredentials(email, password)` → User | null
 

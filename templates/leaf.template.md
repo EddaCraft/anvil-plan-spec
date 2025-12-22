@@ -24,9 +24,11 @@
 ## Interfaces
 
 **Depends on:**
+
 - [Service/Module] — [what we need from it]
 
 **Exposes:**
+
 - [Endpoint/API] — [what others can use]
 
 ## Boundary Rules

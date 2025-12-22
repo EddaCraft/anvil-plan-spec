@@ -12,6 +12,7 @@
 **Problem:** [What problem are we solving? Why does this work matter?]
 
 **Success Criteria:**
+
 - [ ] [Measurable outcome 1]
 - [ ] [Measurable outcome 2]
 - [ ] [How we know we're done]
@@ -32,10 +33,12 @@ graph LR
 ## Milestones
 
 ### M1: [Milestone Name]
+
 - **Target:** [date or scope]
 - **Includes:** [modules/features]
 
 ### M2: [Milestone Name]
+
 - **Target:** [date or scope]
 - **Includes:** [modules/features]
 

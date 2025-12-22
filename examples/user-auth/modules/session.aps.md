@@ -25,10 +25,12 @@ Manage user sessions using JWT tokens. Issue access tokens on login, validate to
 ## Interfaces
 
 **Depends on:**
+
 - AUTH — `verifyCredentials()` for login
 - Database — refresh_tokens table
 
 **Exposes:**
+
 - `login(email, password)` → { accessToken, refreshToken }
 - `validateToken(token)` → User | null
 - `refreshSession(refreshToken)` → { accessToken, refreshToken }
@@ -57,6 +59,7 @@ Manage user sessions using JWT tokens. Issue access tokens on login, validate to
 > **Status: Draft** — Blocked on AUTH module completion
 
 No tasks authorised. Blockers:
+
 - [ ] AUTH-001 and AUTH-002 must be complete
 - [ ] Decision needed on refresh token storage schema
 
