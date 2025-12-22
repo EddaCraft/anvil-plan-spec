@@ -1,11 +1,11 @@
-# AGENTS.md — Anvil Collaboration Rules
+# AGENTS.md — Anvil-Plan-Spec (APS) Collaboration Rules
 
-This repo uses Anvil to improve trust in AI-assisted development.
+This repo defines the Anvil Plan Spec format — templates, prompts, and examples
+for planning and task authorisation in AI-assisted development.
 
-## Core idea
+## What this repo is
 
-Anvil is a trust broker between AI and humans. AI can propose and implement;
-humans remain accountable.
+APS is a **specification format**, not executable code. It contains:
 
 ## Execution authority
 
@@ -13,34 +13,22 @@ humans remain accountable.
 - **Tasks authorise execution.**
 - If there is no task, do not implement changes unless explicitly instructed.
 
-## AI anti-patterns
 
-Do not introduce:
 
-- broad eslint disables
-- `any` type escapes
-- unsafe casts
-- "make it pass" hacks
+## Rules for AI contributing to this repo
 
-If unavoidable:
+When modifying templates, prompts, or documentation:
 
-1. add an inline note explaining why
-2. record the same note in provenance metadata
+- **Keep templates minimal** — avoid over-prescription
+- **Maintain consistency** — field names, structure, and terminology
+- **Update examples** when template structure changes
+- **Run markdownlint** before committing (`npx markdownlint-cli "**/*.md"`)
 
-See: [docs/ai/policies/ai-anti-patterns.md](docs/ai/policies/ai-anti-patterns.md)
+## Execution authority
 
-## Architecture & boundaries
-
-- Respect structural boundaries (layers, contexts, modules).
-- Prefer public interfaces over reaching into internals.
-- Warn on new boundary crossings, acknowledge existing drift.
-
-See: [docs/ai/policies/architecture-and-boundaries.md](docs/ai/policies/architecture-and-boundaries.md)
-
-## Risk acceptance
-
-Approving exceptions or accepting risk is **human-only**.
-AI may propose options and mitigations, but must not approve exceptions.
+- **Specs describe intent.**
+- **Tasks authorise execution.**
+- If there is no task, do not implement changes unless explicitly instructed.
 
 ## Execution layer
 
