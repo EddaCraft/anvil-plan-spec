@@ -9,9 +9,9 @@ This guide walks you through adopting Anvil Plan Spec (APS) in your project.
 
 ## Step 1: Set Up Your Folder Structure
 
-C6reate the following structure in your project:
+Create the following structure in your project:
 
-```
+```text
 your-project/
 ├── plans/
 │   ├── index.aps.md           # Your main plan
@@ -29,6 +29,7 @@ your-project/
 Copy `templates/index.template.md` to `plans/index.aps.md`.
 
 Fill in:
+
 1. **Problem** — What are you solving?
 2. **Success Criteria** — How do you know you're done?
 3. **System Map** — How do modules relate?
@@ -41,6 +42,7 @@ Fill in:
 For each module in your Index, create a file in `plans/modules/`.
 
 Copy `templates/leaf.template.md` and fill in:
+
 1. **Purpose** — Why does this module exist?
 2. **In Scope / Out of Scope** — Clear boundaries
 3. **Interfaces** — What it depends on and exposes
@@ -51,11 +53,13 @@ Copy `templates/leaf.template.md` and fill in:
 ## Step 4: Add Tasks When Ready
 
 Tasks are **execution authority**. Only add them when:
+
 - The module scope is clear
 - Dependencies are resolved
 - You're ready to implement
 
 Each task needs:
+
 - **Intent** — One sentence on what it achieves
 - **Expected Outcome** — Testable result
 - **Validation** — How to verify completion
@@ -65,6 +69,7 @@ Each task needs:
 For complex tasks, create a steps file in `plans/execution/`.
 
 Steps translate "what to achieve" into "what actions to take":
+
 - Each step has a **checkpoint** (observable state)
 - Steps describe **what**, not **how**
 - "How" only appears when referencing existing patterns

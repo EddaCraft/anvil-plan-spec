@@ -26,9 +26,11 @@ Provide the visual interface for the companion app. Displays session history, co
 ## Interfaces
 
 **Depends on:**
+
 - CORE — all data access functions
 
 **Exposes:**
+
 - React components for each view
 - Route definitions
 
@@ -55,6 +57,7 @@ Provide the visual interface for the companion app. Displays session history, co
 > **Status: Draft** — Blocked on CORE module
 
 No tasks authorised. Blockers:
+
 - [ ] CORE-001 and CORE-002 must be complete
 - [ ] Design mockups needed
 

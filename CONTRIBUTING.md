@@ -22,4 +22,5 @@ Thanks for your interest in improving `anvil-plan-spec`.
 
 ## License
 
-By contributing, you agree that your contributions are licensed under the Apache-2.0 license.
+By contributing, you agree that your contributions are licensed under the
+Apache-2.0 license.

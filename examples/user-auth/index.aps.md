@@ -12,6 +12,7 @@ Add user authentication to an existing web application. Users should be able to 
 **Problem:** The application currently has no user authentication. All users see the same content and cannot save personal data.
 
 **Success Criteria:**
+
 - [ ] Users can register with email and password
 - [ ] Users can log in and receive a session token
 - [ ] Protected routes reject unauthenticated requests
@@ -35,10 +36,12 @@ graph LR
 ## Milestones
 
 ### M1: Core Authentication
+
 - **Target:** Week 1
 - **Includes:** auth module, session module
 
 ### M2: Protected Routes
+
 - **Target:** Week 2
 - **Includes:** API integration, middleware
 

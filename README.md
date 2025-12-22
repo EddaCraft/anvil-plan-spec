@@ -5,6 +5,7 @@ A lightweight specification format for planning and task authorization in AI-ass
 ## What is APS?
 
 APS provides a structured way to:
+
 - **Plan work** before implementation begins
 - **Authorize tasks** that AI agents can execute
 - **Track execution** through observable checkpoints

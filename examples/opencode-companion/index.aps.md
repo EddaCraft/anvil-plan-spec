@@ -12,6 +12,7 @@ Build a companion application for OpenCode that provides a visual interface for 
 **Problem:** OpenCode is CLI-only. Users want a visual way to browse session history, manage configurations, and see real-time progress without switching to terminal.
 
 **Success Criteria:**
+
 - [ ] Users can view past coding sessions with full context
 - [ ] Users can edit OpenCode configuration through UI
 - [ ] Real-time updates show current session progress
@@ -35,14 +36,17 @@ graph LR
 ## Milestones
 
 ### M1: Read-Only Viewer
+
 - **Target:** Sprint 1
 - **Includes:** core module, basic UI
 
 ### M2: Configuration Editor
+
 - **Target:** Sprint 2
 - **Includes:** settings UI, config persistence
 
 ### M3: Real-Time Updates
+
 - **Target:** Sprint 3
 - **Includes:** process monitoring, live updates
 

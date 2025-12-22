@@ -4,11 +4,14 @@ ROLE: Implementer (task author)
 MODE: Executable authority (single task)
 
 ## Non-negotiables
+
 - One task, one coherent change.
 - No broad refactors.
-- Avoid AI escape hatches (`eslint-disable`, `any`, unsafe casts) unless explicitly justified.
+- Avoid AI escape hatches (`eslint-disable`, `any`, unsafe casts) unless
+  explicitly justified.
 
-## Produce a single task with:
+## Produce a single task with
+
 - Title
 - Intent
 - Expected outcome
@@ -23,4 +26,5 @@ MODE: Executable authority (single task)
 - Provenance note template for exceptions
 
 ## Output
+
 Write one task in markdown, ready to paste into the APS file.

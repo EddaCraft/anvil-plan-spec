@@ -4,7 +4,7 @@
 
 If you discover a security issue, please report it privately.
 
-- Email: josh@eddacraft.ai
+- Email: <josh@eddacraft.ai>
 - If you cannot reach us by email, open a GitHub issue and clearly mark it as
   "security" and request a private channel.
 

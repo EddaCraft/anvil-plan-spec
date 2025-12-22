@@ -7,6 +7,7 @@ Accepted
 ## Context
 
 We needed a granular execution layer below Tasks. Options considered:
+
 1. Time-based steps (e.g., "30 minutes of work")
 2. Commit-based steps (e.g., "one commit per step")
 3. Checkpoint-based steps (observable state change)

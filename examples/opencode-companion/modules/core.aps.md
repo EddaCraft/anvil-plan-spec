@@ -27,9 +27,11 @@ Provide data access layer for OpenCode configuration and session history. Handle
 ## Interfaces
 
 **Depends on:**
+
 - File system — `~/.opencode/` directory
 
 **Exposes:**
+
 - `getConfig()` → OpenCodeConfig
 - `listSessions()` → Session[]
 - `getSession(id)` → SessionDetail

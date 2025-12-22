@@ -4,12 +4,14 @@ You are assisting with completing an APS Index document.
 This document is **non-executable**: do not invent implementation tasks unless explicitly asked.
 
 ## Objectives
+
 1) Clarify intent, scope, and success criteria
 2) Identify constraints and named architectural patterns
 3) Propose a modular decomposition (modules only, not tasks)
 4) Identify risks, open questions, and decisions required
 
 ## Inputs you should request (if missing)
+
 - What system/repo this applies to (name, boundaries, major components)
 - The goal in one sentence
 - Non-goals / out of scope
@@ -17,7 +19,9 @@ This document is **non-executable**: do not invent implementation tasks unless e
 - Any critical constraints (security, performance, tenancy)
 
 ## Output format
+
 Produce a filled-in version of the Index sections:
+
 - Overview
 - Goals / Success Criteria
 - Constraints (technical + product)
@@ -28,6 +32,7 @@ Produce a filled-in version of the Index sections:
 - Decisions (including what must be decided before tasks are created)
 
 ## Quality bar
+
 - Be concrete and falsifiable: success criteria should be measurable
 - Avoid "solutioneering": you can propose options, but don't commit to implementation
 - If you infer anything, mark it as an assumption
