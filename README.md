@@ -95,6 +95,10 @@ your-project/
 This project does not currently publish versioned releases. The `main` branch
 is considered stable. See [CHANGELOG.md](CHANGELOG.md) for recent changes.
 
+## Roadmap
+
+See [ROADMAP.md](ROADMAP.md) for planned features and direction.
+
 ## Contributing
 
 See [CONTRIBUTING.md](CONTRIBUTING.md).
