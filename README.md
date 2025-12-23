@@ -14,6 +14,23 @@ APS provides a structured way to:
 It acts as a trust layer between humans and AI — humans remain accountable
 for decisions while AI assists with planning and implementation.
 
+## Why APS?
+
+There's no shortage of AI coding tools — Cursor, Kiro, Claude Code, Copilot,
+and countless agent frameworks. Each has its own way of handling context,
+rules, and specifications. **The problem: your planning artifacts get locked
+into whatever tool you're using today.**
+
+APS is different:
+
+- **Portable** — Plain markdown files. No vendor lock-in. Switch tools anytime.
+- **Versioned** — Lives in git. Review plans in PRs. Track changes over time.
+- **Tool-agnostic** — Works with any AI, any IDE, any workflow.
+- **Human-readable** — Your PM, tech lead, and future self can all understand it.
+
+APS isn't a replacement for your AI tools — it's the planning layer that works
+*across* all of them. Write your spec once, use it everywhere.
+
 ## Hierarchy
 
 ```mermaid
@@ -35,6 +52,16 @@ graph TD
 | **Task** | Single coherent change with validation | Yes — execution authority |
 | **Steps** | Ordered actions with checkpoints | Yes — granular execution |
 
+**Key concepts:**
+
+- **Index** — The root plan. Describes the whole initiative, lists modules.
+- **Leaf** — A bounded module where work happens. The smallest unit you *plan*.
+  Called "leaf" because it's the end of the planning tree — you don't subdivide
+  it further into sub-plans.
+- **Task** — A single authorised change. The unit of execution authority.
+- **Steps** — How you *execute* a task. Optional, generated when needed. Breaks
+  a task into checkpointed actions for granular progress tracking.
+
 ## Quick Start
 
 1. **Copy templates** from `templates/` to your project
@@ -44,6 +71,21 @@ graph TD
 5. **Generate Steps** (optional) for granular execution guidance
 
 See [Getting Started](docs/getting-started.md) for a complete walkthrough.
+
+## Works Everywhere
+
+APS is just markdown. Use it however you work:
+
+| Context | How to use APS |
+|---------|----------------|
+| **Claude / ChatGPT** | Paste the spec into your conversation |
+| **Cursor / Copilot** | Keep specs in your repo, reference in prompts |
+| **Claude Code / aider** | Point the agent at your spec files |
+| **Jira / Linear / Notion** | Link to specs in git, or embed the markdown |
+| **Code review** | Review spec changes in PRs before implementation |
+| **Team planning** | Specs are human-readable — discuss them in meetings |
+
+No plugins. No integrations. No configuration. It's just files.
 
 ## Templates
 
