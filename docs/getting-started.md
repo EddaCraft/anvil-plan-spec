@@ -26,14 +26,21 @@ your-project/
 
 ## Step 2: Create Your Index
 
-Copy `templates/index.template.md` to `plans/index.aps.md`.
+**Choose your index template:**
+
+| Template | Best For |
+|----------|----------|
+| `index.template.md` | Most projects. Table format, compact, scannable. |
+| `index-expanded.template.md` | Larger projects (6+ modules) with rich metadata, tags, and complex dependencies. |
+
+Copy your chosen template to `plans/index.aps.md`.
 
 Fill in:
 
 1. **Problem** — What are you solving?
 2. **Success Criteria** — How do you know you're done?
 3. **System Map** — How do modules relate?
-4. **Modules** — List each bounded area of work
+4. **Modules** — List each bounded area of work (with tags for categorisation)
 
 > **Tip:** The Index is non-executable. Focus on intent, not implementation.
 
@@ -126,9 +133,45 @@ graph TD
 | Situation | Template |
 |-----------|----------|
 | Planning a multi-module initiative | `index.template.md` |
+| Large initiative with 6+ modules or rich metadata | `index-expanded.template.md` |
 | Defining a bounded area with multiple tasks | `leaf.template.md` |
 | Small feature that fits in one file | `simple.template.md` |
 | Breaking a task into granular actions | `steps.template.md` |
+
+### Index Template Formats
+
+APS provides two index formats to suit different project sizes:
+
+**Table format** (`index.template.md`):
+
+```markdown
+| Module | Scope | Owner | Status | Priority | Tags | Dependencies |
+|--------|-------|-------|--------|----------|------|--------------|
+| [core](./modules/core.aps.md) | CORE | @josh | Ready | high | domain | — |
+```
+
+- Compact and scannable
+- Works well for 2-6 modules
+- Best for most projects
+
+**List format** (`index-expanded.template.md`):
+
+```markdown
+### core
+
+- **Path:** ./modules/core.aps.md
+- **Scope:** CORE
+- **Owner:** @josh
+- **Status:** Ready
+- **Priority:** high
+- **Tags:** domain, memory
+- **Dependencies:** store-sqlite, provider-local
+```
+
+- More readable with many modules
+- Easier to edit in raw markdown
+- Better for complex dependency chains
+- Supports richer metadata per module
 
 ## Working with AI Assistants
 

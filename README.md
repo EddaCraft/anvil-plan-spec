@@ -92,6 +92,7 @@ No plugins. No integrations. No configuration. It's just files.
 | Template | Use When |
 |----------|----------|
 | [index.template.md](templates/index.template.md) | Starting a new plan or initiative |
+| [index-expanded.template.md](templates/index-expanded.template.md) | Larger initiatives with 6+ modules or rich metadata |
 | [leaf.template.md](templates/leaf.template.md) | Defining a bounded module with tasks |
 | [simple.template.md](templates/simple.template.md) | Small, self-contained features |
 | [steps.template.md](templates/steps.template.md) | Breaking tasks into executable steps |

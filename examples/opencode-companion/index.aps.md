@@ -52,10 +52,10 @@ graph LR
 
 ## Modules
 
-| Module | Scope | Owner | Status | Priority | Dependencies |
-|--------|-------|-------|--------|----------|--------------|
-| [core](./modules/core.aps.md) | CORE | @josh | Ready | high | — |
-| [ui](./modules/ui.aps.md) | UI | @josh | Draft | high | core |
+| Module | Scope | Owner | Status | Priority | Tags | Dependencies |
+|--------|-------|-------|--------|----------|------|--------------|
+| [core](./modules/core.aps.md) | CORE | @josh | Ready | high | domain, fs | — |
+| [ui](./modules/ui.aps.md) | UI | @josh | Draft | high | frontend, tauri | core |
 
 ## Risks & Mitigations
 

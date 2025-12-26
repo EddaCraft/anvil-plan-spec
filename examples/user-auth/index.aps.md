@@ -47,10 +47,10 @@ graph LR
 
 ## Modules
 
-| Module | Scope | Owner | Status | Priority | Dependencies |
-|--------|-------|-------|--------|----------|--------------|
-| [auth](./modules/auth.aps.md) | AUTH | @josh | Ready | high | — |
-| [session](./modules/session.aps.md) | SESSION | @josh | Draft | high | auth |
+| Module | Scope | Owner | Status | Priority | Tags | Dependencies |
+|--------|-------|-------|--------|----------|------|--------------|
+| [auth](./modules/auth.aps.md) | AUTH | @josh | Ready | high | security, api | — |
+| [session](./modules/session.aps.md) | SESSION | @josh | Draft | high | security, jwt | auth |
 
 ## Risks & Mitigations
 

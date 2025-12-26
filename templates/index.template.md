@@ -1,5 +1,6 @@
 <!-- APS: See docs/ai/prompting/ for AI guidance -->
 <!-- This document is non-executable. -->
+<!-- For larger projects with rich metadata, see index-expanded.template.md -->
 
 # [Plan Title]
 
@@ -44,10 +45,10 @@ graph LR
 
 ## Modules
 
-| Module | Scope | Owner | Status | Priority | Dependencies |
-|--------|-------|-------|--------|----------|--------------|
-| [module-id](./modules/module-name.aps.md) | SCOPE | @username | Draft | medium | — |
-| [another-id](./modules/another.aps.md) | SCOPE2 | @username | Draft | high | module-id |
+| Module | Scope | Owner | Status | Priority | Tags | Dependencies |
+|--------|-------|-------|--------|----------|------|--------------|
+| [module-id](./modules/module-name.aps.md) | SCOPE | @username | Draft | medium | core | — |
+| [another-id](./modules/another.aps.md) | SCOPE2 | @username | Draft | high | api | module-id |
 
 ## Risks & Mitigations
 
