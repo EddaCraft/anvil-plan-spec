@@ -58,7 +58,7 @@ APS presents a compelling vision for portable, tool-agnostic planning in AI-assi
 **Recommendation:**
 - Define clearly in glossary
 - Use consistently across all documentation
-- Consider simpler phrasing: "tasks authorize implementation"
+- Consider simpler phrasing: "tasks authorise implementation"
 
 ---
 
