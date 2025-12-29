@@ -70,7 +70,7 @@ APS presents a compelling vision for portable, tool-agnostic planning in AI-assi
 
 **Evidence:**
 - getting-started.md presents all concepts before letting users try anything
-- Decision tree (lines 101-122) shows 7+ decision points
+- Decision tree (lines 99-122) shows 7+ decision points
 - No "quick start" template for trying APS without commitment
 
 **Impact:** High activation energy. Users bounce before seeing value.
