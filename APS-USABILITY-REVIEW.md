@@ -264,7 +264,7 @@ Mark status as "Ready" when:
 - When do I mark tasks complete?
 - What if implementation reveals the task was wrong?
 
-**Current guidance:** README.md:81-87 shows "how to use APS" in different tools but not the workflow.
+**Current guidance:** README.md:79-86 shows "how to use APS" in different tools but not the workflow.
 
 **Impact:** APS feels like extra work, not workflow enhancement.
 
