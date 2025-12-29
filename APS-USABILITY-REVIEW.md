@@ -199,7 +199,7 @@ Copy this file, replace the bracketed parts, and you're using APS!
 - Replace "executable/non-executable" with clearer language:
   - Index: "Planning document - describes intent, doesn't authorize work"
   - Module: "Work can begin when status=Ready and tasks exist"
-  - Task: "Authorizes implementation"
+  - Task: "Authorises implementation"
 - Add workflow diagram showing the progression
 
 ### 🟡 Unclear when to change status from Draft to Ready
