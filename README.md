@@ -64,11 +64,26 @@ graph TD
 
 ## Quick Start
 
-1. **Copy templates** from `templates/` to your project
-2. **Create an Index** to define your plan's scope and modules
-3. **Create Leaf modules** for each bounded area of work
-4. **Add Tasks** when a module is ready for implementation
-5. **Generate Steps** (optional) for granular execution guidance
+### Option A: Scaffold (recommended)
+
+```bash
+# From the APS repo (after cloning)
+./scaffold/init.sh /path/to/your-project
+
+# Or via curl
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/init.sh | bash
+```
+
+This creates `plans/` with templates and `.aps-rules.md` — a portable guide that
+helps AI agents follow APS conventions.
+
+### Option B: Manual Setup
+
+1. Copy templates from `templates/` to your project
+2. Create an Index to define your plan's scope and modules
+3. Create Leaf modules for each bounded area of work
+4. Add Tasks when a module is ready for implementation
+5. Generate Steps (optional) for granular execution guidance
 
 See [Getting Started](docs/getting-started.md) for a complete walkthrough.
 
@@ -104,7 +119,11 @@ No plugins. No integrations. No configuration. It's just files.
 
 ## AI Guidance
 
-APS includes prompts for AI assistants:
+When you scaffold APS into your project, it includes `.aps-rules.md` — a portable
+guide that travels with your specs. Point your AI agent at this file and it will
+follow APS conventions (lean steps, outcome-focused tasks, etc.).
+
+For deeper reference:
 
 - [docs/ai/prompting/](docs/ai/prompting/) — Tool-agnostic prompts
 - [docs/ai/prompting/opencode/](docs/ai/prompting/opencode/) — OpenCode/Claude variants
@@ -123,6 +142,7 @@ See [AGENTS.md](AGENTS.md) for collaboration rules when using AI in this repo.
 ```text
 your-project/
 ├── plans/
+│   ├── .aps-rules.md             # AI agent guidance (portable)
 │   ├── index.aps.md              # Main plan
 │   ├── modules/                  # Leaf modules
 │   │   ├── auth.aps.md
