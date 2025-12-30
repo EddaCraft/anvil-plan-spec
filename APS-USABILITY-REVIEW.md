@@ -11,6 +11,7 @@
 APS presents a compelling vision for portable, tool-agnostic planning in AI-assisted development. However, several usability barriers may prevent adoption, particularly for new users. This review identifies 15 critical areas for improvement across documentation, templates, terminology, and workflow integration.
 
 **Severity Ratings:**
+
 - 🔴 **Critical** - Major barrier to adoption
 - 🟡 **Important** - Degrades user experience significantly
 - 🟢 **Minor** - Polish and refinement
@@ -24,6 +25,7 @@ APS presents a compelling vision for portable, tool-agnostic planning in AI-assi
 **Problem:** The term "Leaf" doesn't communicate its purpose. Users must understand it's a "module" and that it's called "leaf" because it's the end of the planning tree.
 
 **Evidence:**
+
 - README.md:58-60 requires a multi-sentence explanation of why it's called "leaf"
 - The table alternates between "Leaf/Module" creating confusion
 - File names use "leaf.template.md" but examples use descriptive names like "auth.aps.md"
@@ -31,6 +33,7 @@ APS presents a compelling vision for portable, tool-agnostic planning in AI-assi
 **Impact:** New users won't understand what a "leaf" is without reading detailed explanation. The metaphor doesn't match common software terminology.
 
 **Recommendation:**
+
 - Rename to "Module Template" or "Work Module"
 - Reserve "leaf" as a conceptual note in documentation
 - Update all references: `module.template.md` instead of `leaf.template.md`
@@ -40,6 +43,7 @@ APS presents a compelling vision for portable, tool-agnostic planning in AI-assi
 **Problem:** Templates use `SCOPE` as a placeholder for module identifiers, but this conflicts with "In Scope / Out of Scope" sections.
 
 **Evidence:**
+
 - leaf.template.md:7 uses "SCOPE" in metadata table
 - leaf.template.md:14-22 has "In Scope" and "Out of Scope" sections
 - Task IDs use pattern "SCOPE-001" which reads awkwardly
@@ -47,6 +51,7 @@ APS presents a compelling vision for portable, tool-agnostic planning in AI-assi
 **Impact:** Users may think "SCOPE" has special meaning or unclear what to replace it with.
 
 **Recommendation:**
+
 - Use `MODULE-ID` or `{module-name}` as placeholder
 - Provide clear examples: "AUTH", "PAYMENTS", "UI"
 - Add guidance: "Use 2-6 character uppercase identifier"
