@@ -1,43 +1,48 @@
 <!-- APS: See docs/ai/prompting/ for AI guidance -->
-<!-- Executable only if tasks exist and status is Ready. -->
-<!-- Use this template for small, self-contained features. For larger work, use leaf.template.md -->
+<!--
+Use for small, self-contained features (1-3 tasks).
+For larger work with interfaces/boundaries, use module.template.md
+ID: Use 2-6 uppercase chars (DARK, EXPORT, NOTIFY, etc.)
+-->
 
 # [Feature Name]
 
-| Scope | Owner | Priority | Status |
-|-------|-------|----------|--------|
-| SCOPE | @username | medium | Draft |
+| ID | Owner | Status |
+|----|-------|--------|
+| FEAT | @username | Draft |
 
 ## Purpose
 
-[Why we're building this feature and what problem it solves]
+[What problem this solves — keep it brief]
 
 ## Success Criteria
 
-- [ ] [Measurable outcome 1]
-- [ ] [Measurable outcome 2]
+- [ ] [Observable outcome 1]
+- [ ] [Observable outcome 2]
 
 ## Tasks
 
-### SCOPE-001: [First task]
+<!--
+Confidence: high (clear, familiar) / medium (some unknowns) / low (exploratory)
+-->
 
-- **Intent:** [What this task achieves]
-- **Expected Outcome:** [Success criteria — testable]
+### FEAT-001: [First task]
+
+- **Intent:** [What this achieves]
+- **Expected Outcome:** [Testable result]
 - **Validation:** `[test command]`
-- **Confidence:** medium
 
-### SCOPE-002: [Second task]
+### FEAT-002: [Second task]
 
-- **Intent:** [What this task achieves]
-- **Expected Outcome:** [Success criteria — testable]
-- **Dependencies:** SCOPE-001
+- **Intent:** [What this achieves]
+- **Expected Outcome:** [Testable result]
 - **Validation:** `[test command]`
-- **Confidence:** medium
+- **Dependencies:** FEAT-001 *(optional)*
 
-## Execution
+## Execution *(optional)*
 
-Steps: [./execution/SCOPE.steps.md](./execution/SCOPE.steps.md) *(optional)*
+Steps: [./execution/FEAT.steps.md](./execution/FEAT.steps.md)
 
-## Notes
+## Notes *(optional)*
 
-- [Additional notes or considerations]
+- [Additional context]

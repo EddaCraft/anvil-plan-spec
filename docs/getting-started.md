@@ -44,18 +44,18 @@ Fill in:
 
 > **Tip:** The Index is non-executable. Focus on intent, not implementation.
 
-## Step 3: Create Leaf Modules
+## Step 3: Create Modules
 
 For each module in your Index, create a file in `plans/modules/`.
 
 **Choose your template:**
 
-- Use `templates/leaf.template.md` for modules with interfaces and boundaries
+- Use `templates/module.template.md` for modules with interfaces and boundaries
 - Use `templates/simple.template.md` for small, self-contained features
 
-### Leaf Template (full)
+### Module Template (full)
 
-Copy `templates/leaf.template.md` and fill in:
+Copy `templates/module.template.md` and fill in:
 
 1. **Purpose** — Why does this module exist?
 2. **In Scope / Out of Scope** — Clear boundaries
@@ -110,11 +110,11 @@ graph TD
     A[New work item] --> B{How big?}
     B -->|Large initiative| C[Create Index]
     B -->|Single module| D{Self-contained?}
-    B -->|Single task| E[Add to existing Leaf]
+    B -->|Single task| E[Add to existing module]
     
-    C --> F[Add Leaf modules]
+    C --> F[Add modules]
     D -->|Yes| G[Use simple.template.md]
-    D -->|No| H[Use leaf.template.md]
+    D -->|No| H[Use module.template.md]
     
     F --> I{Ready to implement?}
     G --> I
@@ -132,9 +132,10 @@ graph TD
 
 | Situation | Template |
 |-----------|----------|
+| Just trying APS / quick single-file spec | `quickstart.template.md` |
 | Planning a multi-module initiative | `index.template.md` |
 | Large initiative with 6+ modules or rich metadata | `index-expanded.template.md` |
-| Defining a bounded area with multiple tasks | `leaf.template.md` |
+| Defining a bounded area with multiple tasks | `module.template.md` |
 | Small feature that fits in one file | `simple.template.md` |
 | Breaking a task into granular actions | `steps.template.md` |
 
@@ -178,7 +179,7 @@ APS provides two index formats to suit different project sizes:
 APS includes prompts for AI tools. To use them:
 
 1. **For planning:** Reference `docs/ai/prompting/index.prompt.md`
-2. **For module design:** Reference `docs/ai/prompting/leaf.prompt.md`
+2. **For module design:** Reference `docs/ai/prompting/module.prompt.md`
 3. **For task creation:** Reference `docs/ai/prompting/task.prompt.md`
 4. **For execution:** Reference `docs/ai/prompting/steps.prompt.md`
 

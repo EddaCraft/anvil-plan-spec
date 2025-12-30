@@ -36,7 +36,7 @@ See: [docs/ai/prompting/steps.prompt.md](docs/ai/prompting/steps.prompt.md)
 Use:
 
 - [docs/ai/prompting/index.prompt.md](docs/ai/prompting/index.prompt.md)
-- [docs/ai/prompting/leaf.prompt.md](docs/ai/prompting/leaf.prompt.md)
+- [docs/ai/prompting/module.prompt.md](docs/ai/prompting/module.prompt.md)
 - [docs/ai/prompting/task.prompt.md](docs/ai/prompting/task.prompt.md)
 - [docs/ai/prompting/steps.prompt.md](docs/ai/prompting/steps.prompt.md)
 

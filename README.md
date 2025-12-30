@@ -35,7 +35,7 @@ APS isn't a replacement for your AI tools — it's the planning layer that works
 
 ```mermaid
 graph TD
-    A[Index] -->|contains| B[Leaf/Module]
+    A[Index] -->|contains| B[Module]
     B -->|contains| C[Task]
     C -->|executed via| D[Steps]
 
@@ -48,16 +48,15 @@ graph TD
 | Layer | Purpose | Executable? |
 |-------|---------|-------------|
 | **Index** | High-level plan with modules and milestones | No |
-| **Leaf/Module** | Bounded scope with interfaces and tasks | If status is Ready |
+| **Module** | Bounded scope with interfaces and tasks | If status is Ready |
 | **Task** | Single coherent change with validation | Yes — execution authority |
 | **Steps** | Ordered actions with checkpoints | Yes — granular execution |
 
 **Key concepts:**
 
 - **Index** — The root plan. Describes the whole initiative, lists modules.
-- **Leaf** — A bounded module where work happens. The smallest unit you *plan*.
-  Called "leaf" because it's the end of the planning tree — you don't subdivide
-  it further into sub-plans.
+- **Module** — A bounded area where work happens. The smallest unit you *plan*.
+  You don't subdivide modules into sub-plans — they contain tasks directly.
 - **Task** — A single authorised change. The unit of execution authority.
 - **Steps** — How you *execute* a task. Optional, generated when needed. Breaks
   a task into checkpointed actions for granular progress tracking.
@@ -106,11 +105,36 @@ No plugins. No integrations. No configuration. It's just files.
 
 | Template | Use When |
 |----------|----------|
+| [quickstart.template.md](templates/quickstart.template.md) | **Try APS in 5 minutes** — minimal single-file format |
 | [index.template.md](templates/index.template.md) | Starting a new plan or initiative |
 | [index-expanded.template.md](templates/index-expanded.template.md) | Larger initiatives with 6+ modules or rich metadata |
-| [leaf.template.md](templates/leaf.template.md) | Defining a bounded module with tasks |
+| [module.template.md](templates/module.template.md) | Defining a bounded module with tasks |
 | [simple.template.md](templates/simple.template.md) | Small, self-contained features |
 | [steps.template.md](templates/steps.template.md) | Breaking tasks into executable steps |
+
+### Hello World Example
+
+```markdown
+# Add Dark Mode
+
+## Problem
+Users want to reduce eye strain when working at night.
+
+## Success
+- [ ] Toggle persists across sessions
+- [ ] All components respect theme
+
+## Tasks
+
+### 001: Add theme context
+- **Outcome:** ThemeProvider wraps app, exposes toggle
+- **Test:** `npm test -- theme.test.tsx`
+
+### 002: Add toggle to settings
+- **Outcome:** Settings page has working theme toggle
+- **Test:** Manual verification
+- **Depends on:** 001
+```
 
 ## Examples
 
