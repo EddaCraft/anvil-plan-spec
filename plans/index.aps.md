@@ -1,48 +1,61 @@
-<!--
-APS Index Template
-==================
-AGENT: This is NON-EXECUTABLE. Do not create tasks here.
-Focus on: intent, scope, modules, risks — NOT implementation.
-See: plans/.aps-rules.md
--->
-
-# [Plan Title]
+# APS Cross-Tool Plugin Architecture
 
 | Field | Value |
 |-------|-------|
 | Status | Draft |
-| Owner | @username |
-| Created | YYYY-MM-DD |
+| Owner | @EddaCraft |
+| Created | 2026-01-01 |
 
 ## Problem
 
-[What problem are we solving? Why now?]
+APS is currently template-only (markdown files). To become a default planning tool for AI coding assistants like oh-my-opencode (OMO), we need programmatic integration across multiple tools (OpenCode, Claude Code, Cursor, Aider).
+
+Creating tool-specific implementations would duplicate logic and create maintenance burden. We need a core library with thin tool-specific adapters.
 
 ## Success Criteria
 
-- [ ] [Measurable outcome 1]
-- [ ] [Measurable outcome 2]
+- [ ] Core APS library (`@aps/core`) published to npm
+- [ ] CLI tool (`@aps/cli`) works standalone
+- [ ] OpenCode plugin (`opencode-planspec`) installable via npm
+- [ ] Claude Code skill (`aps-planner`) installable via CLI
+- [ ] At least 3 tools can use APS (OpenCode, Claude Code, Cursor)
+- [ ] OMO documentation references APS as recommended planning layer
 
 ## Constraints
 
-- [Technical or product constraint]
+- Must maintain APS's tool-agnostic philosophy
+- Templates remain human-readable markdown (no proprietary formats)
+- Core library has zero AI tool dependencies
+- Backward compatible with existing APS markdown files
 
 ## Modules
 
 | Module | Purpose | Status | Dependencies |
 |--------|---------|--------|--------------|
-| [module](./modules/module.aps.md) | [One-line purpose] | Draft | — |
+| [core](./modules/core.aps.md) | Core APS validation, parsing, scaffolding | Draft | — |
+| [cli](./modules/cli.aps.md) | Standalone CLI wrapping @aps/core | Draft | core |
+| [opencode-plugin](./modules/opencode-plugin.aps.md) | OpenCode plugin integration | Draft | core |
+| [claude-code-skill](./modules/claude-code-skill.aps.md) | Claude Code skill integration | Draft | core, cli |
+| [omo-integration](./modules/omo-integration.aps.md) | oh-my-opencode partnership & distribution | Draft | opencode-plugin |
 
 ## Risks
 
 | Risk | Impact | Mitigation |
 |------|--------|------------|
-| [Risk] | [Impact] | [Mitigation] |
+| Core library API changes break adapters | High | Semantic versioning, adapter tests in CI |
+| Tools evolve their plugin APIs | Medium | Keep adapters thin, easy to update |
+| npm package namespace conflict | Low | Check availability early, reserve names |
+| OMO maintainer not interested | Medium | Plugin works standalone, OMO optional |
 
 ## Open Questions
 
-- [ ] [Question that needs answering before implementation]
+- [ ] Should core library be TypeScript or tool-agnostic (e.g., Rust)?
+- [ ] Do we need a JSON schema alongside markdown templates?
+- [ ] Should CLI auto-update skills when templates change?
+- [ ] How do we handle versioning across core + plugins?
 
 ## Decisions
 
-- **D-001:** [Decision needed] — *pending*
+- **D-001:** Use monorepo for core + plugins — *pending*
+- **D-002:** TypeScript for initial implementation (can port later) — *pending*
+- **D-003:** Publish to npm under `@aps/*` namespace — *pending*
