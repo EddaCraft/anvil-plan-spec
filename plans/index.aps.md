@@ -14,12 +14,23 @@ Creating tool-specific implementations would duplicate logic and create maintena
 
 ## Success Criteria
 
+**Foundation:**
 - [ ] Core APS library (`@aps/core`) published to npm
-- [ ] CLI tool (`@aps/cli`) works standalone
+- [ ] CLI tool (`@aps/cli`) works standalone with validation/scaffolding
+
+**Full Plugin Path:**
+- [ ] Claude Code plugin (`aps-claude-code-plugin`) published to marketplace
 - [ ] OpenCode plugin (`opencode-planspec`) installable via npm
-- [ ] Claude Code skill (`aps-planner`) installable via CLI
-- [ ] At least 3 tools can use APS (OpenCode, Claude Code, Cursor)
+
+**Lightweight Generator Path:**
+- [ ] `aps generate skill <tool>` creates working skills for Claude Code, OpenCode, Cursor, Aider
+- [ ] `aps generate command <tool>` creates slash commands
+- [ ] Generated files work immediately in respective tools
+
+**Distribution & Adoption:**
+- [ ] At least 3 tools can use APS (via plugins OR generators)
 - [ ] OMO documentation references APS as recommended planning layer
+- [ ] Community examples showing both integration approaches
 
 ## Constraints
 
@@ -34,8 +45,9 @@ Creating tool-specific implementations would duplicate logic and create maintena
 |--------|---------|--------|--------------|
 | [core](./modules/core.aps.md) | Core APS validation, parsing, scaffolding | Draft | — |
 | [cli](./modules/cli.aps.md) | Standalone CLI wrapping @aps/core | Draft | core |
-| [opencode-plugin](./modules/opencode-plugin.aps.md) | OpenCode plugin integration | Draft | core |
-| [claude-code-skill](./modules/claude-code-skill.aps.md) | Claude Code skill integration | Draft | core, cli |
+| [generators](./modules/generators.aps.md) | Generate skills/commands for any tool (lightweight path) | Draft | core, cli |
+| [claude-code-plugin](./modules/claude-code-plugin.aps.md) | Full Claude Code plugin (full-featured path) | Draft | core, cli |
+| [opencode-plugin](./modules/opencode-plugin.aps.md) | Full OpenCode plugin (full-featured path) | Draft | core, cli |
 | [omo-integration](./modules/omo-integration.aps.md) | oh-my-opencode partnership & distribution | Draft | opencode-plugin |
 
 ## Risks
