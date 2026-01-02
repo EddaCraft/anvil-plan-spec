@@ -1,6 +1,14 @@
-<!-- APS Execution: See docs/ai/prompting/steps.prompt.md -->
+<!--
+APS Steps Template
+==================
+FILE NAMING:
+- Per-task (TASK-ID.steps.md): Complex projects, independent tasks
+- Per-module (MODULE.steps.md): Simple projects, tightly coupled tasks
 
-# Steps: [TASK-ID or MODULE-ID]
+See: docs/ai/prompting/steps.prompt.md
+-->
+
+# Steps: [TASK-ID or MODULE]
 
 | Field | Value |
 |-------|-------|

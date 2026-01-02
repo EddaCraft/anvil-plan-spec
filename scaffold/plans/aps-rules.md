@@ -93,6 +93,28 @@ Tasks are **execution authority** — permission to make changes.
 | "Create UserService class with methods..." | "User operations are encapsulated" |
 | "Add try/catch blocks to all handlers" | "API errors return consistent format" |
 
+## Naming Conventions
+
+### Module Files
+
+Name module files with a numeric prefix based on dependency order:
+
+```text
+modules/
+├── 01-core.aps.md      # Foundation, no dependencies
+├── 02-auth.aps.md      # Depends on core
+├── 03-payments.aps.md  # Depends on auth
+└── 04-ui.aps.md        # Depends on all above
+```
+
+- Use zero-padded numbers (`01-`, `02-`, not `1-`, `2-`)
+- Order matches dependency flow (foundational → dependent)
+- Order should reflect the Modules table in `index.aps.md`
+
+### Task IDs
+
+Tasks use the module's ID prefix: `AUTH-001`, `AUTH-002`, `CORE-001`, etc.
+
 ## Creating APS Documents
 
 ### When Asked to Plan
@@ -113,14 +135,16 @@ Tasks are **execution authority** — permission to make changes.
 
 ## File Locations
 
-```
+```text
 plans/
-├── .aps-rules.md          # This file (agent guidance)
+├── aps-rules.md           # This file (agent guidance)
 ├── index.aps.md           # Root plan
-├── modules/               # Leaf modules
-│   └── [module].aps.md
+├── modules/               # Module specs (numbered by dependency order)
+│   ├── 01-core.aps.md
+│   └── 02-auth.aps.md
 ├── execution/             # Step files
-│   └── [TASK-ID].steps.md
+│   ├── [TASK-ID].steps.md # Per-task (complex projects)
+│   └── [MODULE].steps.md  # Per-module (simple projects)
 └── decisions/             # ADRs (optional)
     └── [NNN]-[title].md
 ```

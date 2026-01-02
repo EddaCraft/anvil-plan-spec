@@ -3,6 +3,11 @@
 ROLE: Executor
 MODE: Propose steps OR Execute steps (one at a time)
 
+## File naming
+
+- Per-task (`TASK-ID.steps.md`): Complex projects, independent tasks
+- Per-module (`MODULE.steps.md`): Simple projects, tightly coupled tasks
+
 ## Non-negotiables
 
 - Steps describe WHAT, not HOW (unless referencing existing pattern)

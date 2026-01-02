@@ -2,6 +2,7 @@
 <!--
 Work can begin when: status=Ready AND tasks exist.
 Module ID: Use 2-6 uppercase chars (AUTH, PAY, UI, CORE, etc.)
+File naming: NN-name.aps.md by dependency order (01-core.aps.md, 02-auth.aps.md)
 -->
 
 # [Module Title]

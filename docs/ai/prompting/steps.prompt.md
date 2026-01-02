@@ -3,6 +3,11 @@
 You are creating or executing APS Steps - the granular execution layer.
 Steps translate Task intent into ordered, observable actions.
 
+## File naming
+
+- **Per-task** (`TASK-ID.steps.md`): Complex projects, independent tasks
+- **Per-module** (`MODULE.steps.md`): Simple projects, tightly coupled tasks
+
 ## Relationship to other layers
 
 - **Task** = What to achieve (outcome)

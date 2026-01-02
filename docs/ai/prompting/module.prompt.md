@@ -1,7 +1,11 @@
-# APS Leaf/Module Prompt (Tool-Agnostic)
+# APS Module Prompt (Tool-Agnostic)
 
-You are assisting with completing an APS Leaf/Module document.
+You are assisting with completing an APS Module document.
 This document is **bounded and near-executable**, but should remain conservative.
+
+## File naming
+
+Name files with numeric prefix by dependency order: `01-core.aps.md`, `02-auth.aps.md`
 
 > **Note:** For small, self-contained features without complex interfaces,
 > suggest using `templates/simple.template.md` instead.

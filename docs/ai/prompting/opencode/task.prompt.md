@@ -17,13 +17,14 @@ MODE: Executable authority (single task)
 - Expected outcome
 - Scope (what will change)
 - Non-scope (what will not change)
-- Steps (high-level, not code)
 - Files likely touched (best effort)
 - Dependencies (on other tasks, decisions, artefacts)
 - Validation (commands/tests)
 - Risks & mitigations
 - "If blocked" fallback (what to do next)
 - Provenance note template for exceptions
+
+> **Note:** Steps are created separately in `execution/` files, not within tasks.
 
 ## Output
 

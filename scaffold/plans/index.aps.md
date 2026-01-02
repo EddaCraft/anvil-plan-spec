@@ -3,7 +3,7 @@ APS Index Template
 ==================
 AGENT: This is NON-EXECUTABLE. Do not create tasks here.
 Focus on: intent, scope, modules, risks — NOT implementation.
-See: plans/.aps-rules.md
+See: plans/aps-rules.md
 -->
 
 # [Plan Title]

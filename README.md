@@ -71,9 +71,12 @@ graph TD
 
 # Or via curl
 curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/init.sh | bash
+
+# Update existing project to latest templates (preserves your specs)
+./scaffold/init.sh --update /path/to/your-project
 ```
 
-This creates `plans/` with templates and `.aps-rules.md` — a portable guide that
+This creates `plans/` with templates and `aps-rules.md` — a portable guide that
 helps AI agents follow APS conventions.
 
 ### Option B: Manual Setup
@@ -143,7 +146,7 @@ Users want to reduce eye strain when working at night.
 
 ## AI Guidance
 
-When you scaffold APS into your project, it includes `.aps-rules.md` — a portable
+When you scaffold APS into your project, it includes `aps-rules.md` — a portable
 guide that travels with your specs. Point your AI agent at this file and it will
 follow APS conventions (lean steps, outcome-focused tasks, etc.).
 
@@ -166,7 +169,7 @@ See [AGENTS.md](AGENTS.md) for collaboration rules when using AI in this repo.
 ```text
 your-project/
 ├── plans/
-│   ├── .aps-rules.md             # AI agent guidance (portable)
+│   ├── aps-rules.md              # AI agent guidance (portable)
 │   ├── index.aps.md              # Main plan
 │   ├── modules/                  # Leaf modules
 │   │   ├── auth.aps.md

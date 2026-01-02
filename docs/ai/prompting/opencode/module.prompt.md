@@ -1,7 +1,9 @@
-# APS Leaf Prompt (OpenCode / Claude Opus 4.5)
+# APS Module Prompt (OpenCode / Claude Opus 4.5)
 
 ROLE: Architect/Planner
 MODE: Bounded design, optionally task-drafting if Ready
+
+FILE NAMING: `NN-name.aps.md` by dependency order (e.g., `01-core.aps.md`, `02-auth.aps.md`)
 
 > For small, self-contained features, suggest `simple.template.md` instead.
 
@@ -24,4 +26,4 @@ MODE: Bounded design, optionally task-drafting if Ready
 
 ## Output
 
-Write the completed APS Leaf in markdown.
+Write the completed APS Module in markdown.
