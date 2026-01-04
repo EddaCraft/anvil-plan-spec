@@ -2,7 +2,7 @@
 
 | ID | Owner | Status |
 |----|-------|--------|
-| SCAFFOLD | @aneki | Ready |
+| SCAFFOLD | @aneki | Complete |
 
 ## Purpose
 

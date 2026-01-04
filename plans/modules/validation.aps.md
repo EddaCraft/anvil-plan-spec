@@ -2,7 +2,7 @@
 
 | ID | Owner | Status |
 |----|-------|--------|
-| VAL | @aneki | Draft |
+| VAL | @aneki | Ready |
 
 ## Purpose
 
@@ -26,40 +26,75 @@ Provide tooling to validate APS documents against expected structure, catching c
 
 **Depends on:**
 
-- TPL (templates) — validation rules based on template structure
+- TPL (templates) — validation rules based on template structure ✓ Complete
 
 **Exposes:**
 
-- `aps validate [file|dir]` — CLI command
-- Exit codes for CI integration
+- `aps lint [file|dir]` — CLI command
+- Exit codes for CI integration (0 = pass, 1 = errors, 2 = warnings only)
 - JSON output option for tooling
 
 ## Ready Checklist
 
-- [ ] Purpose and scope are clear
-- [ ] Dependencies identified
-- [ ] At least one task defined
+- [x] Purpose and scope are clear
+- [x] Dependencies identified (TPL complete)
+- [x] At least one task defined
 
 ## Tasks
 
-Module is Draft — tasks to be defined when Ready.
+### VAL-001: Define validation rules
 
-Candidate tasks from roadmap:
+- **Intent:** Establish what constitutes a valid APS document before writing code
+- **Expected Outcome:** Markdown document listing required fields per template type (index, module, simple, steps)
+- **Validation:** File exists at docs/validation-rules.md or plans/decisions/
+- **Confidence:** high
 
-1. Define validation rules (required fields per template type)
-2. Create CLI tool skeleton (Node.js or shell)
-3. Implement field presence checks
-4. Implement task ID format validation
-5. Implement dependency reference resolution
-6. Add CI integration example (GitHub Action)
+### VAL-002: Create CLI skeleton
+
+- **Intent:** Establish project structure and basic CLI interface
+- **Expected Outcome:** Executable `aps` CLI that accepts `lint` subcommand with file/dir argument
+- **Validation:** `./bin/aps lint --help` shows usage
+- **Confidence:** high
+
+### VAL-003: Implement field presence checks
+
+- **Intent:** Detect missing required fields in APS documents
+- **Expected Outcome:** CLI reports errors for missing Status, Purpose, Tasks sections
+- **Validation:** Running against malformed test fixture returns non-zero exit
+- **Confidence:** high
+
+### VAL-004: Implement task ID format validation
+
+- **Intent:** Catch malformed task IDs early (e.g., "Task 1" instead of "MOD-001")
+- **Expected Outcome:** CLI warns on task IDs not matching `[A-Z]+-\d{3}` pattern
+- **Validation:** Test fixture with bad IDs triggers warning
+- **Confidence:** medium
+
+### VAL-005: Implement dependency resolution
+
+- **Intent:** Catch broken references to other modules or tasks
+- **Expected Outcome:** CLI warns when `Depends on` references non-existent modules
+- **Validation:** Test fixture with broken dep triggers warning
+- **Confidence:** medium
+
+### VAL-006: Add CI example
+
+- **Intent:** Show users how to run validation in GitHub Actions
+- **Expected Outcome:** Example workflow file in docs/ or .github/examples/
+- **Validation:** Valid YAML syntax; references aps lint command
+- **Confidence:** high
 
 ## Decisions
 
-- **D-001:** CLI language choice — *pending (Node.js vs shell vs Deno)*
-- **D-002:** Strictness levels — *pending (error vs warning)*
+- **D-001:** CLI language — *decided: Shell script (bash) for v1, no runtime dependencies*
+- **D-002:** Strictness levels — *decided: errors (exit 1) vs warnings (exit 0 with output)*
+
+## Execution
+
+Steps: [../execution/VAL.steps.md](../execution/VAL.steps.md)
 
 ## Notes
 
-- Could start as simple shell script using grep/awk
-- JSON Schema approach mentioned in review but may be overkill
-- GitHub Action could be separate deliverable
+- Start simple with shell/grep — can rewrite in Node later if needed
+- JSON Schema approach deferred — overkill for v1
+- GitHub Action is a separate deliverable after CLI works
