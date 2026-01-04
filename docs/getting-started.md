@@ -2,108 +2,20 @@
 
 This guide walks you through adopting Anvil Plan Spec (APS) in your project.
 
-## Prerequisites
+## Which Template Should I Use?
 
-- A project repository (any language/framework)
-- Familiarity with markdown
+Start here. Pick based on what you're trying to do:
 
-## Step 1: Set Up Your Folder Structure
+| Situation | Template | Time to Value |
+|-----------|----------|---------------|
+| **Just trying APS** | [quickstart](../templates/quickstart.template.md) | 5 minutes |
+| **Small feature** (1-3 tasks, self-contained) | [simple](../templates/simple.template.md) | 15 minutes |
+| **Module with boundaries** (interfaces, deps) | [module](../templates/module.template.md) | 30 minutes |
+| **Multi-module initiative** | [index](../templates/index.template.md) | 1 hour |
+| **Large initiative** (6+ modules) | [index-expanded](../templates/index-expanded.template.md) | 1-2 hours |
+| **Breaking a task into actions** | [steps](../templates/steps.template.md) | 15 minutes |
 
-Create the following structure in your project:
-
-```text
-your-project/
-├── plans/
-│   ├── index.aps.md           # Your main plan
-│   ├── modules/               # Leaf modules
-│   │   ├── auth.aps.md
-│   │   └── payments.aps.md
-│   ├── execution/             # Step files
-│   │   └── AUTH-001.steps.md
-│   └── decisions/             # ADRs (optional)
-│       └── 001-use-jwt.md
-```
-
-## Step 2: Create Your Index
-
-**Choose your index template:**
-
-| Template | Best For |
-|----------|----------|
-| `index.template.md` | Most projects. Table format, compact, scannable. |
-| `index-expanded.template.md` | Larger projects (6+ modules) with rich metadata, tags, and complex dependencies. |
-
-Copy your chosen template to `plans/index.aps.md`.
-
-Fill in:
-
-1. **Problem** — What are you solving?
-2. **Success Criteria** — How do you know you're done?
-3. **System Map** — How do modules relate?
-4. **Modules** — List each bounded area of work (with tags for categorisation)
-
-> **Tip:** The Index is non-executable. Focus on intent, not implementation.
-
-## Step 3: Create Modules
-
-For each module in your Index, create a file in `plans/modules/`.
-
-**Choose your template:**
-
-- Use `templates/module.template.md` for modules with interfaces and boundaries
-- Use `templates/simple.template.md` for small, self-contained features
-
-### Module Template (full)
-
-Copy `templates/module.template.md` and fill in:
-
-1. **Purpose** — Why does this module exist?
-2. **In Scope / Out of Scope** — Clear boundaries
-3. **Interfaces** — What it depends on and exposes
-4. **Boundary Rules** — Architectural constraints
-5. **Tasks** — Only when status is Ready
-
-### Simple Template (lightweight)
-
-Copy `templates/simple.template.md` for features that:
-
-- Don't have complex interfaces
-- Don't need boundary rules
-- Are self-contained (1-3 tasks)
-
-Fill in:
-
-1. **Purpose** — What problem it solves
-2. **Success Criteria** — How you know it's done
-3. **Tasks** — The work to do
-
-> **Tip:** Keep modules small. If you have >8 tasks, consider splitting.
-
-## Step 4: Add Tasks When Ready
-
-Tasks are **execution authority**. Only add them when:
-
-- The module scope is clear
-- Dependencies are resolved
-- You're ready to implement
-
-Each task needs:
-
-- **Intent** — One sentence on what it achieves
-- **Expected Outcome** — Testable result
-- **Validation** — How to verify completion
-
-## Step 5: Generate Steps (Optional)
-
-For complex tasks, create a steps file in `plans/execution/`.
-
-Steps translate "what to achieve" into "what actions to take":
-
-- Each step has a **checkpoint** (observable state)
-- Steps describe **what**, not **how**
-- "How" only appears when referencing existing patterns
-
-## Workflow Decision Tree
+### Decision Tree
 
 ```mermaid
 graph TD
@@ -128,64 +40,137 @@ graph TD
     L -->|No| N[Execute directly]
 ```
 
-## When to Use Each Template
+## Quick Start
 
-| Situation | Template |
-|-----------|----------|
-| Just trying APS / quick single-file spec | `quickstart.template.md` |
-| Planning a multi-module initiative | `index.template.md` |
-| Large initiative with 6+ modules or rich metadata | `index-expanded.template.md` |
-| Defining a bounded area with multiple tasks | `module.template.md` |
-| Small feature that fits in one file | `simple.template.md` |
-| Breaking a task into granular actions | `steps.template.md` |
+**Want to see APS in action first?** Check the [examples](../examples/):
 
-### Index Template Formats
+- [User Authentication](../examples/user-auth/) — Adding auth to an existing app
+- [OpenCode Companion](../examples/opencode-companion/) — Building a new tool
 
-APS provides two index formats to suit different project sizes:
+**Solo developer?** You don't need the full ceremony:
 
-**Table format** (`index.template.md`):
+- Use `simple.template.md` for most features
+- Skip formal modules — go straight to tasks
+- Only create an Index if you're planning weeks of work
+- Steps files are optional — use when a task feels complex
 
-```markdown
-| Module | Scope | Owner | Status | Priority | Tags | Dependencies |
-|--------|-------|-------|--------|----------|------|--------------|
-| [core](./modules/core.aps.md) | CORE | @josh | Ready | high | domain | — |
+**Ready to scaffold?** Run this in your project:
+
+```bash
+# From a cloned APS repo
+./scaffold/init.sh /path/to/your-project
+
+# Or via curl (once repo is public)
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/init.sh | bash
 ```
 
-- Compact and scannable
-- Works well for 2-6 modules
-- Best for most projects
+This creates `plans/` with templates and `aps-rules.md` for AI guidance.
 
-**List format** (`index-expanded.template.md`):
+## Prerequisites
+
+- A project repository (any language/framework)
+- Familiarity with markdown
+
+## Setting Up Manually
+
+If you prefer manual setup over the scaffold script:
+
+### 1. Create folder structure
+
+```text
+your-project/
+├── plans/
+│   ├── index.aps.md           # Your main plan
+│   ├── modules/               # Module specs
+│   │   └── feature.aps.md
+│   ├── execution/             # Step files
+│   │   └── FEAT-001.steps.md
+│   └── decisions/             # ADRs (optional)
+│       └── 001-use-jwt.md
+```
+
+### 2. Create your Index
+
+Copy `index.template.md` to `plans/index.aps.md`. Fill in:
+
+1. **Problem** — What are you solving?
+2. **Success Criteria** — How do you know you're done?
+3. **Modules** — List each bounded area of work
+
+> **Tip:** The Index is non-executable. Focus on intent, not implementation.
+
+### 3. Create Modules
+
+For each module, create a file in `plans/modules/`:
+
+- `module.template.md` — For modules with interfaces and dependencies
+- `simple.template.md` — For small, self-contained features
+
+Fill in Purpose, Scope, and leave Tasks empty until Ready.
+
+### 4. Add Tasks When Ready
+
+Tasks are **execution authority**. Only add them when:
+
+- The module scope is clear
+- Dependencies are resolved
+- You're ready to implement
+
+Each task needs:
+
+- **Intent** — One sentence on what it achieves
+- **Expected Outcome** — Testable result
+- **Validation** — How to verify completion
+
+### 5. Generate Steps (Optional)
+
+For complex tasks, create a steps file in `plans/execution/`.
+
+Steps translate "what to achieve" into "what actions to take":
+
+- Each step has a **checkpoint** (observable state)
+- Steps describe **what**, not **how**
+
+## Index Template Formats
+
+APS provides two index formats:
+
+**Table format** (`index.template.md`) — compact, scannable, best for 2-6 modules:
 
 ```markdown
-### core
+| Module | Purpose | Status | Dependencies |
+|--------|---------|--------|--------------|
+| [auth](./modules/auth.aps.md) | User authentication | Ready | — |
+```
 
-- **Path:** ./modules/core.aps.md
-- **Scope:** CORE
-- **Owner:** @josh
+**List format** (`index-expanded.template.md`) — more readable with many modules:
+
+```markdown
+### auth
+
+- **Path:** ./modules/auth.aps.md
 - **Status:** Ready
 - **Priority:** high
-- **Tags:** domain, memory
-- **Dependencies:** store-sqlite, provider-local
+- **Dependencies:** database, session
 ```
-
-- More readable with many modules
-- Easier to edit in raw markdown
-- Better for complex dependency chains
-- Supports richer metadata per module
 
 ## Working with AI Assistants
 
-APS includes prompts for AI tools. To use them:
+APS includes prompts for AI tools:
 
-1. **For planning:** Reference `docs/ai/prompting/index.prompt.md`
-2. **For module design:** Reference `docs/ai/prompting/module.prompt.md`
-3. **For task creation:** Reference `docs/ai/prompting/task.prompt.md`
-4. **For execution:** Reference `docs/ai/prompting/steps.prompt.md`
+| Task | Prompt |
+|------|--------|
+| Planning | `docs/ai/prompting/index.prompt.md` |
+| Module design | `docs/ai/prompting/module.prompt.md` |
+| Task creation | `docs/ai/prompting/task.prompt.md` |
+| Execution | `docs/ai/prompting/steps.prompt.md` |
 
-OpenCode/Claude users can use the variants in `docs/ai/prompting/opencode/`.
+OpenCode/Claude users: see `docs/ai/prompting/opencode/` for optimized variants.
+
+When you scaffold APS, it includes `aps-rules.md` — point your AI agent at this
+file and it will follow APS conventions automatically.
 
 ## Next Steps
 
-- Review the [examples](../examples/) for complete worked examples
-- Read [AGENTS.md](../AGENTS.md) for AI collaboration rules
+- Review [workflow.md](./workflow.md) for day-to-day usage patterns
+- Read [AGENTS.md](../AGENTS.md) for AI collaboration rules in this repo

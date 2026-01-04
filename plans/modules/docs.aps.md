@@ -2,7 +2,7 @@
 
 | ID | Owner | Status |
 |----|-------|--------|
-| DOCS | @aneki | Draft |
+| DOCS | @aneki | Complete |
 
 ## Purpose
 
@@ -12,7 +12,6 @@ Improve onboarding and workflow clarity through better documentation structure, 
 
 - Reorganize getting-started.md (decision tree first)
 - Create "Development Workflow" guide with concrete examples
-- Create "Using AI Prompts" guide with tool-specific examples
 - Add completion/archival guidance
 - Solo developer documentation
 
@@ -21,39 +20,72 @@ Improve onboarding and workflow clarity through better documentation structure, 
 - Video tutorials (different medium)
 - Tool-specific plugins or integrations
 - Translated documentation
+- AI prompt variants (covered in existing docs/ai/prompting/)
 
 ## Interfaces
 
 **Depends on:**
 
-- TPL (templates) — documentation references current template structure
+- TPL (templates) — documentation references current template structure ✓ Complete
 
 **Exposes:**
 
 - docs/getting-started.md — improved onboarding
 - docs/workflow.md — new daily workflow guide
-- docs/ai-prompts.md — new AI usage guide
 
 ## Ready Checklist
 
-- [ ] Purpose and scope are clear
-- [ ] Dependencies identified
-- [ ] At least one task defined
+- [x] Purpose and scope are clear
+- [x] Dependencies identified (TPL complete)
+- [x] At least one task defined
 
 ## Tasks
 
-Module is Draft — tasks to be defined when Ready.
+### DOCS-001: Reorganize getting-started.md
 
-Candidate tasks from usability review:
+- **Intent:** Put decision tree first so users immediately know which template to use
+- **Expected Outcome:** getting-started.md leads with "Which template?" flowchart, then walks through each path
+- **Validation:** Decision tree appears in first 50 lines; markdownlint passes
+- **Confidence:** high
+- **Status:** ✓ Complete
 
-1. Reorganize getting-started.md with decision tree first
-2. Create workflow.md with "Day in the Life" examples
-3. Create ai-prompts.md with tool-specific guidance
-4. Add solo developer notes to templates/docs
-5. Add completion/archival guidance
+### DOCS-002: Create workflow.md
+
+- **Intent:** Show concrete "day in the life" examples of using APS
+- **Expected Outcome:** New file docs/workflow.md with scenarios: starting a feature, mid-implementation, handoff, completion
+- **Validation:** File exists with at least 3 workflow scenarios
+- **Confidence:** high
+- **Status:** ✓ Complete
+
+### DOCS-003: Add completion guidance
+
+- **Intent:** Clarify what happens when a plan or module is done
+- **Expected Outcome:** Section in workflow.md covering: marking complete, archival options, when to delete vs keep
+- **Validation:** grep "Completion\|Archive" docs/workflow.md returns matches
+- **Confidence:** high
+- **Status:** ✓ Complete
+
+### DOCS-004: Add solo developer notes
+
+- **Intent:** Address feedback that APS feels "heavy" for solo devs
+- **Expected Outcome:** Section in getting-started.md or workflow.md with solo dev guidance (use Simple template, skip formal modules)
+- **Validation:** grep -i "solo" docs/*.md returns matches
+- **Confidence:** high
+- **Status:** ✓ Complete
+
+### DOCS-005: Surface examples more prominently
+
+- **Intent:** Address "examples are buried" feedback
+- **Expected Outcome:** README and getting-started.md link to examples earlier; examples/ appears in quick start section
+- **Validation:** Examples link appears in first 100 lines of README
+- **Confidence:** high
+- **Status:** ✓ Complete
+
+## Execution
+
+Steps: [../execution/DOCS.steps.md](../execution/DOCS.steps.md)
 
 ## Notes
 
-- Should reference the hello world example from README
-- Consider linking to examples more prominently
-- Address the "examples are buried" feedback
+- Reference the hello world example from README (already exists)
+- Keep docs concise — avoid duplicating template content

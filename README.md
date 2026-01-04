@@ -31,6 +31,9 @@ APS is different:
 APS isn't a replacement for your AI tools — it's the planning layer that works
 *across* all of them. Write your spec once, use it everywhere.
 
+> **Want to see APS in action?** Jump to [examples](examples/) or see the
+> [Hello World](#hello-world-example) below.
+
 ## Hierarchy
 
 ```mermaid

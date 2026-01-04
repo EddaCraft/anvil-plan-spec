@@ -33,10 +33,10 @@ The usability review (APS-USABILITY-REVIEW.md) identified 15 issues across docum
 
 | Module | Purpose | Status | Dependencies |
 |--------|---------|--------|--------------|
-| [scaffold](./modules/scaffold.aps.md) | One-command setup for new projects | Ready | — |
-| [templates](./modules/templates.aps.md) | Reduce friction, mark optional fields | Ready | — |
-| [docs](./modules/docs.aps.md) | Workflow guide, improved onboarding | Draft | templates |
-| [validation](./modules/validation.aps.md) | CLI tool to validate APS documents | Draft | templates |
+| [scaffold](./modules/scaffold.aps.md) | One-command setup for new projects | Complete | — |
+| [templates](./modules/templates.aps.md) | Reduce friction, mark optional fields | Complete | — |
+| [docs](./modules/docs.aps.md) | Workflow guide, improved onboarding | Complete | templates |
+| [validation](./modules/validation.aps.md) | CLI tool to validate APS documents | Ready | templates |
 
 ## Risks
 
