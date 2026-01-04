@@ -66,7 +66,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 ### VAL-004: Implement task ID format validation
 
 - **Intent:** Catch malformed task IDs early (e.g., "Task 1" instead of "MOD-001")
-- **Expected Outcome:** CLI warns on task IDs not matching `[A-Z]+-\d{3}` pattern
+- **Expected Outcome:** CLI warns on task IDs not matching `[A-Z]+-[0-9]{3}` pattern
 - **Validation:** Test fixture with bad IDs triggers warning
 - **Confidence:** medium
 
