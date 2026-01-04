@@ -31,7 +31,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 **Exposes:**
 
 - `aps lint [file|dir]` — CLI command
-- Exit codes for CI integration (0 = pass, 1 = errors, 2 = warnings only)
+- Exit codes for CI integration (0 = no errors, may include warnings; 1 = errors)
 - JSON output option for tooling
 
 ## Ready Checklist
