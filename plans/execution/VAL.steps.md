@@ -10,7 +10,7 @@
 ## Prerequisites
 
 - [x] TPL module complete (template structure known)
-- [ ] DOCS module complete (validation rules may reference docs)
+- [x] DOCS module complete (validation rules may reference docs)
 
 ## Steps
 
