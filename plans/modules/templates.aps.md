@@ -39,7 +39,7 @@ Reduce template friction by marking optional fields, providing inline guidance, 
 - [x] Dependencies identified (none)
 - [x] At least one task defined
 
-## Tasks
+## Work Items
 
 ### TPL-001: Rename leaf.template.md to module.template.md
 

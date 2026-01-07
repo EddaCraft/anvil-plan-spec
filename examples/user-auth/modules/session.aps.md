@@ -1,5 +1,5 @@
 <!-- APS: See docs/ai/prompting/ for AI guidance -->
-<!-- Executable only if tasks exist and status is Ready. -->
+<!-- Executable only if work items exist and status is Ready. -->
 
 # Session Module
 
@@ -54,7 +54,7 @@ Manage user sessions using JWT tokens. Issue access tokens on login, validate to
 | Token theft | Short access token expiry, httpOnly cookies |
 | Refresh token reuse | Rotate on each use, detect reuse |
 
-## Tasks
+## Work Items
 
 > **Status: Draft** — Blocked on AUTH module completion
 

@@ -1,7 +1,7 @@
 # APS Index Prompt (OpenCode / Claude Opus 4.5)
 
 ROLE: Planner
-MODE: Non-executable (do not create implementation tasks unless explicitly
+MODE: Non-executable (do not create implementation work items unless explicitly
 requested)
 
 ## Operating constraints

@@ -39,7 +39,7 @@ Improve onboarding and workflow clarity through better documentation structure, 
 - [x] Dependencies identified (TPL complete)
 - [x] At least one task defined
 
-## Tasks
+## Work Items
 
 ### DOCS-001: Reorganize getting-started.md
 

@@ -1,5 +1,5 @@
 <!-- APS: See docs/ai/prompting/ for AI guidance -->
-<!-- Executable only if tasks exist and status is Ready. -->
+<!-- Executable only if work items exist and status is Ready. -->
 
 # Core Module
 
@@ -56,7 +56,7 @@ Provide data access layer for OpenCode configuration and session history. Handle
 | Config format unknown | Start with documented fields only |
 | Large session files | Stream/paginate, don't load all into memory |
 
-## Tasks
+## Work Items
 
 ### CORE-001: Implement config discovery and parsing
 

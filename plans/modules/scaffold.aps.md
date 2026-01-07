@@ -38,7 +38,7 @@ Provide one-command setup that copies APS templates and agent guidance into any 
 - [x] Dependencies identified (none)
 - [x] At least one task defined
 
-## Tasks
+## Work Items
 
 ### SCAFFOLD-001: Create scaffold directory structure
 

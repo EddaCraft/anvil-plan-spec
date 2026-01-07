@@ -1,6 +1,6 @@
 <!-- APS: See docs/ai/prompting/ for AI guidance -->
 <!--
-Work can begin when: status=Ready AND tasks exist.
+Work can begin when: status=Ready AND work items exist.
 Module ID: Use 2-6 uppercase chars (AUTH, PAY, UI, CORE, etc.)
 File naming: NN-name.aps.md by dependency order (01-core.aps.md, 02-auth.aps.md)
 -->
@@ -43,9 +43,9 @@ Change status to **Ready** when:
 
 - [ ] Purpose and scope are clear
 - [ ] Dependencies identified (or confirmed none)
-- [ ] At least one task defined
+- [ ] At least one work item defined
 
-## Tasks
+## Work Items
 
 <!--
 Required: Intent, Expected Outcome, Validation
@@ -53,11 +53,11 @@ Optional: Non-scope, Files, Dependencies, Confidence, Risks
 
 Confidence levels:
 - high: Clear requirements, familiar patterns
-- medium: Some unknowns, moderate risk  
+- medium: Some unknowns, moderate risk
 - low: Exploratory, high uncertainty
 -->
 
-### AUTH-001: [Task title]
+### AUTH-001: [Work item title]
 
 - **Intent:** [What this achieves — one sentence]
 - **Expected Outcome:** [Observable/testable result]
@@ -67,7 +67,7 @@ Confidence levels:
 - **Files:** [Likely files] *(optional — best effort)*
 - **Dependencies:** AUTH-XXX *(optional)*
 
-### AUTH-002: [Another task]
+### AUTH-002: [Another work item]
 
 - **Intent:** [What this achieves]
 - **Expected Outcome:** [Testable result]
@@ -76,7 +76,7 @@ Confidence levels:
 
 ## Execution *(optional)*
 
-Steps: [./execution/AUTH.steps.md](./execution/AUTH.steps.md)
+Action Plan: [./execution/AUTH.actions.md](./execution/AUTH.actions.md)
 
 ## Decisions *(optional)*
 
