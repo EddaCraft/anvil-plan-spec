@@ -1,5 +1,5 @@
 <!-- APS: See docs/ai/prompting/ for AI guidance -->
-<!-- Executable only if tasks exist and status is Ready. -->
+<!-- Executable only if work items exist and status is Ready. -->
 
 # Authentication Module
 
@@ -54,7 +54,7 @@ Handle user registration and credential verification. This module owns password 
 | Timing attacks on login | Use constant-time comparison |
 | Weak passwords | Enforce minimum length (8 chars) |
 
-## Tasks
+## Work Items
 
 ### AUTH-001: Create user registration function
 

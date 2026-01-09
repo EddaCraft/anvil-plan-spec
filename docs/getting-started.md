@@ -9,11 +9,11 @@ Start here. Pick based on what you're trying to do:
 | Situation | Template | Time to Value |
 |-----------|----------|---------------|
 | **Just trying APS** | [quickstart](../templates/quickstart.template.md) | 5 minutes |
-| **Small feature** (1-3 tasks, self-contained) | [simple](../templates/simple.template.md) | 15 minutes |
+| **Small feature (1-3 work items, self-contained) | [simple](../templates/simple.template.md) | 15 minutes |
 | **Module with boundaries** (interfaces, deps) | [module](../templates/module.template.md) | 30 minutes |
 | **Multi-module initiative** | [index](../templates/index.template.md) | 1 hour |
 | **Large initiative** (6+ modules) | [index-expanded](../templates/index-expanded.template.md) | 1-2 hours |
-| **Breaking a task into actions** | [steps](../templates/steps.template.md) | 15 minutes |
+| **Breaking a work item into actions** | [actions](../templates/actions.template.md) | 15 minutes |
 
 ### Decision Tree
 
@@ -22,7 +22,7 @@ graph TD
     A[New work item] --> B{How big?}
     B -->|Large initiative| C[Create Index]
     B -->|Single module| D{Self-contained?}
-    B -->|Single task| E[Add to existing module]
+    B -->|Single work item| E[Add to existing module]
     
     C --> F[Add modules]
     D -->|Yes| G[Use simple.template.md]
@@ -32,11 +32,11 @@ graph TD
     G --> I
     H --> I
     
-    I -->|Yes| J[Add Tasks, set status=Ready]
+    I -->|Yes| J[Add Work Items, set status=Ready]
     I -->|No| K[Leave as Draft, list blockers]
     
-    J --> L{Complex task?}
-    L -->|Yes| M[Create Steps file]
+    J --> L{Complex work item?}
+    L -->|Yes| M[Create Action Plan file]
     L -->|No| N[Execute directly]
 ```
 
@@ -50,9 +50,9 @@ graph TD
 **Solo developer?** You don't need the full ceremony:
 
 - Use `simple.template.md` for most features
-- Skip formal modules — go straight to tasks
+- Skip formal modules — go straight to work items
 - Only create an Index if you're planning weeks of work
-- Steps files are optional — use when a task feels complex
+- Steps files are optional — use when a work item feels complex
 
 **Ready to scaffold?** Run this in your project:
 
@@ -83,8 +83,8 @@ your-project/
 │   ├── index.aps.md           # Your main plan
 │   ├── modules/               # Module specs
 │   │   └── feature.aps.md
-│   ├── execution/             # Step files
-│   │   └── FEAT-001.steps.md
+│   ├── execution/             # Action plan files
+│   │   └── FEAT-001.actions.md
 │   └── decisions/             # ADRs (optional)
 │       └── 001-use-jwt.md
 ```

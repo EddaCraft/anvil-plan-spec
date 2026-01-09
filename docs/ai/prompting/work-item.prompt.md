@@ -1,7 +1,7 @@
-# APS Task/TODO Prompt (Tool-Agnostic)
+# APS Work Item Prompt (Tool-Agnostic)
 
-You are assisting with creating a single APS Task/TODO.
-A task is **execution authority**. Keep it small.
+You are assisting with creating a single APS Work Item.
+A work item is **execution authority**. Keep it small.
 
 ## Objectives
 
@@ -11,14 +11,14 @@ A task is **execution authority**. Keep it small.
 
 ## Hard rules
 
-- One task = one coherent change
+- One work item = one coherent change
 - Avoid `eslint-disable`, `any`, unsafe casts, broad suppressions
-- No broad refactors unless explicitly the task's purpose
-- If you cannot scope safely, split into smaller tasks
+- No broad refactors unless explicitly the work item's purpose
+- If you cannot scope safely, split into smaller work items
 
-## Required task fields
+## Required work item fields
 
-- Task title
+- Work item title
 - Intent (one sentence)
 - Expected outcome (observable/testable)
 - Scope (what will change)
@@ -26,7 +26,7 @@ A task is **execution authority**. Keep it small.
 - Files likely touched (best effort)
 - Validation steps (tests/checks)
 - Risks + mitigations
-- Dependencies (on other tasks, decisions, artefacts)
+- Dependencies (on other work items, decisions, artefacts)
 - Provenance note template (for future suppressions/exceptions)
 
 ## Output style

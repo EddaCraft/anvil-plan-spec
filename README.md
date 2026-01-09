@@ -1,6 +1,6 @@
 # Anvil Plan Spec (APS)
 
-A lightweight specification format for planning and task authorisation in
+A lightweight specification format for planning and work item authorisation in
 AI-assisted development.
 
 ## What is APS?
@@ -8,7 +8,7 @@ AI-assisted development.
 APS provides a structured way to:
 
 - **Plan work** before implementation begins
-- **Authorise tasks** that AI agents can execute
+- **Authorise work items** that AI agents can execute
 - **Track execution** through observable checkpoints
 
 It acts as a trust layer between humans and AI — humans remain accountable
@@ -39,8 +39,8 @@ APS isn't a replacement for your AI tools — it's the planning layer that works
 ```mermaid
 graph TD
     A[Index] -->|contains| B[Module]
-    B -->|contains| C[Task]
-    C -->|executed via| D[Steps]
+    B -->|contains| C[Work Item]
+    C -->|executed via| D[Action Plan]
 
     A -.-|"non-executable<br/>describes intent"| A
     B -.-|"executable if Ready<br/>bounded scope"| B
@@ -51,18 +51,18 @@ graph TD
 | Layer | Purpose | Executable? |
 |-------|---------|-------------|
 | **Index** | High-level plan with modules and milestones | No |
-| **Module** | Bounded scope with interfaces and tasks | If status is Ready |
-| **Task** | Single coherent change with validation | Yes — execution authority |
-| **Steps** | Ordered actions with checkpoints | Yes — granular execution |
+| **Module** | Bounded scope with interfaces and work items | If status is Ready |
+| **Work Item** | Single coherent change with validation | Yes — execution authority |
+| **Action Plan** | Ordered actions with checkpoints | Yes — granular execution |
 
 **Key concepts:**
 
 - **Index** — The root plan. Describes the whole initiative, lists modules.
 - **Module** — A bounded area where work happens. The smallest unit you *plan*.
-  You don't subdivide modules into sub-plans — they contain tasks directly.
-- **Task** — A single authorised change. The unit of execution authority.
-- **Steps** — How you *execute* a task. Optional, generated when needed. Breaks
-  a task into checkpointed actions for granular progress tracking.
+  You don't subdivide modules into sub-plans — they contain work items directly.
+- **Work Item** — A single authorised change. The unit of execution authority.
+- **Action Plan** — How you *execute* a work item. Optional, generated when needed. Breaks
+  a work item into checkpointed actions for granular progress tracking.
 
 ## Quick Start
 
@@ -87,8 +87,8 @@ helps AI agents follow APS conventions.
 1. Copy templates from `templates/` to your project
 2. Create an Index to define your plan's scope and modules
 3. Create Leaf modules for each bounded area of work
-4. Add Tasks when a module is ready for implementation
-5. Generate Steps (optional) for granular execution guidance
+4. Add Work Items when a module is ready for implementation
+5. Generate Action Plans (optional) for granular execution guidance
 
 See [Getting Started](docs/getting-started.md) for a complete walkthrough.
 
@@ -114,9 +114,9 @@ No plugins. No integrations. No configuration. It's just files.
 | [quickstart.template.md](templates/quickstart.template.md) | **Try APS in 5 minutes** — minimal single-file format |
 | [index.template.md](templates/index.template.md) | Starting a new plan or initiative |
 | [index-expanded.template.md](templates/index-expanded.template.md) | Larger initiatives with 6+ modules or rich metadata |
-| [module.template.md](templates/module.template.md) | Defining a bounded module with tasks |
+| [module.template.md](templates/module.template.md) | Defining a bounded module with work items |
 | [simple.template.md](templates/simple.template.md) | Small, self-contained features |
-| [steps.template.md](templates/steps.template.md) | Breaking tasks into executable steps |
+| [actions.template.md](templates/actions.template.md) | Breaking work items into executable actions |
 
 ### Hello World Example
 
@@ -130,7 +130,7 @@ Users want to reduce eye strain when working at night.
 - [ ] Toggle persists across sessions
 - [ ] All components respect theme
 
-## Tasks
+## Work Items
 
 ### 001: Add theme context
 - **Outcome:** ThemeProvider wraps app, exposes toggle
@@ -163,9 +163,9 @@ See [AGENTS.md](AGENTS.md) for collaboration rules when using AI in this repo.
 ## Principles
 
 1. **Specs describe intent** — what and why, not how
-2. **Tasks authorise execution** — no task, no implementation
+2. **Work items authorise execution** — no work item, no implementation
 3. **Humans remain accountable** — AI proposes, humans approve
-4. **Checkpoints are observable** — every step has a verifiable state
+4. **Checkpoints are observable** — every action has a verifiable state
 
 ## Project Structure
 
@@ -177,8 +177,8 @@ your-project/
 │   ├── modules/                  # Leaf modules
 │   │   ├── auth.aps.md
 │   │   └── payments.aps.md
-│   ├── execution/                # Step files
-│   │   └── AUTH-001.steps.md
+│   ├── execution/                # Action plan files
+│   │   └── AUTH-001.actions.md
 │   └── decisions/                # ADRs (optional)
 │       └── 001-use-jwt.md
 ```

@@ -1,5 +1,5 @@
 <!-- APS: See docs/ai/prompting/ for AI guidance -->
-<!-- Executable only if tasks exist and status is Ready. -->
+<!-- Executable only if work items exist and status is Ready. -->
 
 # UI Module
 
@@ -52,7 +52,7 @@ Provide the visual interface for the companion app. Displays session history, co
 | Large session lists | Virtual scrolling |
 | Tauri/React integration issues | Use official Tauri React template |
 
-## Tasks
+## Work Items
 
 > **Status: Draft** — Blocked on CORE module
 

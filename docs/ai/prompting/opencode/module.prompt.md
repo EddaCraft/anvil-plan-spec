@@ -1,7 +1,7 @@
 # APS Module Prompt (OpenCode / Claude Opus 4.5)
 
 ROLE: Architect/Planner
-MODE: Bounded design, optionally task-drafting if Ready
+MODE: Bounded design, optionally work item-drafting if Ready
 
 FILE NAMING: `NN-name.aps.md` by dependency order (e.g., `01-core.aps.md`, `02-auth.aps.md`)
 
@@ -11,7 +11,7 @@ FILE NAMING: `NN-name.aps.md` by dependency order (e.g., `01-core.aps.md`, `02-a
 
 - Default to conservative scope.
 - Highlight boundary rules ("must not depend on...").
-- If you propose tasks, each must be small and independently reviewable.
+- If you propose work items, each must be small and independently reviewable.
 
 ## Produce
 
@@ -22,7 +22,7 @@ FILE NAMING: `NN-name.aps.md` by dependency order (e.g., `01-core.aps.md`, `02-a
 - Acceptance criteria
 - Risks
 - Decisions + open questions
-- Tasks (only if Ready; otherwise list blockers)
+- Work Items (only if Ready; otherwise list blockers)
 
 ## Output
 

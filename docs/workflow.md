@@ -10,8 +10,8 @@ APS documents live alongside your code and evolve with it:
 | Phase | What Happens | APS Artifacts |
 |-------|--------------|---------------|
 | **Planning** | Define scope and success | Index, Modules (Draft) |
-| **Ready** | Approve for implementation | Modules (Ready), Tasks |
-| **Executing** | Build the thing | Steps, task status updates |
+| **Ready** | Approve for implementation | Modules (Ready), Work Items |
+| **Executing** | Build the thing | Steps, work item status updates |
 | **Complete** | Ship and close out | Mark complete, archive |
 
 ## Scenarios
@@ -45,15 +45,15 @@ You've been asked to add user authentication to an existing app.
    ```
 
 3. **Draft the modules.** Create `auth.aps.md` with Purpose and Scope. Leave
-   Tasks empty — you're still exploring.
+   Work Items empty — you're still exploring.
 
 4. **Get approval.** Share the Index with your team or reviewer. Discuss
    scope, dependencies, risks.
 
-5. **Move to Ready.** Once approved, change module status to Ready and add Tasks:
+5. **Move to Ready.** Once approved, change module status to Ready and add Work Items:
 
    ```markdown
-   ## Tasks
+   ## Work Items
 
    ### AUTH-001: Create registration endpoint
    - **Intent:** Allow new users to create accounts
@@ -61,7 +61,7 @@ You've been asked to add user authentication to an existing app.
    - **Validation:** curl test returns 201
    ```
 
-6. **Execute.** Work through tasks. If a task is complex, create a Steps file.
+6. **Execute.** Work through work items. If a work item is complex, create a Action Plan file.
 
 ---
 
@@ -69,7 +69,7 @@ You've been asked to add user authentication to an existing app.
 
 You're halfway through AUTH-001 and realize you need database migrations.
 
-1. **Update the spec.** Add a new task or note the dependency:
+1. **Update the spec.** Add a new work item or note the dependency:
 
    ```markdown
    ### AUTH-001: Create registration endpoint
@@ -77,7 +77,7 @@ You're halfway through AUTH-001 and realize you need database migrations.
    - **Blocked:** Needs AUTH-000 (db migration) first
    ```
 
-   Or add a new task:
+   Or add a new work item:
 
    ```markdown
    ### AUTH-000: Add users table migration
@@ -95,7 +95,7 @@ You're halfway through AUTH-001 and realize you need database migrations.
    - **Blocked:** Waiting on Google API credentials from infra team
    ```
 
-3. **Track progress.** Update task status as you go:
+3. **Track progress.** Update work item status as you go:
    - Remove status line = not started
    - `In Progress` = actively working
    - `Blocked` = waiting on something
@@ -107,7 +107,7 @@ You're halfway through AUTH-001 and realize you need database migrations.
 
 You're going on vacation and someone else needs to continue your work.
 
-1. **Update all statuses.** Make sure every task reflects current state. The
+1. **Update all statuses.** Make sure every work item reflects current state. The
    incoming dev should be able to look at the module and know exactly what's
    done and what's not.
 
@@ -128,9 +128,9 @@ You're going on vacation and someone else needs to continue your work.
 
 ### Completion and Archival
 
-You've finished all tasks in a module. Now what?
+You've finished all work items in a module. Now what?
 
-1. **Validate all tasks.** Run each task's validation command. Make sure
+1. **Validate all work items.** Run each work item's validation command. Make sure
    everything actually works.
 
 2. **Mark module complete:**
@@ -187,12 +187,12 @@ Update specs as you work, not after. Stale specs lose trust.
 
 ### Don't over-specify
 
-Tasks describe **what**, not **how**. Implementation details belong in code
+Work Items describe **what**, not **how**. Implementation details belong in code
 and comments, not specs.
 
 ### Use Steps sparingly
 
-Most tasks don't need a Steps file. Only create one when:
+Most work items don't need a Action Plan file. Only create one when:
 
 - Task has 5+ distinct actions
 - Multiple people might work on it

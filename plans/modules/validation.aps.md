@@ -40,7 +40,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 - [x] Dependencies identified (TPL complete)
 - [x] At least one task defined
 
-## Tasks
+## Work Items
 
 ### VAL-001: Define validation rules
 
