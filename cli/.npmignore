@@ -1,0 +1,29 @@
+# Test files
+test/
+tests/
+*.test.js
+*.spec.js
+
+# Development files
+.git
+.gitignore
+.editorconfig
+.eslintrc*
+.prettierrc*
+
+# Documentation (keep only README.md)
+docs/
+examples/
+
+# CI
+.github/
+.travis.yml
+.circleci/
+
+# Misc
+*.log
+*.swp
+*.swo
+*~
+.DS_Store
+node_modules/

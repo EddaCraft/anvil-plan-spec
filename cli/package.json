@@ -1,0 +1,42 @@
+{
+  "name": "@anvil-plan-spec/cli",
+  "version": "0.1.0",
+  "description": "CLI tool to initialize Anvil Plan Spec structure in your project",
+  "main": "lib/index.js",
+  "bin": {
+    "aps": "./bin/aps.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "aps",
+    "anvil-plan-spec",
+    "planning",
+    "ai-assisted",
+    "scaffold",
+    "workflow"
+  ],
+  "author": "Anvil Plan Spec Contributors",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/EddaCraft/anvil-plan-spec.git",
+    "directory": "cli"
+  },
+  "bugs": {
+    "url": "https://github.com/EddaCraft/anvil-plan-spec/issues"
+  },
+  "homepage": "https://github.com/EddaCraft/anvil-plan-spec#readme",
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "files": [
+    "bin/",
+    "lib/",
+    "templates/"
+  ],
+  "dependencies": {
+    "prompts": "^2.4.2"
+  }
+}
