@@ -333,7 +333,7 @@ Use these prompts to generate APS documents:
 | Index (project root) | [docs/ai/prompting/index.prompt.md](docs/ai/prompting/index.prompt.md) |
 | Module (bounded area) | [docs/ai/prompting/module.prompt.md](docs/ai/prompting/module.prompt.md) |
 | Work Item (execution unit) | [docs/ai/prompting/work-item.prompt.md](docs/ai/prompting/work-item.prompt.md) |
-| Action Plan (steps) | [docs/ai/prompting/actions.prompt.md](docs/ai/prompting/actions.prompt.md) |
+| Action Plan (actions) | [docs/ai/prompting/actions.prompt.md](docs/ai/prompting/actions.prompt.md) |
 
 **OpenCode/Claude variants:** [docs/ai/prompting/opencode/](docs/ai/prompting/opencode/)
 
