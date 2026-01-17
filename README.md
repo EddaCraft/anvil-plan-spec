@@ -272,7 +272,7 @@ When user asks to implement a feature or execute a work item:
    If creating action plan:
    - Use [docs/ai/prompting/actions.prompt.md](docs/ai/prompting/actions.prompt.md)
    - Create: `plans/execution/[WORKITEM-ID].actions.md` using the full work item ID (e.g., `plans/execution/AUTH-001.actions.md`)
-   - Write steps with observable checkpoints (max 12 words each)
+   - Write actions with observable checkpoints (max 12 words each)
    - **NO implementation detail** — just what should exist
 
 5. **Implement step-by-step**
