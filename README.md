@@ -34,6 +34,42 @@ APS isn't a replacement for your AI tools — it's the planning layer that works
 > **Want to see APS in action?** Jump to [examples](examples/) or see the
 > [Hello World](#hello-world-example) below.
 
+## Philosophy: Compound Engineering
+
+APS embraces the principle of **compound engineering**: each unit of engineering
+work should make subsequent units easier—not harder.
+
+Traditional development accumulates technical debt. Every feature adds complexity.
+The codebase becomes harder to work with over time. Compound engineering inverts
+this by investing heavily in planning and review upfront, so execution is fast
+and clean.
+
+**The 80/20 split:**
+
+- **80% planning and review** — Thorough specs, clear work items, validated
+  checkpoints
+- **20% execution** — Fast implementation following well-defined plans
+
+**The planning lifecycle:**
+
+```
+Plan → Execute → Validate → Learn → Plan again
+  ↑                                      │
+  └──────────────────────────────────────┘
+```
+
+| Phase | What Happens | How It Serves Planning |
+|-------|--------------|------------------------|
+| **Plan** | Define scope, success criteria, work items | Reference past patterns and solutions |
+| **Execute** | Work against well-defined specs | Clean implementation, fewer blockers |
+| **Validate** | Check outcomes against spec | Verify plan was correct, update if not |
+| **Learn** | Document solutions and learnings | Future plans start with known answers |
+
+Planning without validation is guesswork. Validation without learning repeats
+mistakes. The cycle exists to make each plan better than the last.
+
+See [docs/workflow.md](docs/workflow.md) for the full workflow guide.
+
 ## Hierarchy
 
 ```mermaid
@@ -117,6 +153,7 @@ No plugins. No integrations. No configuration. It's just files.
 | [module.template.md](templates/module.template.md) | Defining a bounded module with work items |
 | [simple.template.md](templates/simple.template.md) | Small, self-contained features |
 | [actions.template.md](templates/actions.template.md) | Breaking work items into executable actions |
+| [solution.template.md](templates/solution.template.md) | Documenting solved problems (compound phase) |
 
 ### Hello World Example
 
