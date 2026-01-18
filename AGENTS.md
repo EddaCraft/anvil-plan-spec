@@ -21,6 +21,7 @@ When modifying templates, prompts, or documentation:
 - **Maintain consistency** — field names, structure, and terminology
 - **Update examples** when template structure changes
 - **Run markdownlint** before committing (`npx markdownlint-cli "**/*.md"`)
+  - CI automatically runs markdown linting on all PRs
 
 ## Execution layer
 
