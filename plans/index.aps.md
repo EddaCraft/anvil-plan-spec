@@ -43,23 +43,23 @@ APS needs continued development to:
 
 | Module | Purpose | Status |
 |--------|---------|--------|
-| [examples](./modules/examples.aps.md) | Additional worked examples | Draft |
-| [prompts](./modules/prompts.aps.md) | Tool-specific prompt variants | Draft |
-| [compound](./modules/compound.aps.md) | Review/Learn phase tooling | Draft |
+| examples | Additional worked examples | Draft |
+| prompts | Tool-specific prompt variants | Draft |
+| compound | Review/Learn phase tooling | Draft |
 
 ### Medium Term
 
 | Module | Purpose | Status |
 |--------|---------|--------|
-| [integrations](./modules/integrations.aps.md) | Issue tracker sync, JSON export | Proposed |
-| [knowledge](./modules/knowledge.aps.md) | Solution search, pattern library | Proposed |
+| integrations | Issue tracker sync, JSON export | Proposed |
+| knowledge | Solution search, pattern library | Proposed |
 
 ### Long Term
 
 | Module | Purpose | Status |
 |--------|---------|--------|
-| [ecosystem](./modules/ecosystem.aps.md) | GitHub Action, VS Code extension | Proposed |
-| [spec](./modules/spec.aps.md) | Formal versioning, JSON Schema | Proposed |
+| ecosystem | GitHub Action, VS Code extension | Proposed |
+| spec | Formal versioning, JSON Schema | Proposed |
 
 ## Non-Goals
 
