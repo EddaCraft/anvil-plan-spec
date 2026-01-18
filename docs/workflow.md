@@ -3,16 +3,32 @@
 This guide shows how APS fits into your daily development workflow through
 concrete scenarios.
 
-## Overview
+## The Planning Lifecycle
 
-APS documents live alongside your code and evolve with it:
+APS follows the compound engineering philosophy: each unit of work should make
+future work easier. The workflow has four phases that loop back to planning:
 
-| Phase | What Happens | APS Artifacts |
-|-------|--------------|---------------|
-| **Planning** | Define scope and success | Index, Modules (Draft) |
-| **Ready** | Approve for implementation | Modules (Ready), Work Items |
-| **Executing** | Build the thing | Steps, work item status updates |
-| **Complete** | Ship and close out | Mark complete, archive |
+```
+Plan → Execute → Validate → Learn → Plan again
+  ↑                                      │
+  └──────────────────────────────────────┘
+```
+
+| Phase | What Happens | APS Artifacts | How It Serves Planning |
+|-------|--------------|---------------|------------------------|
+| **Plan** | Define scope and success | Index, Modules, Work Items | Reference past patterns and solutions |
+| **Execute** | Work against specs | Action Plans, status updates | Clean implementation from clear specs |
+| **Validate** | Check outcomes against spec | Review notes, checklist | Verify plan was correct, update if not |
+| **Learn** | Document solutions | Solution docs in `docs/solutions/` | Future plans start with known answers |
+
+**The 80/20 principle:** Spend 80% of effort on planning and validation, 20% on
+execution. Thorough preparation means fast, clean implementation.
+
+**Why the cycle matters:** Planning without validation is guesswork. Validation
+without learning repeats mistakes. The cycle exists to make each plan better
+than the last.
+
+## Phase Overview
 
 ## Scenarios
 
@@ -202,3 +218,215 @@ Most work items don't need a Action Plan file. Only create one when:
 
 Include spec changes in your PRs. Reviewers should see what you planned
 alongside what you built.
+
+---
+
+## Validate Phase
+
+After completing work items, validate against the spec before shipping.
+
+### Pre-Ship Checklist
+
+Before merging or deploying, verify:
+
+```markdown
+## Review Checklist
+
+### Functional
+- [ ] All work item validations pass
+- [ ] Edge cases handled
+- [ ] Error states covered
+
+### Quality
+- [ ] Code follows existing patterns
+- [ ] Tests added for new functionality
+- [ ] No obvious security issues
+
+### Documentation
+- [ ] Spec reflects what was built
+- [ ] README updated if needed
+- [ ] Comments explain non-obvious code
+```
+
+### Multi-Perspective Review
+
+For complex changes, consider multiple review angles:
+
+| Perspective | Questions to Ask |
+|-------------|------------------|
+| **Developer** | Is this easy to understand and modify? |
+| **Operations** | How do I deploy and troubleshoot this? |
+| **End User** | Is the feature intuitive? Are errors helpful? |
+| **Security** | What's the attack surface? Is data protected? |
+
+### Review in Practice
+
+1. **Run validations.** Execute every work item's validation command:
+
+   ```bash
+   # From each work item
+   curl -X POST /api/register -d '...'  # AUTH-001
+   psql -c '\d users'                   # AUTH-000
+   ```
+
+2. **Check against spec.** Does the implementation match the Expected Outcome?
+
+3. **Update spec if needed.** If implementation diverged from plan (for good
+   reasons), update the spec to reflect reality.
+
+4. **Note issues found.** If review catches problems, document them:
+
+   ```markdown
+   ## Notes
+
+   Review findings:
+   - AUTH-002 needs rate limiting (deferred to AUTH-005)
+   - Token expiry should be configurable (added to backlog)
+   ```
+
+---
+
+## Learn Phase
+
+After solving problems, document solutions to inform future planning.
+
+### Why Document Solutions?
+
+| First Occurrence | After Documenting |
+|------------------|-------------------|
+| 30+ minutes debugging | 2 minute lookup |
+| Research from scratch | Reference past solution |
+| Trial and error | Known working approach |
+
+**Knowledge compounds.** Each documented solution makes future work faster.
+
+### When to Document
+
+Document immediately after fixing:
+
+- **Non-trivial bugs** — Took multiple attempts to diagnose
+- **Tricky configurations** — Easy to get wrong
+- **Performance issues** — Required investigation
+- **Integration problems** — External dependencies behaved unexpectedly
+
+**Skip documentation for:**
+
+- Simple typos or syntax errors
+- Obvious issues with immediate fixes
+- One-off problems unlikely to recur
+
+### Solution Documentation Format
+
+Create solution docs in `docs/solutions/` organized by category:
+
+```text
+docs/solutions/
+├── performance/
+│   └── n-plus-one-query-brief-system.md
+├── configuration/
+│   └── jwt-token-expiry-settings.md
+├── integration/
+│   └── oauth-redirect-uri-mismatch.md
+└── database/
+    └── migration-column-order-issue.md
+```
+
+### Solution Template
+
+```markdown
+# [Brief Problem Description]
+
+## Symptom
+
+What you observed:
+- Error message (exact text)
+- Unexpected behavior
+- Performance issue
+
+## Root Cause
+
+What was actually wrong:
+- Technical explanation
+- Why it happened
+
+## Solution
+
+What fixed it:
+- Code changes
+- Configuration changes
+- Command to run
+
+## Prevention
+
+How to avoid in future:
+- Pattern to follow
+- Check to add
+- Test to write
+
+## Related
+
+- Work item: AUTH-001
+- PR: #123
+- Similar issue: [link to other solution]
+```
+
+### Learn Workflow in Practice
+
+1. **Recognize the moment.** You just fixed something that took effort. Pause
+   before moving on.
+
+2. **Capture while fresh.** Context fades quickly. Document now, not later.
+
+   ```bash
+   # Create solution doc
+   mkdir -p docs/solutions/performance
+   # Write solution using the template
+   ```
+
+3. **Cross-reference.** Link to related work items, PRs, and similar issues.
+
+4. **Make it findable.** Use clear filenames and categories. Future you (or
+   your teammates) will search for this.
+
+5. **Update specs.** If the solution affects how work should be done, update
+   relevant module specs or add to project conventions.
+
+### Building a Knowledge Base
+
+Over time, your `docs/solutions/` becomes a searchable knowledge base:
+
+```bash
+# Find past solutions
+grep -r "timeout" docs/solutions/
+grep -r "OAuth" docs/solutions/
+```
+
+**Patterns emerge.** After documenting 3+ similar issues, consider:
+
+- Adding to project conventions
+- Creating a checklist for common pitfalls
+- Updating templates to prevent the issue
+
+### Knowledge Compounds
+
+| After 1 Month | After 6 Months | After 1 Year |
+|---------------|----------------|--------------|
+| 5-10 solutions | 30-50 solutions | 100+ solutions |
+| Occasional reference | Regular lookups | Comprehensive KB |
+| Individual knowledge | Team knowledge | Institutional knowledge |
+
+**Each solution documented makes future planning faster.** New team members
+ramp up faster. Recurring problems get solved in minutes. Plans start with
+known answers instead of research.
+
+---
+
+## Complete Workflow Example
+
+Putting it all together for a feature:
+
+1. **Plan** — Create index and modules. Define work items with validation commands.
+2. **Execute** — Work against specs. Create action plans for complex items.
+3. **Validate** — Run validation commands. Check outcomes against spec. Update if diverged.
+4. **Learn** — Document tricky problems solved. Add to solution library.
+5. **Plan again** — Next feature references past solutions. Starts faster.
