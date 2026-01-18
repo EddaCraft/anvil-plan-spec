@@ -10,6 +10,8 @@ guidelines for contributing to the project.
 3. **Update documentation** if behaviour changes
 4. **Keep PRs focused** on one logical change per PR
 5. **Ensure linting passes** before requesting review (`npx markdownlint-cli "**/*.md"`)
+   - CI will automatically run markdown linting on all PRs
+   - Fix any linting errors before requesting review
 
 ### Commit Messages
 
