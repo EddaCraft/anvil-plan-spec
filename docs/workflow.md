@@ -8,7 +8,7 @@ concrete scenarios.
 APS follows the compound engineering philosophy: each unit of work should make
 future work easier. The workflow has four phases that loop back to planning:
 
-```
+```text
 Plan → Execute → Validate → Learn → Plan again
   ↑                                      │
   └──────────────────────────────────────┘

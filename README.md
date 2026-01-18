@@ -1,7 +1,28 @@
 # Anvil Plan Spec (APS)
 
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+
 A lightweight specification format for planning and work item authorisation in
 AI-assisted development.
+
+## Table of Contents
+
+- [What is APS?](#what-is-aps)
+- [Why APS?](#why-aps)
+- [Philosophy: Compound Engineering](#philosophy-compound-engineering)
+- [Hierarchy](#hierarchy)
+- [Quick Start](#quick-start)
+- [Works Everywhere](#works-everywhere)
+- [Templates](#templates)
+- [Examples](#examples)
+- [AI Guidance](#ai-guidance)
+- [AI Agent Implementation Guide](#-ai-agent-implementation-guide)
+- [Principles](#principles)
+- [Project Structure](#project-structure)
+- [Versioning](#versioning)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## What is APS?
 
@@ -52,7 +73,7 @@ and clean.
 
 **The planning lifecycle:**
 
-```
+```text
 Plan → Execute → Validate → Learn → Plan again
   ↑                                      │
   └──────────────────────────────────────┘
@@ -207,7 +228,7 @@ See [AGENTS.md](AGENTS.md) for collaboration rules when using AI in this repo.
 
 ### Quick Decision Tree
 
-```
+```text
 Is there a plans/ directory?
 ├─ NO  → Initialize APS using scaffold (see Initialization below)
 ├─ YES → Does plans/index.aps.md exist?
@@ -252,6 +273,7 @@ When user asks to "set up APS" or "initialize planning":
 When user asks to plan a feature or break down work:
 
 1. **Read context**
+
    ```bash
    # Must read before planning
    cat plans/index.aps.md              # Understand project scope
@@ -285,6 +307,7 @@ When user asks to plan a feature or break down work:
 When user asks to implement a feature or execute a work item:
 
 1. **Find the work item**
+
    ```bash
    # Locate the spec
    grep -r "work item ID" plans/modules/
@@ -319,6 +342,7 @@ When user asks to implement a feature or execute a work item:
    - If blocked: Document blocker, ask user
 
 6. **Validate completion**
+
    ```bash
    # Run the validation command from work item
    [validation command from spec]
@@ -430,7 +454,7 @@ See [ROADMAP.md](ROADMAP.md) for planned features and direction.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md).
+See [CONTRIBUTING.md](CONTRIBUTING.md) and our [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 

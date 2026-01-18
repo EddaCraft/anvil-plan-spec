@@ -1,0 +1,60 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  lint:
+    name: Lint Markdown
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run markdownlint
+        run: npm run lint
+
+  test-cli:
+    name: Test CLI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Test CLI help
+        run: node bin/aps.js help
+
+      - name: Test CLI init
+        run: |
+          mkdir -p /tmp/test-project
+          node bin/aps.js init /tmp/test-project
+          ls -la /tmp/test-project/plans/
+          test -f /tmp/test-project/plans/index.aps.md
+          test -f /tmp/test-project/plans/aps-rules.md
+
+      - name: Test CLI update
+        run: |
+          node bin/aps.js init --update /tmp/test-project

@@ -1,0 +1,33 @@
+# Internal documentation
+APS-USABILITY-REVIEW.md
+WARP.md
+
+# Project's own plans (meta - uses APS to plan APS)
+plans/
+
+# Git and CI/CD
+.git/
+.github/
+
+# Development files
+.markdownlint.json
+.gitignore
+*.log
+
+# Test and coverage
+coverage/
+.nyc_output/
+
+# IDE and editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node modules (shouldn't be in git anyway)
+node_modules/

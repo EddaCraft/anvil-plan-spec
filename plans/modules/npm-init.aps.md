@@ -112,6 +112,7 @@ Provide a zero-friction npm-based initialization command that scaffolds APS stru
 - **Validation:** `npx create-aps --config aps-init.json` creates structure without prompts
 - **Confidence:** medium
 - **Config format:**
+
   ```json
   {
     "projectType": "multi-module",

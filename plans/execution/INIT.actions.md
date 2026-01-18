@@ -169,6 +169,7 @@ This action plan breaks down the npm init command implementation into observable
 ### Action 4.2: Create version tracking file
 
 - [ ] Define format for `plans/.aps-version`:
+
   ```json
   {
     "createApsVersion": "0.1.0",
@@ -180,6 +181,7 @@ This action plan breaks down the npm init command implementation into observable
     }
   }
   ```
+
 - [ ] Write version file on initial scaffold
 - [ ] Read version file in update mode
 

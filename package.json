@@ -1,0 +1,58 @@
+{
+  "name": "anvil-plan-spec",
+  "version": "0.1.0",
+  "description": "A lightweight specification format for planning and work item authorisation in AI-assisted development",
+  "keywords": [
+    "ai",
+    "planning",
+    "specification",
+    "markdown",
+    "ai-assisted-development",
+    "task-management",
+    "software-engineering",
+    "llm",
+    "claude",
+    "cursor",
+    "copilot"
+  ],
+  "homepage": "https://github.com/EddaCraft/anvil-plan-spec#readme",
+  "bugs": {
+    "url": "https://github.com/EddaCraft/anvil-plan-spec/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EddaCraft/anvil-plan-spec.git"
+  },
+  "license": "Apache-2.0",
+  "author": "EddaCraft <josh@eddacraft.ai>",
+  "type": "module",
+  "bin": {
+    "aps": "./bin/aps.js"
+  },
+  "files": [
+    "bin/",
+    "templates/",
+    "scaffold/",
+    "docs/",
+    "examples/",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "CODE_OF_CONDUCT.md",
+    "SECURITY.md",
+    "AGENTS.md"
+  ],
+  "scripts": {
+    "lint": "markdownlint \"**/*.md\" --ignore node_modules --ignore APS-USABILITY-REVIEW.md",
+    "lint:fix": "markdownlint \"**/*.md\" --ignore node_modules --ignore APS-USABILITY-REVIEW.md --fix",
+    "test": "echo \"No tests yet\" && exit 0",
+    "prepublishOnly": "npm run lint"
+  },
+  "devDependencies": {
+    "markdownlint-cli": "^0.47.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

@@ -13,5 +13,22 @@ possible.
 
 ## Supported Versions
 
-This project does not currently publish versioned releases. The default branch
-is considered the supported version.
+| Version | Supported          |
+| ------- | ------------------ |
+| 0.x.x   | :white_check_mark: |
+
+We support the latest minor release. Security fixes will be backported to the
+most recent release only.
+
+## Security Considerations
+
+APS is a specification format consisting of markdown templates and a simple CLI
+tool for scaffolding. It does not:
+
+- Execute arbitrary code
+- Make network requests (except during `npm install`)
+- Access sensitive system resources
+- Store or transmit user data
+
+The CLI (`bin/aps.js`) only performs file system operations in the target
+directory specified by the user.

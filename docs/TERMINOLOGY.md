@@ -94,12 +94,13 @@ Create an Action Plan when:
 
 ### File Naming
 
-```
+```text
 plans/execution/[WORK-ITEM-ID].actions.md
 ```
 
 **Example:**
-```
+
+```text
 ADAPTER-OC-001.actions.md
 ```
 
