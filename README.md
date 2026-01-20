@@ -102,17 +102,20 @@ graph TD
 
 ## Quick Start
 
-### Option A: Scaffold (recommended)
+### Option A: curl (recommended)
 
 ```bash
-# From the APS repo (after cloning)
-./scaffold/init.sh /path/to/your-project
+# Install in current directory
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash
 
-# Or via curl
-curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/init.sh | bash
+# Install in a specific directory
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash -s -- /path/to/project
 
-# Update existing project to latest templates (preserves your specs)
-./scaffold/init.sh --update /path/to/your-project
+# Install a specific version
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | VERSION=v0.2.0 bash
+
+# Update existing project (preserves your specs)
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/update | bash
 ```
 
 This creates `plans/` with templates and `aps-rules.md` — a portable guide that

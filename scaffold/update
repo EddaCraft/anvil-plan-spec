@@ -1,0 +1,94 @@
+#!/usr/bin/env bash
+#
+# APS Update Script
+# Updates templates and rules in an existing APS project.
+# Your specs (index.aps.md, modules/*.aps.md) are preserved.
+#
+# Usage:
+#   curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/update | bash
+#   curl ... | bash -s -- /path/to/project
+#   curl ... | VERSION=0.2.0 bash
+#
+# For new projects, use the install script instead.
+#
+
+set -euo pipefail
+
+VERSION="${VERSION:-main}"
+TARGET="${1:-.}"
+PLANS_DIR="$TARGET/plans"
+BASE_URL="https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/$VERSION"
+
+# Colors (disabled if not interactive)
+if [[ -t 1 ]]; then
+  GREEN='\033[0;32m'
+  RED='\033[0;31m'
+  BLUE='\033[0;34m'
+  YELLOW='\033[1;33m'
+  BOLD='\033[1m'
+  NC='\033[0m'
+else
+  GREEN='' RED='' BLUE='' YELLOW='' BOLD='' NC=''
+fi
+
+info()  { echo -e "${GREEN}>${NC} $1"; }
+warn()  { echo -e "${YELLOW}>${NC} $1"; }
+error() { echo -e "${RED}error:${NC} $1"; }
+step()  { echo -e "${BLUE}==>${NC} ${BOLD}$1${NC}"; }
+
+download() {
+  local path="$1"
+  local dest="$2"
+  curl -fsSL "$BASE_URL/scaffold/plans/$path" -o "$dest"
+}
+
+# Header
+echo ""
+echo -e "${BOLD}Anvil Plan Spec (APS) Update${NC}"
+echo ""
+
+# Check for existing installation
+if [[ ! -d "$PLANS_DIR" ]]; then
+  error "No plans/ directory found at $TARGET"
+  echo ""
+  echo "To install APS in a new project:"
+  echo "  curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash"
+  echo ""
+  exit 1
+fi
+
+# Ensure subdirectories exist (in case of older installations)
+mkdir -p "$PLANS_DIR/modules"
+mkdir -p "$PLANS_DIR/execution"
+mkdir -p "$PLANS_DIR/decisions"
+
+# Update templates and rules
+step "Updating templates and rules"
+
+download "aps-rules.md" "$PLANS_DIR/aps-rules.md"
+info "aps-rules.md"
+
+download "modules/.module.template.md" "$PLANS_DIR/modules/.module.template.md"
+info "modules/.module.template.md"
+
+download "modules/.simple.template.md" "$PLANS_DIR/modules/.simple.template.md"
+info "modules/.simple.template.md"
+
+download "execution/.steps.template.md" "$PLANS_DIR/execution/.steps.template.md"
+info "execution/.steps.template.md"
+
+# Success
+echo ""
+step "Update complete"
+echo ""
+echo "  Updated:"
+echo "    - aps-rules.md (agent guidance)"
+echo "    - modules/.module.template.md"
+echo "    - modules/.simple.template.md"
+echo "    - execution/.steps.template.md"
+echo ""
+warn "Your specs were preserved:"
+echo "    - index.aps.md"
+echo "    - modules/*.aps.md"
+echo "    - execution/*.actions.md"
+echo ""
