@@ -261,7 +261,7 @@ src/bmm/sub-modules/claude-code/
 
 ```
 1. User starts BMAD: `*workflow-init`
-   → BMAD recommends "BMad Method" track
+   → BMAD recommends "BMAD Method" track
 
 2. Analysis Phase (BMAD)
    → PM agent runs `brainstorm-project`
