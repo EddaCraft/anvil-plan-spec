@@ -3,13 +3,14 @@
 Work can begin when: status=Ready AND work items exist.
 Module ID: Use 2-6 uppercase chars (AUTH, PAY, UI, CORE, etc.)
 File naming: NN-name.aps.md by dependency order (01-core.aps.md, 02-auth.aps.md)
+Packages: For monorepos, list affected packages (see docs/monorepo.md)
 -->
 
 # [Module Title]
 
-| ID | Owner | Priority | Status |
-|----|-------|----------|--------|
-| AUTH | @username | medium | Draft |
+| ID | Owner | Priority | Status | Packages |
+|----|-------|----------|--------|----------|
+| AUTH | @username | medium | Draft | *(monorepo only)* |
 
 ## Purpose
 
@@ -63,6 +64,7 @@ Confidence levels:
 - **Expected Outcome:** [Observable/testable result]
 - **Validation:** `[test command]`
 - **Confidence:** medium
+- **Packages:** [Affected packages] *(monorepo only — inherits from module if omitted)*
 - **Non-scope:** [What won't change] *(optional)*
 - **Files:** [Likely files] *(optional — best effort)*
 - **Dependencies:** AUTH-XXX *(optional)*
