@@ -15,7 +15,7 @@
 #   bash init.sh --update [target-dir]  # Update templates only (preserves your specs)
 #
 
-set -euo pipefail
+set -eo pipefail
 
 UPDATE_MODE=false
 TARGET="."
@@ -49,18 +49,31 @@ fi
 info() { echo -e "${GREEN}[aps]${NC} $1"; }
 warn() { echo -e "${YELLOW}[aps]${NC} $1"; }
 
+# Detect if running via curl pipe (BASH_SOURCE is empty) or locally
+if [[ -n "${BASH_SOURCE[0]:-}" && "${BASH_SOURCE[0]}" != "bash" ]]; then
+  SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+else
+  SCRIPT_DIR=""
+fi
+
 copy_or_download() {
   local src_name="$1"
   local dest_path="$2"
-  
-  if [[ -f "$SCRIPT_DIR/plans/$src_name" ]]; then
-    cp "$SCRIPT_DIR/plans/$src_name" "$dest_path"
-  else
-    curl -fsSL "$APS_REPO/$src_name" -o "$dest_path"
-  fi
-}
+  local src_path="${SCRIPT_DIR:+$SCRIPT_DIR/plans/$src_name}"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  # Use local file only if SCRIPT_DIR is set and file exists and isn't the destination
+  if [[ -n "$src_path" && -f "$src_path" ]]; then
+    local src_real dest_real
+    src_real="$(realpath "$src_path" 2>/dev/null || echo "$src_path")"
+    dest_real="$(realpath "$dest_path" 2>/dev/null || echo "$dest_path")"
+    if [[ "$src_real" != "$dest_real" ]]; then
+      cp "$src_path" "$dest_path"
+      return
+    fi
+  fi
+  # Fall back to downloading
+  curl -fsSL "$APS_REPO/$src_name" -o "$dest_path"
+}
 
 if [[ "$UPDATE_MODE" == true ]]; then
   if [[ ! -d "$PLANS_DIR" ]]; then
