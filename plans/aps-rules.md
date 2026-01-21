@@ -149,6 +149,38 @@ plans/
     └── [NNN]-[title].md
 ```
 
+## Monorepo Conventions
+
+For repositories with multiple packages/apps. See `docs/monorepo.md` for full guidance.
+
+### Package Tagging
+
+Every module declares `Packages: pkg1, pkg2` in metadata. Work items inherit or narrow the package scope.
+
+### Session Start Ritual
+
+Before touching code:
+
+1. **Orient** — Read `plans/index.aps.md` "What's Next" section, then relevant module(s)
+2. **Confirm authority** — Work item exists, status = Ready, packages are clear
+3. **Declare intent** — State: "Executing AUTH-002 (core, api): [description]"
+
+If no Ready work item exists:
+- Create Draft work item first
+- Ask human to mark Ready before proceeding
+- OR if trivial fix, note in session end summary
+
+### Session End Ritual
+
+After completing work:
+
+1. **Update status** — Mark work items: `In Progress`, `Complete: YYYY-MM-DD`, or `Blocked: [reason]`
+2. **Capture discovered work** — Add as Draft items with package tags
+3. **Update "What's Next"** — Remove completed, add new Ready items, re-sequence if needed
+4. **Session summary** — Brief note: what completed, what discovered, what's next
+
+**Key principle:** The next agent should pick up exactly where you left off without archaeology.
+
 ## Quick Reference
 
 | If agent is... | Check for... |
@@ -157,3 +189,4 @@ plans/
 | Writing tasks | Outcome-focused? Has validation command? |
 | Planning module | Boundaries clear? No premature tasks? |
 | Executing | Task status is Ready? Prerequisites met? |
+| In monorepo | Packages tagged? "What's Next" updated? |
