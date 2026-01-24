@@ -43,6 +43,7 @@ APS needs continued development to:
 
 | Module | Purpose | Status |
 |--------|---------|--------|
+| [tasks](./modules/tasks.aps.md) | Claude Code Tasks integration | Draft |
 | [examples](./modules/examples.aps.md) | Additional worked examples | Draft |
 | [prompts](./modules/prompts.aps.md) | Tool-specific prompt variants | Draft |
 | [compound](./modules/compound.aps.md) | Review/Learn phase tooling | Draft |
@@ -83,3 +84,4 @@ These are explicitly out of scope:
 - **D-007:** Validation approach — *decided: standalone CLI first, then GitHub Action wrapper*
 - **D-008:** Solution docs organization — *decided: per-project with monorepo support*
 - **D-009:** npm init module — *decided: merged into scaffold module, no separate npm package*
+- **D-010:** Claude Code Tasks integration — *decided: yes, APS as planning layer + Tasks as execution layer*

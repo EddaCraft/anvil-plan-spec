@@ -181,6 +181,70 @@ After completing work:
 
 **Key principle:** The next agent should pick up exactly where you left off without archaeology.
 
+## Claude Code Tasks Integration
+
+When using Claude Code with Tasks enabled, APS work items map naturally to Tasks for runtime coordination.
+
+### Concept Mapping
+
+| APS Concept | Claude Tasks Equivalent |
+|-------------|------------------------|
+| Work Item | Task |
+| Work Item Dependencies | `blockedBy` field |
+| Module | Agent work stream / Task List |
+| Action Plan | Ordered sub-tasks |
+| Status (Ready/In Progress/Complete) | Task status |
+| Validation command | Task completion gate |
+
+### Starting a Session with Tasks
+
+1. **Read the module spec** — e.g., `plans/modules/02-auth.aps.md`
+2. **Create Tasks from work items:**
+   - Task name = `{ID}: {title}` (e.g., "AUTH-001: User registration")
+   - Set `blockedBy` from Dependencies field
+   - Include validation command in task description
+3. **Group into waves** by dependency order
+4. **Assign agents by module** to minimize file conflicts
+
+### Wave Planning
+
+Tasks without dependencies form **Wave 1** (can execute in parallel). As Wave 1 completes, blocked tasks become unblocked and form subsequent waves.
+
+```
+Wave 1: [No deps]     → AUTH-001, CORE-001, UI-001 (parallel)
+Wave 2: [After W1]    → AUTH-002 (blocked by AUTH-001)
+Wave 3: [After W2]    → PAY-001 (blocked by AUTH-002)
+```
+
+### Multi-Agent Assignment
+
+For parallel execution, assign agents by domain to avoid conflicts:
+
+| Agent | Module | Tasks |
+|-------|--------|-------|
+| Agent A | AUTH | AUTH-001 → AUTH-002 → AUTH-003 |
+| Agent B | CORE | CORE-001 → CORE-002 |
+| Agent C | UI | UI-001 → UI-002 |
+
+### Shared Task Lists
+
+For cross-session collaboration, use the same Task List:
+
+```bash
+CLAUDE_CODE_TASK_LIST_ID=myproject-sprint1 claude
+```
+
+All sessions see task updates in real-time.
+
+### Syncing Back to APS
+
+After task completion:
+1. Update work item status in the APS module file
+2. Run session end ritual (update "What's Next", capture discovered work)
+3. Commit APS changes to git
+
+**Key principle:** APS is the source of truth (durable, versioned). Tasks are runtime state (ephemeral, shared).
+
 ## Quick Reference
 
 | If agent is... | Check for... |
@@ -190,3 +254,4 @@ After completing work:
 | Planning module | Boundaries clear? No premature tasks? |
 | Executing | Task status is Ready? Prerequisites met? |
 | In monorepo | Packages tagged? "What's Next" updated? |
+| Using Claude Code Tasks | Work items mapped? Waves planned? Status synced back? |
