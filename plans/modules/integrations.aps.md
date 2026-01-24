@@ -14,6 +14,7 @@ Enable APS documents to integrate with external tooling through structured data 
 - GitHub Issues sync (read/write work items as issues)
 - Structured output for custom tooling
 - Import from common formats (if feasible)
+- MCP server for AI tool integration (shared with TASKS module)
 
 ## Out of Scope
 
