@@ -122,7 +122,7 @@ helps AI agents follow APS conventions.
 
 1. Copy templates from `templates/` to your project
 2. Create an Index to define your plan's scope and modules
-3. Create Leaf modules for each bounded area of work
+3. Create modules for each bounded area of work
 4. Add Work Items when a module is ready for implementation
 5. Generate Action Plans (optional) for granular execution guidance
 
