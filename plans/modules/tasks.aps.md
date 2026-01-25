@@ -132,9 +132,9 @@ This creates a natural split: **APS handles planning** (durable, git-versioned),
 
 ## Decisions
 
-- **D-001:** Task List granularity — *pending: one per project vs one per module*
-- **D-002:** Sync direction — *pending: APS-authoritative vs bidirectional*
-- **D-003:** MCP server language — *pending: TypeScript (ecosystem) vs Python (simpler)*
+- **D-001:** Task List granularity — *decided: one per module by default (`project-MODULE`), fallback to one per project with module-prefixed task names if maintenance overhead is too high*
+- **D-002:** Sync direction — *decided: optional (user chooses), default to bidirectional if optionality adds too much complexity*
+- **D-003:** MCP server language — *decided: TypeScript (ecosystem alignment, MCP SDK support)*
 
 ## Execution Strategy
 
@@ -151,9 +151,24 @@ This creates a natural split: **APS handles planning** (durable, git-versioned),
 ### Phase 3: Deep Integration
 - TASKS-006: MCP server
 
+## Related Work
+
+Existing projects in this space (research January 2025):
+
+| Project | Approach | Notes |
+|---------|----------|-------|
+| [claude-todo-emulator](https://github.com/joehaddad2000/claude-todo-emulator) | MCP server emulating TodoWrite | Task schema: id, content, status, priority, timestamps, metadata |
+| [ccpm](https://github.com/automazeio/ccpm) | GitHub Issues + git worktrees | Uses `.claude/` dir, parallel agents via isolated worktrees |
+| [claude-task-master](https://github.com/eyaltoledano/claude-task-master) | PRD-driven task generation | `.taskmaster/` dir, subtasks, dependencies, complexity analysis |
+| claude-todo-manager-mcp | Direct `~/.claude` access | By @jasonkneen, enables multi-instance coordination |
+
+**Key insight from ccpm:** They validate our pattern — specs as source of truth, GitHub Issues for sync, git worktrees for parallel agent isolation.
+
 ## Notes
 
 - Start with prompt-based approach (Phase 1) — Claude already knows how to create Tasks
 - CLI adds automation but isn't required for basic usage
 - MCP server enables rich bidirectional integration but adds complexity
 - Consider: watch mode for continuous sync during long sessions
+- Could integrate with or learn from ccpm's worktree-based parallel execution
+- TypeScript MCP server aligns with @anthropic/mcp-sdk ecosystem
