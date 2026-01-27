@@ -25,12 +25,12 @@ When modifying templates, prompts, or documentation:
 
 ## Execution layer
 
-- **Tasks** define outcomes (what to achieve)
-- **Steps** define actions (what to do, not how)
-- Steps live in `execution/[TASK-ID].steps.md` or `execution/[MODULE].steps.md`
-- Each step has a checkpoint (observable completion state)
+- **Work items** define outcomes (what to achieve)
+- **Actions** define what to do (not how)
+- Action plans live in `execution/[WORKITEM-ID].actions.md`
+- Each action has a checkpoint (observable completion state)
 
-See: [docs/ai/prompting/steps.prompt.md](docs/ai/prompting/steps.prompt.md)
+See: [docs/ai/prompting/actions.prompt.md](docs/ai/prompting/actions.prompt.md)
 
 ## Prompting entry points
 
@@ -38,8 +38,8 @@ Use:
 
 - [docs/ai/prompting/index.prompt.md](docs/ai/prompting/index.prompt.md)
 - [docs/ai/prompting/module.prompt.md](docs/ai/prompting/module.prompt.md)
-- [docs/ai/prompting/task.prompt.md](docs/ai/prompting/task.prompt.md)
-- [docs/ai/prompting/steps.prompt.md](docs/ai/prompting/steps.prompt.md)
+- [docs/ai/prompting/work-item.prompt.md](docs/ai/prompting/work-item.prompt.md)
+- [docs/ai/prompting/actions.prompt.md](docs/ai/prompting/actions.prompt.md)
 
 OpenCode/Claude Opus variants:
 
@@ -48,7 +48,7 @@ OpenCode/Claude Opus variants:
 ## Roles (conceptual)
 
 - **Planner**: completes index/module docs, identifies decisions
-- **Implementer**: executes one task at a time
-- **Executor**: follows steps to complete tasks, validates checkpoints
+- **Implementer**: executes one work item at a time
+- **Executor**: follows action plans to complete work items, validates checkpoints
 - **Reviewer**: flags anti-patterns and boundary issues, suggests alternatives
 - **Librarian**: updates ADR links/pattern references and keeps docs consistent

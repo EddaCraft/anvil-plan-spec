@@ -13,6 +13,7 @@ Start here. Pick based on what you're trying to do:
 | **Module with boundaries** (interfaces, deps) | [module](../templates/module.template.md) | 30 minutes |
 | **Multi-module initiative** | [index](../templates/index.template.md) | 1 hour |
 | **Large initiative** (6+ modules) | [index-expanded](../templates/index-expanded.template.md) | 1-2 hours |
+| **Monorepo** (multiple packages/apps) | [index-monorepo](../templates/index-monorepo.template.md) | 1-2 hours |
 | **Breaking a work item into actions** | [actions](../templates/actions.template.md) | 15 minutes |
 
 ### Decision Tree
@@ -131,9 +132,32 @@ Steps translate "what to achieve" into "what actions to take":
 - Each step has a **checkpoint** (observable state)
 - Steps describe **what**, not **how**
 
+## Monorepo Setup
+
+Working in a monorepo with multiple packages/apps? See [monorepo.md](./monorepo.md) for full guidance. Key differences:
+
+1. **Use the monorepo index template** — [index-monorepo.template.md](../templates/index-monorepo.template.md)
+2. **Add Packages to modules** — Each module declares which packages it affects
+3. **"What's Next" view** — Prioritized queue across all packages
+4. **"By Package" view** — Navigation grouped by package
+5. **Session rituals** — Start/end rituals keep docs in sync
+
+```text
+monorepo/
+├── plans/
+│   ├── index.aps.md              # Uses index-monorepo format
+│   └── modules/
+│       ├── 01-auth.aps.md        # Packages: core, api
+│       └── 02-cli.aps.md         # Packages: cli, shared
+├── apps/
+│   └── api/
+└── packages/
+    └── core/
+```
+
 ## Index Template Formats
 
-APS provides two index formats:
+APS provides three index formats:
 
 **Table format** (`index.template.md`) — compact, scannable, best for 2-6 modules:
 
@@ -173,4 +197,5 @@ file and it will follow APS conventions automatically.
 ## Next Steps
 
 - Review [workflow.md](./workflow.md) for day-to-day usage patterns
+- Read [monorepo.md](./monorepo.md) if working in a multi-package repository
 - Read [AGENTS.md](../AGENTS.md) for AI collaboration rules in this repo

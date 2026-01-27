@@ -2,7 +2,7 @@
 
 | ID | Owner | Status |
 |----|-------|--------|
-| SCAFFOLD | @aneki | Complete |
+| SCAFFOLD | @aneki | Ready |
 
 ## Purpose
 
@@ -17,9 +17,8 @@ Provide one-command setup that copies APS templates and agent guidance into any 
 
 ## Out of Scope
 
-- npm/npx package (future consideration)
 - Interactive prompts or configuration
-- Modifying existing files in target repo
+- Modifying existing user spec files (.aps.md)
 
 ## Interfaces
 
@@ -64,9 +63,16 @@ Provide one-command setup that copies APS templates and agent guidance into any 
 - **Confidence:** medium
 - **Non-scope:** Cannot test until deployed
 
+### SCAFFOLD-004: Add --update flag to refresh templates
+
+- **Intent:** Allow users to get latest templates without losing their specs
+- **Expected Outcome:** `init.sh --update` overwrites .template.md files and aps-rules.md but preserves user's .aps.md files
+- **Validation:** Run --update in existing project; templates refresh, index.aps.md unchanged
+- **Confidence:** high
+
 ## Execution
 
-Steps: [../execution/SCAFFOLD.steps.md](../execution/SCAFFOLD.steps.md) *(not needed — tasks complete)*
+Steps: [../execution/SCAFFOLD.steps.md](../execution/SCAFFOLD.steps.md)
 
 ## Notes
 

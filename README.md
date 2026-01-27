@@ -102,17 +102,20 @@ graph TD
 
 ## Quick Start
 
-### Option A: Scaffold (recommended)
+### Option A: curl (recommended)
 
 ```bash
-# From the APS repo (after cloning)
-./scaffold/init.sh /path/to/your-project
+# Install in current directory
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash
 
-# Or via curl
-curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/init.sh | bash
+# Install in a specific directory
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash -s -- /path/to/project
 
-# Update existing project to latest templates (preserves your specs)
-./scaffold/init.sh --update /path/to/your-project
+# Install a specific version (use a git tag or branch name, e.g., v0.2.0 or main)
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | VERSION=v0.2.0 bash
+
+# Update existing project (preserves your specs)
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/update | bash
 ```
 
 This creates `plans/` with templates and `aps-rules.md` — a portable guide that
@@ -122,7 +125,7 @@ helps AI agents follow APS conventions.
 
 1. Copy templates from `templates/` to your project
 2. Create an Index to define your plan's scope and modules
-3. Create Leaf modules for each bounded area of work
+3. Create modules for each bounded area of work
 4. Add Work Items when a module is ready for implementation
 5. Generate Action Plans (optional) for granular execution guidance
 

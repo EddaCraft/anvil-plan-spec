@@ -5,7 +5,7 @@
 | Status | Active |
 | Owner | @aneki |
 | Created | 2025-12-31 |
-| Updated | 2026-01-18 |
+| Updated | 2026-01-21 |
 
 ## Problem
 
@@ -34,7 +34,7 @@ APS needs continued development to:
 
 | Module | Purpose | Status |
 |--------|---------|--------|
-| [scaffold](./modules/scaffold.aps.md) | One-command setup for new projects | Complete |
+| [scaffold](./modules/scaffold.aps.md) | One-command setup for new projects | Ready |
 | [templates](./modules/templates.aps.md) | Reduce friction, mark optional fields | Complete |
 | [docs](./modules/docs.aps.md) | Workflow guide, improved onboarding | Complete |
 | [validation](./modules/validation.aps.md) | CLI tool to validate APS documents | Ready |
@@ -43,16 +43,11 @@ APS needs continued development to:
 
 | Module | Purpose | Status |
 |--------|---------|--------|
-| examples | Additional worked examples | Draft |
-| prompts | Tool-specific prompt variants | Draft |
-| compound | Review/Learn phase tooling | Draft |
-
-### Medium Term
-
-| Module | Purpose | Status |
-|--------|---------|--------|
-| integrations | Issue tracker sync, JSON export | Proposed |
-| knowledge | Solution search, pattern library | Proposed |
+| [tasks](./modules/tasks.aps.md) | Claude Code Tasks integration | Draft |
+| [examples](./modules/examples.aps.md) | Additional worked examples | Draft |
+| [prompts](./modules/prompts.aps.md) | Tool-specific prompt variants | Draft |
+| [compound](./modules/compound.aps.md) | Review/Learn phase tooling | Draft |
+| [integrations](./modules/integrations.aps.md) | JSON export, GitHub sync | Draft |
 
 ### Long Term
 
@@ -84,10 +79,9 @@ These are explicitly out of scope:
 - **D-002:** Use `ID` instead of `SCOPE` in templates — *decided: yes, less confusing*
 - **D-003:** Add aps-rules.md as portable agent guide — *decided: yes, travels with templates*
 - **D-004:** Adopt compound engineering philosophy — *decided: yes, planning lifecycle*
-
-## Open Questions
-
-- [ ] Should quickstart.template.md be the default entry point in README?
-- [ ] Do we need tool-specific prompt variants (Cursor, Copilot) or is generic sufficient?
-- [ ] Should validation be a standalone CLI or a GitHub Action first?
-- [ ] How should solution docs be organized across multiple projects?
+- **D-005:** Quickstart as default entry point — *decided: no, keep template choices*
+- **D-006:** Tool-specific prompt variants — *decided: yes, need variants or stubs pointing to generic AGENTS.md*
+- **D-007:** Validation approach — *decided: standalone CLI first, then GitHub Action wrapper*
+- **D-008:** Solution docs organization — *decided: per-project with monorepo support*
+- **D-009:** npm init module — *decided: merged into scaffold module, no separate npm package*
+- **D-010:** Claude Code Tasks integration — *decided: yes, APS as planning layer + Tasks as execution layer*
