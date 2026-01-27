@@ -166,6 +166,7 @@ Before touching code:
 3. **Declare intent** — State: "Executing AUTH-002 (core, api): [description]"
 
 If no Ready work item exists:
+
 - Create Draft work item first
 - Ask human to mark Ready before proceeding
 - OR if trivial fix, note in session end summary

@@ -166,6 +166,7 @@ Before touching code:
 3. **Declare intent** — State: "Executing AUTH-002 (core, api): [description]"
 
 If no Ready work item exists:
+
 - Create Draft work item first
 - Ask human to mark Ready before proceeding
 - OR if trivial fix, note in session end summary
@@ -210,7 +211,7 @@ When using Claude Code with Tasks enabled, APS work items map naturally to Tasks
 
 Tasks without dependencies form **Wave 1** (can execute in parallel). As Wave 1 completes, blocked tasks become unblocked and form subsequent waves.
 
-```
+```text
 Wave 1: [No deps]     → AUTH-001, CORE-001, UI-001 (parallel)
 Wave 2: [After W1]    → AUTH-002 (blocked by AUTH-001)
 Wave 3: [After W2]    → PAY-001 (blocked by AUTH-002)
@@ -226,19 +227,10 @@ For parallel execution, assign agents by domain to avoid conflicts:
 | Agent B | CORE | CORE-001 → CORE-002 |
 | Agent C | UI | UI-001 → UI-002 |
 
-### Shared Task Lists
-
-For cross-session collaboration, use the same Task List:
-
-```bash
-CLAUDE_CODE_TASK_LIST_ID=myproject-sprint1 claude
-```
-
-All sessions see task updates in real-time.
-
 ### Syncing Back to APS
 
 After task completion:
+
 1. Update work item status in the APS module file
 2. Run session end ritual (update "What's Next", capture discovered work)
 3. Commit APS changes to git
@@ -254,4 +246,3 @@ After task completion:
 | Planning module | Boundaries clear? No premature tasks? |
 | Executing | Task status is Ready? Prerequisites met? |
 | In monorepo | Packages tagged? "What's Next" updated? |
-| Using Claude Code Tasks | Work items mapped? Waves planned? Status synced back? |

@@ -27,6 +27,7 @@ Output an agent assignment table:
 ## Example
 
 Input:
+
 ```
 AUTH-001: User registration
   Files: src/auth/register.ts, src/db/users.ts
@@ -45,6 +46,7 @@ UI-002: Dashboard (deps: UI-001)
 ```
 
 Output:
+
 ```
 | Agent | Focus Area | Tasks (in order) | Key Files |
 |-------|------------|------------------|-----------|

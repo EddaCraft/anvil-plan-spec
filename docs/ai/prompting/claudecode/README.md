@@ -5,6 +5,7 @@ Prompt templates for using APS with Claude Code's Tasks feature.
 ## Overview
 
 Claude Code Tasks provide runtime coordination for executing APS work items:
+
 - Dependencies via `blockedBy`
 - Multi-session collaboration
 - Wave-based parallel execution
@@ -24,17 +25,20 @@ APS remains the **planning layer** (durable, git-versioned), while Tasks handle 
 ## Quick Start
 
 1. **Start session:**
+
    ```
    Read plans/modules/02-auth.aps.md and create Tasks from Ready work items.
    Show me the wave breakdown.
    ```
 
 2. **Execute waves:**
+
    ```
    Start Wave 1. Work on AUTH-001 first.
    ```
 
 3. **End session:**
+
    ```
    Session complete. AUTH-001 done, AUTH-002 blocked on API key.
    Update APS files and show the diff.

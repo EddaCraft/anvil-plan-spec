@@ -19,6 +19,7 @@ APS currently assumes a single `plans/` directory for one project. In monorepos 
 ## Solution: Tagged Modules + Ritualized Workflow
 
 Keep single `plans/` at monorepo root. Add:
+
 - Explicit package tags on modules and work items
 - "What's Next" and "By Package" views in the index
 - Session start/end rituals for agent discipline
@@ -104,6 +105,7 @@ Validate: `npm test -w packages/platform -- auth.test.ts`
 ```
 
 Key additions for monorepo:
+
 - `Packages` column at module level (which packages this module touches)
 - `Packages` per work item (can be subset of module's packages)
 - Validation commands use workspace flags (`-w packages/platform`)
