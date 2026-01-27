@@ -111,7 +111,7 @@ curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaf
 # Install in a specific directory
 curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash -s -- /path/to/project
 
-# Install a specific version
+# Install a specific version (use a git tag or branch name, e.g., v0.2.0 or main)
 curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | VERSION=v0.2.0 bash
 
 # Update existing project (preserves your specs)

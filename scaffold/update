@@ -16,6 +16,18 @@ set -euo pipefail
 
 VERSION="${VERSION:-main}"
 TARGET="${1:-.}"
+
+# Validate TARGET to prevent path traversal
+if [[ "$TARGET" == /* ]]; then
+  echo "error: Absolute paths are not allowed for TARGET; please use a relative path (e.g., ./my-project)." >&2
+  exit 1
+fi
+
+if [[ "$TARGET" == *".."* ]]; then
+  echo "error: Parent directory references ('..') are not allowed in TARGET." >&2
+  exit 1
+fi
+
 PLANS_DIR="$TARGET/plans"
 BASE_URL="https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/$VERSION"
 
@@ -39,7 +51,12 @@ step()  { echo -e "${BLUE}==>${NC} ${BOLD}$1${NC}"; }
 download() {
   local path="$1"
   local dest="$2"
-  curl -fsSL "$BASE_URL/scaffold/plans/$path" -o "$dest"
+  local url="$BASE_URL/scaffold/plans/$path"
+  if ! curl -fsSL "$url" -o "$dest"; then
+    error "Failed to download '$path' from $url"
+    echo "       Please check your network connectivity and ensure VERSION='$VERSION' is correct."
+    exit 1
+  fi
 }
 
 # Header
