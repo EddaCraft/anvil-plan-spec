@@ -1,0 +1,51 @@
+# Example GitHub Actions workflow for APS linting
+#
+# Add this to .github/workflows/lint-aps.yml in your project
+#
+# Prerequisites:
+#   1. Initialize APS in your project: curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/init.sh | bash
+#   2. The aps CLI is downloaded automatically by this workflow
+
+name: Lint APS Documents
+
+on:
+  push:
+    paths:
+      - 'plans/**/*.aps.md'
+      - 'plans/**/*.actions.md'
+  pull_request:
+    paths:
+      - 'plans/**/*.aps.md'
+      - 'plans/**/*.actions.md'
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download APS CLI
+        run: |
+          mkdir -p bin lib/rules
+          curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/bin/aps -o bin/aps
+          curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/lib/lint.sh -o lib/lint.sh
+          curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/lib/output.sh -o lib/output.sh
+          curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/lib/rules/common.sh -o lib/rules/common.sh
+          curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/lib/rules/module.sh -o lib/rules/module.sh
+          curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/lib/rules/index.sh -o lib/rules/index.sh
+          curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/lib/rules/workitem.sh -o lib/rules/workitem.sh
+          chmod +x bin/aps
+
+      - name: Lint APS documents
+        run: ./bin/aps lint plans/
+
+      - name: Upload results (on failure)
+        if: failure()
+        run: ./bin/aps lint plans/ --json > aps-lint-results.json
+
+      - name: Upload artifact
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aps-lint-results
+          path: aps-lint-results.json

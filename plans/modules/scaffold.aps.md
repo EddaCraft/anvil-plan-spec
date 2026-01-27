@@ -2,7 +2,7 @@
 
 | ID | Owner | Status |
 |----|-------|--------|
-| SCAFFOLD | @aneki | Ready |
+| SCAFFOLD | @aneki | Complete |
 
 ## Purpose
 
@@ -61,7 +61,7 @@ Provide one-command setup that copies APS templates and agent guidance into any 
 - **Expected Outcome:** `curl ... | bash` downloads and executes correctly
 - **Validation:** Manual test after pushing to main branch
 - **Confidence:** medium
-- **Non-scope:** Cannot test until deployed
+- **Status:** ✓ Complete
 
 ### SCAFFOLD-004: Add --update flag to refresh templates
 
@@ -69,10 +69,11 @@ Provide one-command setup that copies APS templates and agent guidance into any 
 - **Expected Outcome:** `init.sh --update` overwrites .template.md files and aps-rules.md but preserves user's .aps.md files
 - **Validation:** Run --update in existing project; templates refresh, index.aps.md unchanged
 - **Confidence:** high
+- **Status:** ✓ Complete
 
 ## Execution
 
-Steps: [../execution/SCAFFOLD.steps.md](../execution/SCAFFOLD.steps.md)
+Steps: Not needed — all tasks complete
 
 ## Notes
 

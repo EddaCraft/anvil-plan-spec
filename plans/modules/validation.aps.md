@@ -2,7 +2,7 @@
 
 | ID | Owner | Status |
 |----|-------|--------|
-| VAL | @aneki | Ready |
+| VAL | @aneki | Complete |
 
 ## Purpose
 
@@ -48,6 +48,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 - **Expected Outcome:** Markdown document listing required fields per template type (index, module, simple, steps)
 - **Validation:** File exists at docs/validation-rules.md or plans/decisions/
 - **Confidence:** high
+- **Status:** ✓ Complete (docs/plans/2026-01-27-validation-cli-design.md)
 
 ### VAL-002: Create CLI skeleton
 
@@ -55,6 +56,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 - **Expected Outcome:** Executable `aps` CLI that accepts `lint` subcommand with file/dir argument
 - **Validation:** `./bin/aps lint --help` shows usage
 - **Confidence:** high
+- **Status:** ✓ Complete
 
 ### VAL-003: Implement field presence checks
 
@@ -62,6 +64,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 - **Expected Outcome:** CLI reports errors for missing Status, Purpose, Tasks sections
 - **Validation:** Running against malformed test fixture returns non-zero exit
 - **Confidence:** high
+- **Status:** ✓ Complete
 
 ### VAL-004: Implement task ID format validation
 
@@ -69,6 +72,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 - **Expected Outcome:** CLI warns on task IDs not matching `[A-Z]+-[0-9]{3}` pattern
 - **Validation:** Test fixture with bad IDs triggers warning
 - **Confidence:** medium
+- **Status:** ✓ Complete
 
 ### VAL-005: Implement dependency resolution
 
@@ -76,6 +80,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 - **Expected Outcome:** CLI warns when `Depends on` references non-existent modules
 - **Validation:** Test fixture with broken dep triggers warning
 - **Confidence:** medium
+- **Status:** ✓ Complete (W003 rule for task deps; W002 for module deps deferred)
 
 ### VAL-006: Add CI example
 
@@ -83,6 +88,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 - **Expected Outcome:** Example workflow file in docs/ or .github/examples/
 - **Validation:** Valid YAML syntax; references aps lint command
 - **Confidence:** high
+- **Status:** ✓ Complete (docs/ci-lint-example.yml)
 
 ## Decisions
 
@@ -91,7 +97,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 
 ## Execution
 
-Steps: [../execution/VAL.steps.md](../execution/VAL.steps.md)
+Steps: Not needed — all tasks complete
 
 ## Notes
 

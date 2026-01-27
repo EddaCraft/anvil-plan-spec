@@ -10,15 +10,25 @@ Initial release of Anvil Plan Spec (APS).
 
 ### Added
 
-- **Templates** — Index, Leaf, Simple, and Steps templates in `templates/`
+- **Templates** — Index, Module, Simple, Actions, and Quickstart templates in `templates/`
+- **Scaffold** — One-command setup via `curl | bash` with `--update` support
 - **Prompts** — Tool-agnostic and OpenCode/Claude variants in `docs/ai/prompting/`
 - **Examples** — User Authentication and OpenCode Companion worked examples
-- **Documentation** — Getting started guide, ADR template, project structure
+- **Documentation** — Getting started guide, workflow guide, ADR template, project structure
 - **Roadmap** — Planned features and direction
+- **Claude Code Tasks** — Integration guidance in aps-rules.md
+
+### Changed
+
+- Renamed "Leaf" template to "Module" for clarity
+- Renamed "Steps" template to "Actions" for clarity
+- Changed `SCOPE` placeholder to `ID` in templates to avoid confusion with In/Out Scope sections
 
 ### Documentation
 
 - README with hierarchy diagram, quick start, and principles
 - AGENTS.md with collaboration rules for AI contributors
 - CONTRIBUTING.md with scope guardrails and PR process
-- Getting started guide with workflow decision tree
+- Getting started guide with decision tree
+- Workflow guide with day-in-the-life scenarios
+- Monorepo support guide

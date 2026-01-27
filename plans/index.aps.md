@@ -5,7 +5,7 @@
 | Status | Active |
 | Owner | @aneki |
 | Created | 2025-12-31 |
-| Updated | 2026-01-21 |
+| Updated | 2026-01-27 |
 
 ## Problem
 
@@ -17,9 +17,9 @@ APS needs continued development to:
 
 ## Success Criteria
 
-- [ ] New user can try APS in under 5 minutes
-- [ ] CLI validates APS documents in CI pipelines
-- [ ] Documentation covers common workflows with examples
+- [x] New user can try APS in under 5 minutes
+- [x] CLI validates APS documents in CI pipelines
+- [x] Documentation covers common workflows with examples
 - [ ] Knowledge compounds across projects via solution library
 
 ## Constraints
@@ -34,10 +34,10 @@ APS needs continued development to:
 
 | Module | Purpose | Status |
 |--------|---------|--------|
-| [scaffold](./modules/scaffold.aps.md) | One-command setup for new projects | Ready |
+| [scaffold](./modules/scaffold.aps.md) | One-command setup for new projects | Complete |
 | [templates](./modules/templates.aps.md) | Reduce friction, mark optional fields | Complete |
 | [docs](./modules/docs.aps.md) | Workflow guide, improved onboarding | Complete |
-| [validation](./modules/validation.aps.md) | CLI tool to validate APS documents | Ready |
+| [validation](./modules/validation.aps.md) | CLI tool to validate APS documents | Complete |
 
 ### Near Term
 
