@@ -99,6 +99,7 @@ plans/execution/[WORK-ITEM-ID].actions.md
 ```
 
 **Example:**
+
 ```
 ADAPTER-OC-001.actions.md
 ```

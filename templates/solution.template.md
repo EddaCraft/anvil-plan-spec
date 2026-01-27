@@ -35,6 +35,7 @@ docs/solutions/
 `[short-description]-[component].md`
 
 Examples:
+
 - `n-plus-one-query-user-list.md`
 - `jwt-expiry-refresh-token.md`
 - `oauth-redirect-mismatch.md`
@@ -119,6 +120,7 @@ How to avoid this in future:
 | Component | [affected module/area] |
 | Severity | [critical/moderate/minor] |
 | Time to fix | [rough estimate] |
+
 ```
 
 ---

@@ -255,6 +255,7 @@ When user asks to "set up APS" or "initialize planning":
 When user asks to plan a feature or break down work:
 
 1. **Read context**
+
    ```bash
    # Must read before planning
    cat plans/index.aps.md              # Understand project scope
@@ -288,6 +289,7 @@ When user asks to plan a feature or break down work:
 When user asks to implement a feature or execute a work item:
 
 1. **Find the work item**
+
    ```bash
    # Locate the spec
    grep -r "work item ID" plans/modules/
@@ -322,6 +324,7 @@ When user asks to implement a feature or execute a work item:
    - If blocked: Document blocker, ask user
 
 6. **Validate completion**
+
    ```bash
    # Run the validation command from work item
    [validation command from spec]

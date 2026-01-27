@@ -16,12 +16,13 @@ Building an APS plugin for BMAD Method is **highly feasible** and presents a com
 ### What is BMAD?
 
 BMAD Method ("Build More, Architect Dreams") is an AI-driven agile development framework featuring:
+
 - **21 specialized agents** (PM, Architect, Developer, UX Designer, Scrum Master, etc.)
 - **50+ guided workflows** across 4 development phases
 - **Scale-adaptive intelligence** (complexity levels 0-4)
 - **MIT licensed**, fully open source
 
-Repository: https://github.com/bmad-code-org/BMAD-METHOD
+Repository: <https://github.com/bmad-code-org/BMAD-METHOD>
 
 ### BMAD Architecture
 
@@ -82,6 +83,7 @@ workflow/
 ```
 
 Workflows are organized into 4 phases:
+
 1. **Analysis** - Research, product brief creation
 2. **Planning** - PRD, architecture, epic planning
 3. **Solutioning** - Design, technical decisions
@@ -116,12 +118,14 @@ Workflows are organized into 4 phases:
 ### Complementary Strengths
 
 **BMAD brings to APS:**
+
 - Rich agent personas for guided spec creation
 - Structured workflow execution
 - Scale-adaptive complexity handling
 - Pre-built development lifecycle workflows
 
 **APS brings to BMAD:**
+
 - Authorization/trust layer before execution
 - Observable checkpoint validation
 - Lean specification format (WHAT not HOW)
@@ -147,6 +151,7 @@ implementation-planning     →    execution/*.actions.md
 ```
 
 **Implementation:**
+
 1. Create APS output templates for BMAD workflows
 2. Add APS generation commands to relevant agents (PM, Architect)
 3. Inject APS rules into BMAD agent personas
@@ -165,6 +170,7 @@ checkpoints                 →    SM tracks progress
 ```
 
 **Implementation:**
+
 1. Create APS reader/parser for BMAD
 2. Add APS validation workflows
 3. Map APS status to BMAD workflow states
@@ -327,12 +333,14 @@ src/bmm/sub-modules/claude-code/
 ## 9. Resources
 
 ### BMAD Method
-- Repository: https://github.com/bmad-code-org/BMAD-METHOD
-- Documentation: https://docs.bmad-method.org
+
+- Repository: <https://github.com/bmad-code-org/BMAD-METHOD>
+- Documentation: <https://docs.bmad-method.org>
 - License: MIT
 
 ### Anvil Plan Spec
-- Repository: https://github.com/EddaCraft/anvil-plan-spec
+
+- Repository: <https://github.com/EddaCraft/anvil-plan-spec>
 - License: Apache-2.0
 
 ---

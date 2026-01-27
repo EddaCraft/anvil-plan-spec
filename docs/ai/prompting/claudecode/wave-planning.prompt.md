@@ -32,6 +32,7 @@ Output format:
 ## Example
 
 Input:
+
 ```
 AUTH-001: User registration (no deps)
 AUTH-002: Email verification (deps: AUTH-001)
@@ -41,6 +42,7 @@ UI-001: Login page (deps: AUTH-001, CORE-002)
 ```
 
 Output:
+
 ```
 | Wave | Tasks | Parallel Agents | Blocked Until |
 |------|-------|-----------------|---------------|

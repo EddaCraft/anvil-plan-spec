@@ -11,6 +11,7 @@ Enable APS to integrate with Claude Code's new Tasks primitive, allowing work it
 ## Background
 
 Anthropic announced Tasks as an evolution of TodoWrite in Claude Code (January 2025). Key capabilities:
+
 - Tasks stored in `~/.claude/tasks` (file-system based)
 - Dependencies via `blockedBy` metadata
 - Multi-session/subagent collaboration
@@ -139,16 +140,19 @@ This creates a natural split: **APS handles planning** (durable, git-versioned),
 ## Execution Strategy
 
 ### Phase 1: Guidance (No Tooling)
+
 - TASKS-001: aps-rules.md updates
 - TASKS-002: Prompt templates
 - TASKS-007: Scaffold hints
 
 ### Phase 2: CLI Integration
+
 - TASKS-003: Format research
 - TASKS-004: Export command
 - TASKS-005: Sync command
 
 ### Phase 3: Deep Integration
+
 - TASKS-006: MCP server
 
 ## Related Work

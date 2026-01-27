@@ -39,6 +39,7 @@ Please update the APS files:
 ## Example
 
 Input:
+
 ```
 Completed tasks:
 - AUTH-001: User registration flow
