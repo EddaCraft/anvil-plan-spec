@@ -43,7 +43,7 @@ for f in "$PLANS_DIR/modules/"*.aps.md "$PLANS_DIR/"*.aps.md; do
     # Find which work items are in progress
     CURRENT_ITEM=""
     while IFS= read -r line; do
-      if echo "$line" | grep -qP '^### [A-Z]+-\d+:'; then
+      if echo "$line" | grep -qE '^### [A-Z]+-[0-9]+:'; then
         CURRENT_ITEM=$(echo "$line" | sed 's/^### //' | sed 's/ *$//')
       fi
       if [ -n "$CURRENT_ITEM" ] && echo "$line" | grep -qi 'In Progress'; then
