@@ -38,21 +38,26 @@ for f in "$PLANS_DIR/modules/"*.aps.md "$PLANS_DIR/"*.aps.md; do
   basename "$f" | grep -q '^\.' && continue
   basename "$f" | grep -q '^index' && continue
 
-  # Look for In Progress status markers
-  if grep -qi 'In Progress' "$f" 2>/dev/null; then
-    # Find which work items are in progress
-    CURRENT_ITEM=""
-    while IFS= read -r line; do
-      if echo "$line" | grep -qE '^### [A-Z]+-[0-9]+:'; then
-        CURRENT_ITEM=$(echo "$line" | sed 's/^### //' | sed 's/ *$//')
-      fi
-      if [ -n "$CURRENT_ITEM" ] && echo "$line" | grep -qi 'In Progress'; then
+  # Parse work items and their statuses
+  CURRENT_ITEM=""
+  while IFS= read -r line; do
+    if echo "$line" | grep -qE '^### [A-Z]+-[0-9]+:'; then
+      CURRENT_ITEM=$(echo "$line" | sed 's/^### //' | sed 's/ *$//')
+    fi
+    
+    if [ -n "$CURRENT_ITEM" ]; then
+      # Check for In Progress status
+      if echo "$line" | grep -qi 'In Progress'; then
         echo -e "${YELLOW}Still in progress:${NC} $CURRENT_ITEM ($(basename "$f"))"
         INCOMPLETE=$((INCOMPLETE + 1))
         CURRENT_ITEM=""
+      # Check for Complete status
+      elif echo "$line" | grep -qiE '\*\*Status:\*\* *Complete|Status: *Complete'; then
+        COMPLETE=$((COMPLETE + 1))
+        CURRENT_ITEM=""
       fi
-    done < "$f"
-  fi
+    fi
+  done < "$f"
 done
 
 # Check action plans for incomplete checkpoints
@@ -70,6 +75,9 @@ fi
 if [ "$INCOMPLETE" -gt 0 ]; then
   echo ""
   echo -e "${RED}${BOLD}Session incomplete.${NC} $INCOMPLETE item(s) still need attention."
+  if [ "$COMPLETE" -gt 0 ]; then
+    echo -e "${GREEN}Session status:${NC} $COMPLETE complete, $INCOMPLETE incomplete"
+  fi
   echo ""
   echo "Before ending this session:"
   echo "  1. Complete or explicitly mark items as Blocked"
@@ -78,6 +86,10 @@ if [ "$INCOMPLETE" -gt 0 ]; then
   echo "  4. Commit APS changes to git"
   exit 1
 else
-  echo -e "${GREEN}All work items resolved.${NC} Session can end cleanly."
+  if [ "$COMPLETE" -gt 0 ]; then
+    echo -e "${GREEN}All work items resolved.${NC} $COMPLETE item(s) complete. Session can end cleanly."
+  else
+    echo -e "${GREEN}All work items resolved.${NC} Session can end cleanly."
+  fi
   exit 0
 fi
