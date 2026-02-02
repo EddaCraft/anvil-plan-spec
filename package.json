@@ -1,0 +1,26 @@
+{
+  "name": "anvil-plan-spec",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A lightweight specification format for planning and work item authorisation in AI-assisted development.",
+  "scripts": {
+    "lint": "markdownlint \"**/*.md\"",
+    "lint:fix": "markdownlint --fix \"**/*.md\"",
+    "validate": "./bin/aps lint",
+    "prepare": "husky"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7",
+    "markdownlint-cli": "^0.47.0"
+  },
+  "lint-staged": {
+    "*.md": [
+      "markdownlint"
+    ],
+    "*.sh": [
+      "bash -n"
+    ]
+  }
+}
