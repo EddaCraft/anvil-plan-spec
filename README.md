@@ -18,7 +18,7 @@ for decisions while AI assists with planning and implementation.
 
 There's no shortage of AI coding tools — Cursor, Kiro, Claude Code, Copilot,
 and countless agent frameworks. Each has its own way of handling context,
-rules, and specifications. **The problem: your planning artifacts get locked
+rules, and specifications. **The problem: your planning artefacts get locked
 into whatever tool you're using today.**
 
 APS is different:

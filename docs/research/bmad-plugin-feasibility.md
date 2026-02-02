@@ -7,7 +7,7 @@
 
 Building an APS plugin for BMAD Method is **highly feasible** and presents a compelling integration opportunity. Both frameworks share philosophical alignment around structured human-AI collaboration, and their complementary strengths create natural synergy points. BMAD excels at guided workflow execution with specialized agents, while APS provides a trust/authorization layer with observable checkpoints.
 
-**Recommendation:** Proceed with plugin development, starting with a bidirectional integration that allows BMAD workflows to generate APS specs and BMAD agents to consume/validate APS artifacts.
+**Recommendation:** Proceed with plugin development, starting with a bidirectional integration that allows BMAD workflows to generate APS specs and BMAD agents to consume/validate APS artefacts.
 
 ---
 
@@ -112,7 +112,7 @@ Workflows are organized into 4 phases:
 | Workflow Phase | Module | Group workflows by bounded scope |
 | Workflow | Work Item | Each workflow becomes an authorized unit |
 | Workflow Steps | Action Plan | Steps map to checkpoints |
-| Agent Output (PRD, etc.) | Produces/Expected Outcome | Template outputs become APS artifacts |
+| Agent Output (PRD, etc.) | Produces/Expected Outcome | Template outputs become APS artefacts |
 | Workflow Status | Work Item Status | Direct status sync |
 
 ### Complementary Strengths
@@ -129,7 +129,7 @@ Workflows are organized into 4 phases:
 - Authorization/trust layer before execution
 - Observable checkpoint validation
 - Lean specification format (WHAT not HOW)
-- Version-controlled planning artifacts
+- Version-controlled planning artefacts
 - Validation framework (CLI linting)
 
 ---

@@ -89,7 +89,7 @@ See `hooks.md` for full hook configuration.
 
 Type `/plan` in Claude Code to start planning, or `/plan-status` to check
 current state. The skill will guide you through creating the right APS
-artifacts for your project.
+artefacts for your project.
 
 ## How It Reinforces Planning
 
