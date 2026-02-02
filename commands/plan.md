@@ -8,7 +8,7 @@ You are starting an APS (Anvil Plan Spec) planning session. Follow these steps:
 
 ### Step 1: Assess current state
 
-Check what APS artifacts already exist:
+Check what APS artefacts already exist:
 
 1. Look for `plans/` directory
 2. Read `plans/aps-rules.md` if it exists (agent guidance)
