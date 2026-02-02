@@ -4,7 +4,7 @@ Review the current state of APS planning in this project.
 
 ## Instructions
 
-Scan all APS artifacts and give a concise status report.
+Scan all APS artefacts and give a concise status report.
 
 ### What to check
 
