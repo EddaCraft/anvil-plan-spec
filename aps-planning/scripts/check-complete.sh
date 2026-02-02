@@ -46,12 +46,12 @@ for f in "$PLANS_DIR/modules/"*.aps.md "$PLANS_DIR/"*.aps.md; do
     fi
     
     if [ -n "$CURRENT_ITEM" ]; then
-      # Check for In Progress status
-      if echo "$line" | grep -qi 'In Progress'; then
+      # Check for In Progress status (matches both **Status:** and Status: formats)
+      if echo "$line" | grep -qiE '\*\*Status:\*\* *In Progress|Status: *In Progress'; then
         echo -e "${YELLOW}Still in progress:${NC} $CURRENT_ITEM ($(basename "$f"))"
         INCOMPLETE=$((INCOMPLETE + 1))
         CURRENT_ITEM=""
-      # Check for Complete status
+      # Check for Complete status (matches both **Status:** and Status: formats)
       elif echo "$line" | grep -qiE '\*\*Status:\*\* *Complete|Status: *Complete'; then
         COMPLETE=$((COMPLETE + 1))
         CURRENT_ITEM=""
