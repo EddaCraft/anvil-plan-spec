@@ -19,6 +19,7 @@ aps lint --json         # JSON output for tooling
 ```
 
 Exit codes:
+
 - `0` — No errors (may include warnings)
 - `1` — One or more errors found
 
@@ -34,6 +35,7 @@ Filename-based detection:
 | `**/*.aps.md` (elsewhere) | simple | Small self-contained feature |
 
 Directory scanning:
+
 - Find all `*.aps.md` and `*.actions.md` files
 - Skip dotfiles (`.module.template.md`)
 - Default to `plans/` if no argument given
