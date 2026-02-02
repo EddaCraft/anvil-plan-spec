@@ -4,10 +4,24 @@ Hooks reinforce APS planning behavior by triggering at key moments during
 a Claude Code session. They solve the **attention drift problem**: after many
 tool calls, agents forget their original goals.
 
+## Quick Install
+
+The fastest way to add hooks is the install script:
+
+```bash
+./aps-planning/scripts/install-hooks.sh           # All hooks
+./aps-planning/scripts/install-hooks.sh --minimal  # PreToolUse + Stop only
+./aps-planning/scripts/install-hooks.sh --remove   # Remove APS hooks
+```
+
+This safely merges hooks into `.claude/settings.local.json`, preserving any
+existing settings and permissions. It's idempotent — running it twice won't
+create duplicates.
+
 ## Recommended Hooks
 
-Add these to your project's `.claude/settings.local.json` or your user-level
-`~/.claude/settings.json`:
+If you prefer manual setup, add these to your project's
+`.claude/settings.local.json` or your user-level `~/.claude/settings.json`:
 
 ```json
 {

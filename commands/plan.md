@@ -16,7 +16,23 @@ Check what APS artifacts already exist:
 4. Check `plans/modules/` for existing module specs
 5. Check for any work items with Ready or In Progress status
 
-### Step 2: Report what you found
+### Step 2: Bootstrap if needed
+
+**If no `plans/` directory exists**, scaffold the APS structure before
+continuing:
+
+1. Check if `scaffold/init.sh` exists in this repo — if so, run it:
+   `bash scaffold/init.sh .`
+2. Otherwise, create the structure manually:
+   - `mkdir -p plans/modules plans/execution plans/decisions`
+   - Create `plans/index.aps.md` with an Index template
+   - Create `plans/aps-rules.md` with agent guidance
+3. Tell the user what was created and ask what they're building
+
+If hooks aren't installed, suggest:
+`./aps-planning/scripts/install-hooks.sh`
+
+### Step 3: Report what you found
 
 Tell the user:
 
@@ -25,12 +41,12 @@ Tell the user:
 - What work items are in progress or ready
 - What the logical next step is
 
-### Step 3: Help plan
+### Step 4: Help plan
 
 Based on what the user needs:
 
-**If no plans exist:** Ask what they're building and help create the right APS
-spec. Use the template picker:
+**If plans exist but are empty:** Ask what they're building and help create the
+right spec. Use the template picker:
 
 | Situation | Template |
 |-----------|----------|
@@ -47,7 +63,7 @@ if the work item is complex.
 **If work items are In Progress:** Pick up where the last session left off.
 Re-read the work item and continue.
 
-### Step 4: Create or update files
+### Step 5: Create or update files
 
 Write APS files to `plans/` following the naming conventions:
 

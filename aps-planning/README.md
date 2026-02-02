@@ -39,9 +39,10 @@ Index (what are we building?)
 | File | Purpose |
 |------|---------|
 | `SKILL.md` | Core skill — behavioral rules and APS workflow |
-| `reference.md` | Compact APS format reference |
-| `examples.md` | Real-world format examples |
+| `reference.md` | Compact APS format reference (points to canonical docs) |
+| `examples.md` | Real-world format examples (points to canonical examples) |
 | `hooks.md` | Hook configuration for behavioral reinforcement |
+| `scripts/install-hooks.sh` | Installs APS hooks into `.claude/settings.local.json` |
 | `scripts/init-session.sh` | Reports planning status at session start |
 | `scripts/check-complete.sh` | Verifies work items are resolved before stopping |
 
@@ -63,27 +64,16 @@ Copy `commands/plan.md` and `commands/plan-status.md` into your project's
 
 ### 3. Configure hooks (optional but recommended)
 
-Add to `.claude/settings.local.json`:
+Run the install script:
 
-```json
-{
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Write|Edit",
-        "hook": "if [ -d plans ]; then echo '[APS] Check your work item intent before proceeding.'; fi"
-      }
-    ],
-    "Stop": [
-      {
-        "hook": "./aps-planning/scripts/check-complete.sh"
-      }
-    ]
-  }
-}
+```bash
+./aps-planning/scripts/install-hooks.sh           # All hooks
+./aps-planning/scripts/install-hooks.sh --minimal  # PreToolUse + Stop only
+./aps-planning/scripts/install-hooks.sh --remove   # Remove APS hooks
 ```
 
-See `hooks.md` for full hook configuration.
+This merges APS hooks into `.claude/settings.local.json` without clobbering
+existing settings. See `hooks.md` for what each hook does.
 
 ### 4. Use it
 
