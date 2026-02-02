@@ -100,7 +100,7 @@ for f in "$PLANS_DIR/modules/"*.aps.md "$PLANS_DIR/"*.aps.md; do
 
   # Look for work item headers (### PREFIX-NNN: Title)
   while IFS= read -r line; do
-    if echo "$line" | grep -qP '^### [A-Z]+-\d+:'; then
+    if echo "$line" | grep -Eq '^### [A-Z][A-Z]*-[0-9][0-9]*:'; then
       ITEM_ID=$(echo "$line" | sed 's/^### \([A-Z]*-[0-9]*\):.*/\1/')
       ITEM_TITLE=$(echo "$line" | sed 's/^### [A-Z]*-[0-9]*: *//')
       echo "  - $ITEM_ID: $ITEM_TITLE  ($(basename "$f"))"
