@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 # APS Completion Checker
-# Verifies that all In Progress work items have been completed.
+# Verifies that all In Progress work items and action plans have been completed.
 # Use as a Stop hook or run before ending a session.
 #
 # Usage: ./aps-planning/scripts/check-complete.sh [plans-dir]
 #
 # Exit codes:
 #   0 — All work items resolved (none in progress)
-#   1 — Work items still in progress
+#   1 — Work items or action plans still in progress
 
 set -euo pipefail
 
@@ -60,14 +60,17 @@ for f in "$PLANS_DIR/modules/"*.aps.md "$PLANS_DIR/"*.aps.md; do
   done < "$f"
 done
 
-# Check action plans for incomplete checkpoints
+# Check action plans for incomplete checkpoints (only In Progress ones)
 if [ -d "$PLANS_DIR/execution" ]; then
   for f in "$PLANS_DIR/execution/"*.actions.md; do
     [ -f "$f" ] || continue
-    UNCHECKED=$(grep -c '^\- \[ \]' "$f" 2>/dev/null || true)
-    if [ "$UNCHECKED" -gt 0 ]; then
-      echo -e "${YELLOW}Unchecked items:${NC} $UNCHECKED in $(basename "$f")"
-      INCOMPLETE=$((INCOMPLETE + 1))
+    # Check if this action plan is In Progress
+    if grep -qiE '^\| Status.*\| *(In Progress|In-Progress)' "$f" 2>/dev/null; then
+      UNCHECKED=$(grep -c '^\- \[ \]' "$f" 2>/dev/null || true)
+      if [ "$UNCHECKED" -gt 0 ]; then
+        echo -e "${YELLOW}Unchecked items:${NC} $UNCHECKED in $(basename "$f")"
+        INCOMPLETE=$((INCOMPLETE + 1))
+      fi
     fi
   done
 fi
