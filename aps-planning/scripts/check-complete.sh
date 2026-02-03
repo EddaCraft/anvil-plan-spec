@@ -65,7 +65,7 @@ if [ -d "$PLANS_DIR/execution" ]; then
   for f in "$PLANS_DIR/execution/"*.actions.md; do
     [ -f "$f" ] || continue
     # Check if this action plan is In Progress
-    if grep -qiE '^\| Status.*\| *(In Progress|In-Progress)' "$f" 2>/dev/null; then
+    if grep -qiE '^\| *Status *\|.*(In Progress|In-Progress)' "$f" 2>/dev/null; then
       UNCHECKED=$(grep -c '^\- \[ \]' "$f" 2>/dev/null || true)
       if [ "$UNCHECKED" -gt 0 ]; then
         echo -e "${YELLOW}Unchecked items:${NC} $UNCHECKED in $(basename "$f")"
