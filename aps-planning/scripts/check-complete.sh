@@ -66,7 +66,7 @@ if [ -d "$PLANS_DIR/execution" ]; then
     [ -f "$f" ] || continue
     # Check if this action plan is In Progress
     if grep -qiE '^\| *Status *\|.*(In Progress|In-Progress)' "$f" 2>/dev/null; then
-      UNCHECKED=$(grep -c '^\- \[ \]' "$f" 2>/dev/null || true)
+      UNCHECKED=$(grep -c '^ *- \[ \]' "$f" 2>/dev/null || true)
       if [ "$UNCHECKED" -gt 0 ]; then
         echo -e "${YELLOW}Unchecked items:${NC} $UNCHECKED in $(basename "$f")"
         INCOMPLETE=$((INCOMPLETE + 1))
