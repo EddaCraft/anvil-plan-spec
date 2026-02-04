@@ -129,6 +129,13 @@ install_skill() {
   info ".claude/commands/plan-status.md"
 }
 
+# Check if APS hooks are already configured in settings
+has_aps_hooks() {
+  local target_dir="$1"
+  local settings="$target_dir/.claude/settings.local.json"
+  [[ -f "$settings" ]] && grep -q 'aps-planning/scripts\|\[APS\]' "$settings" 2>/dev/null
+}
+
 # Prompt for hook installation with two-step fallback
 prompt_hooks() {
   local target_dir="$1"
@@ -180,9 +187,16 @@ if [[ "$UPDATE_MODE" == true ]]; then
   # Update skill files (always overwrite — these are ours, not user content)
   install_skill "$TARGET"
 
+  # Prompt for hooks only if not already configured
+  if ! has_aps_hooks "$TARGET"; then
+    prompt_hooks "$TARGET"
+  else
+    echo ""
+    info "Hook configuration was NOT modified (run install-hooks.sh to update)."
+  fi
+
   echo ""
   info "Your specs (index.aps.md, modules/*.aps.md) were NOT modified."
-  info "Hook configuration was NOT modified (run install-hooks.sh to update)."
 
 else
   if [[ -d "$PLANS_DIR" ]]; then
