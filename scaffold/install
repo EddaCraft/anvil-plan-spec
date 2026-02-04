@@ -185,6 +185,8 @@ download "aps-planning/hooks.md" "$SKILL_DIR/hooks.md"
 download "aps-planning/scripts/install-hooks.sh" "$SKILL_DIR/scripts/install-hooks.sh"
 download "aps-planning/scripts/init-session.sh" "$SKILL_DIR/scripts/init-session.sh"
 download "aps-planning/scripts/check-complete.sh" "$SKILL_DIR/scripts/check-complete.sh"
+download "aps-planning/scripts/pre-tool-check.sh" "$SKILL_DIR/scripts/pre-tool-check.sh"
+download "aps-planning/scripts/post-tool-nudge.sh" "$SKILL_DIR/scripts/post-tool-nudge.sh"
 chmod +x "$SKILL_DIR/scripts/"*.sh
 
 info "aps-planning/ (skill, reference, examples, hooks, scripts)"

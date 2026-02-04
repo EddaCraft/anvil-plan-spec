@@ -6,8 +6,8 @@
 # Usage: ./aps-planning/scripts/check-complete.sh [plans-dir]
 #
 # Exit codes:
-#   0 — All work items resolved (none in progress)
-#   1 — Work items or action plans still in progress
+#   0 — All work items resolved (or JSON decision returned)
+#   2 — Work items still in progress (blocks Claude from stopping)
 
 set -euo pipefail
 
@@ -76,23 +76,20 @@ if [ -d "$PLANS_DIR/execution" ]; then
 fi
 
 if [ "$INCOMPLETE" -gt 0 ]; then
-  echo ""
-  echo -e "${RED}${BOLD}Session incomplete.${NC} $INCOMPLETE item(s) still need attention."
-  if [ "$COMPLETE" -gt 0 ]; then
-    echo -e "${GREEN}Session status:${NC} $COMPLETE complete, $INCOMPLETE incomplete"
-  fi
-  echo ""
-  echo "Before ending this session:"
-  echo "  1. Complete or explicitly mark items as Blocked"
-  echo "  2. Update work item statuses in the module spec"
-  echo "  3. Add any discovered work as Draft items"
-  echo "  4. Commit APS changes to git"
-  exit 1
+  # Exit 2 blocks Claude from stopping. stderr is fed back to Claude.
+  {
+    echo "Session incomplete. $INCOMPLETE item(s) still need attention."
+    if [ "$COMPLETE" -gt 0 ]; then
+      echo "Session status: $COMPLETE complete, $INCOMPLETE incomplete"
+    fi
+    echo ""
+    echo "Before ending this session:"
+    echo "  1. Complete or explicitly mark items as Blocked"
+    echo "  2. Update work item statuses in the module spec"
+    echo "  3. Add any discovered work as Draft items"
+    echo "  4. Commit APS changes to git"
+  } >&2
+  exit 2
 else
-  if [ "$COMPLETE" -gt 0 ]; then
-    echo -e "${GREEN}All work items resolved.${NC} $COMPLETE item(s) complete. Session can end cleanly."
-  else
-    echo -e "${GREEN}All work items resolved.${NC} Session can end cleanly."
-  fi
   exit 0
 fi

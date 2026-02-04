@@ -146,6 +146,8 @@ install_skill() {
   copy_or_download "scaffold/aps-planning/scripts/install-hooks.sh" "$skill_dir/scripts/install-hooks.sh"
   copy_or_download "scaffold/aps-planning/scripts/init-session.sh" "$skill_dir/scripts/init-session.sh"
   copy_or_download "scaffold/aps-planning/scripts/check-complete.sh" "$skill_dir/scripts/check-complete.sh"
+  copy_or_download "scaffold/aps-planning/scripts/pre-tool-check.sh" "$skill_dir/scripts/pre-tool-check.sh"
+  copy_or_download "scaffold/aps-planning/scripts/post-tool-nudge.sh" "$skill_dir/scripts/post-tool-nudge.sh"
   chmod +x "$skill_dir/scripts/"*.sh
 
   info "aps-planning/ (skill, reference, examples, hooks, scripts)"

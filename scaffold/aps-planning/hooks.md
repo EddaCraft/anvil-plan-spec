@@ -29,27 +29,43 @@ If you prefer manual setup, add these to your project's
     "PreToolUse": [
       {
         "matcher": "Write|Edit|Bash",
-        "hook": "if [ -d plans ] && [ -f plans/index.aps.md -o -d plans/modules ]; then echo '[APS] Re-read your current work item before making changes. Are you still on-plan?'; fi",
-        "description": "Remind agent to check APS plan before writing code"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./aps-planning/scripts/pre-tool-check.sh"
+          }
+        ]
       }
     ],
     "PostToolUse": [
       {
         "matcher": "Write|Edit",
-        "hook": "if [ -d plans ]; then echo '[APS] If you completed a work item or discovered new scope, update the APS spec now.'; fi",
-        "description": "Remind agent to update APS after code changes"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./aps-planning/scripts/post-tool-nudge.sh"
+          }
+        ]
       }
     ],
     "Stop": [
       {
-        "hook": "./aps-planning/scripts/check-complete.sh",
-        "description": "Verify all in-progress work items are resolved before ending"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./aps-planning/scripts/check-complete.sh"
+          }
+        ]
       }
     ],
     "SessionStart": [
       {
-        "hook": "./aps-planning/scripts/init-session.sh",
-        "description": "Show APS planning status at session start"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./aps-planning/scripts/init-session.sh"
+          }
+        ]
       }
     ]
   }
@@ -114,7 +130,12 @@ preventing goal drift:
     "PreToolUse": [
       {
         "matcher": "Write|Edit",
-        "hook": "if [ -d plans ]; then echo '[APS] Check your work item intent before proceeding.'; fi"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./aps-planning/scripts/pre-tool-check.sh"
+          }
+        ]
       }
     ]
   }
@@ -125,8 +146,8 @@ preventing goal drift:
 
 - Hooks only fire if a `plans/` directory exists, so they're silent in projects
   that don't use APS.
-- The PreToolUse hook is intentionally lightweight — it's a reminder, not a
-  blocker. The agent decides whether to re-read.
-- The Stop hook is the only one that can block — it exits non-zero when work
-  is incomplete, which prompts the agent to finish up.
+- The PreToolUse and PostToolUse hooks output JSON with `additionalContext`
+  so their reminders reach Claude (plain stdout only shows in verbose mode).
+- The Stop hook blocks by exiting with code 2 when work is incomplete.
+  Its stderr message is fed back to Claude explaining what needs attention.
 - Scripts need execute permissions: `chmod +x aps-planning/scripts/*.sh`
