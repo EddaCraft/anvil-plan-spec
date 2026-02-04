@@ -91,6 +91,9 @@ info "modules/.module.template.md"
 download "plans/modules/.simple.template.md" "$PLANS_DIR/modules/.simple.template.md"
 info "modules/.simple.template.md"
 
+download "plans/modules/.index-monorepo.template.md" "$PLANS_DIR/modules/.index-monorepo.template.md"
+info "modules/.index-monorepo.template.md"
+
 download "plans/execution/.steps.template.md" "$PLANS_DIR/execution/.steps.template.md"
 info "execution/.steps.template.md"
 
@@ -126,6 +129,7 @@ echo "  Updated:"
 echo "    - aps-rules.md (agent guidance)"
 echo "    - modules/.module.template.md"
 echo "    - modules/.simple.template.md"
+echo "    - modules/.index-monorepo.template.md"
 echo "    - execution/.steps.template.md"
 echo "    - aps-planning/ (skill + scripts)"
 echo "    - .claude/commands/ (plan, plan-status)"
