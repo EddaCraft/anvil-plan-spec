@@ -3,6 +3,8 @@
 # APS CLI - Anvil Plan Spec tooling
 #
 # Usage:
+#   aps init [dir]        Create APS structure in a new project
+#   aps update [dir]      Update templates, skill, and commands
 #   aps lint [file|dir]   Validate APS documents (default: plans/)
 #   aps lint --json       Output as JSON
 #   aps --help            Show this help
@@ -20,12 +22,15 @@ source "$LIB_DIR/rules/module.sh"
 source "$LIB_DIR/rules/index.sh"
 source "$LIB_DIR/rules/workitem.sh"
 source "$LIB_DIR/lint.sh"
+source "$LIB_DIR/scaffold.sh"
 
 show_help() {
   cat <<EOF
 aps - Anvil Plan Spec CLI
 
 Usage:
+  aps init [dir]        Create APS structure in a new project
+  aps update [dir]      Update templates, skill, and commands
   aps lint [file|dir]   Validate APS documents
   aps lint --json       Output results as JSON
   aps --help            Show this help
@@ -34,7 +39,12 @@ Options:
   --json    Output results in JSON format
   --help    Show help for a command
 
+Environment:
+  APS_VERSION   Git ref to download from (default: main)
+
 Examples:
+  aps init                    # Init in current directory
+  aps update                  # Update templates and skill
   aps lint                    # Lint plans/ directory
   aps lint plans/index.aps.md # Lint specific file
   aps lint . --json           # Lint current dir, JSON output
@@ -45,6 +55,14 @@ main() {
   local cmd="${1:-}"
 
   case "$cmd" in
+    init)
+      shift
+      cmd_init "$@"
+      ;;
+    update)
+      shift
+      cmd_update "$@"
+      ;;
     lint)
       shift
       cmd_lint "$@"
