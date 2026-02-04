@@ -131,6 +131,30 @@ helps AI agents follow APS conventions.
 
 See [Getting Started](docs/getting-started.md) for a complete walkthrough.
 
+## Validation
+
+Validate your APS documents with the built-in CLI:
+
+```bash
+# Lint all plans
+./bin/aps lint plans/
+
+# Lint a specific file
+./bin/aps lint plans/modules/auth.aps.md
+
+# JSON output for CI
+./bin/aps lint plans/ --json
+```
+
+The linter checks for:
+
+- Missing required sections (Purpose, Work Items, Modules)
+- Missing work item fields (Intent, Expected Outcome, Validation)
+- Malformed task IDs (should be `PREFIX-NNN`, e.g., `AUTH-001`)
+- Empty sections and other common issues
+
+See [docs/ci-lint-example.yml](docs/ci-lint-example.yml) for GitHub Actions integration.
+
 ## Works Everywhere
 
 APS is just markdown. Use it however you work:

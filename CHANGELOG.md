@@ -12,6 +12,7 @@ Initial release of Anvil Plan Spec (APS).
 
 - **Templates** — Index, Module, Simple, Actions, and Quickstart templates in `templates/`
 - **Scaffold** — One-command setup via `curl | bash` with `--update` support
+- **Validation CLI** — `aps lint` command to validate APS documents with CI integration
 - **Prompts** — Tool-agnostic and OpenCode/Claude variants in `docs/ai/prompting/`
 - **Examples** — User Authentication and OpenCode Companion worked examples
 - **Documentation** — Getting started guide, workflow guide, ADR template, project structure
