@@ -34,7 +34,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 PLANS_DIR="$TARGET/plans"
-APS_BASE_URL="https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold"
+APS_BASE_URL="https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main"
 
 if [[ -t 1 ]]; then
   GREEN='\033[0;32m'
@@ -57,22 +57,28 @@ else
   SCRIPT_DIR=""
 fi
 
-# Copy from local scaffold or download from GitHub
-# $1: relative path within scaffold/ (e.g., "plans/aps-rules.md" or "aps-planning/SKILL.md")
+# Copy from local repo or download from GitHub
+# $1: path relative to repo root (e.g., "scaffold/plans/aps-rules.md" or "bin/aps")
 # $2: destination path
 copy_or_download() {
   local src_name="$1"
   local dest_path="$2"
-  local src_path="${SCRIPT_DIR:+$SCRIPT_DIR/$src_name}"
 
-  # Use local file only if SCRIPT_DIR is set and file exists and isn't the destination
-  if [[ -n "$src_path" && -f "$src_path" ]]; then
-    local src_real dest_real
-    src_real="$(realpath "$src_path" 2>/dev/null || echo "$src_path")"
-    dest_real="$(realpath "$dest_path" 2>/dev/null || echo "$dest_path")"
-    if [[ "$src_real" != "$dest_real" ]]; then
-      cp "$src_path" "$dest_path"
-      return
+  mkdir -p "$(dirname "$dest_path")"
+
+  # Try local file first: SCRIPT_DIR points to scaffold/, go up one level for repo root
+  if [[ -n "$SCRIPT_DIR" ]]; then
+    local repo_root
+    repo_root="$(cd "$SCRIPT_DIR/.." && pwd)"
+    local src_path="$repo_root/$src_name"
+    if [[ -f "$src_path" ]]; then
+      local src_real dest_real
+      src_real="$(realpath "$src_path" 2>/dev/null || echo "$src_path")"
+      dest_real="$(realpath "$dest_path" 2>/dev/null || echo "$dest_path")"
+      if [[ "$src_real" != "$dest_real" ]]; then
+        cp "$src_path" "$dest_path"
+        return
+      fi
     fi
   fi
   # Fall back to downloading
@@ -98,6 +104,31 @@ ask_yn() {
   fi
 }
 
+# Install the APS CLI (bin/aps + lib/)
+install_cli() {
+  local target_dir="$1"
+
+  step "Installing APS CLI"
+
+  local cli_files=(
+    "bin/aps"
+    "lib/output.sh"
+    "lib/lint.sh"
+    "lib/scaffold.sh"
+    "lib/rules/common.sh"
+    "lib/rules/module.sh"
+    "lib/rules/index.sh"
+    "lib/rules/workitem.sh"
+  )
+
+  for f in "${cli_files[@]}"; do
+    copy_or_download "$f" "$target_dir/$f"
+  done
+  chmod +x "$target_dir/bin/aps"
+
+  info "bin/aps + lib/ (CLI)"
+}
+
 # Install the APS planning skill and commands
 install_skill() {
   local target_dir="$1"
@@ -108,25 +139,51 @@ install_skill() {
 
   # Skill files
   mkdir -p "$skill_dir/scripts"
-  copy_or_download "aps-planning/SKILL.md" "$skill_dir/SKILL.md"
-  copy_or_download "aps-planning/reference.md" "$skill_dir/reference.md"
-  copy_or_download "aps-planning/examples.md" "$skill_dir/examples.md"
-  copy_or_download "aps-planning/hooks.md" "$skill_dir/hooks.md"
-  copy_or_download "aps-planning/scripts/install-hooks.sh" "$skill_dir/scripts/install-hooks.sh"
-  copy_or_download "aps-planning/scripts/init-session.sh" "$skill_dir/scripts/init-session.sh"
-  copy_or_download "aps-planning/scripts/check-complete.sh" "$skill_dir/scripts/check-complete.sh"
+  copy_or_download "scaffold/aps-planning/SKILL.md" "$skill_dir/SKILL.md"
+  copy_or_download "scaffold/aps-planning/reference.md" "$skill_dir/reference.md"
+  copy_or_download "scaffold/aps-planning/examples.md" "$skill_dir/examples.md"
+  copy_or_download "scaffold/aps-planning/hooks.md" "$skill_dir/hooks.md"
+  copy_or_download "scaffold/aps-planning/scripts/install-hooks.sh" "$skill_dir/scripts/install-hooks.sh"
+  copy_or_download "scaffold/aps-planning/scripts/init-session.sh" "$skill_dir/scripts/init-session.sh"
+  copy_or_download "scaffold/aps-planning/scripts/check-complete.sh" "$skill_dir/scripts/check-complete.sh"
   chmod +x "$skill_dir/scripts/"*.sh
 
-  info "aps-planning/ (skill, reference, examples, hooks)"
-  info "aps-planning/scripts/ (install-hooks, init-session, check-complete)"
+  info "aps-planning/ (skill, reference, examples, hooks, scripts)"
 
   # Slash commands
   mkdir -p "$commands_dir"
-  copy_or_download "commands/plan.md" "$commands_dir/plan.md"
-  copy_or_download "commands/plan-status.md" "$commands_dir/plan-status.md"
+  copy_or_download "scaffold/commands/plan.md" "$commands_dir/plan.md"
+  copy_or_download "scaffold/commands/plan-status.md" "$commands_dir/plan-status.md"
 
-  info ".claude/commands/plan.md"
-  info ".claude/commands/plan-status.md"
+  info ".claude/commands/ (plan, plan-status)"
+}
+
+# Set up PATH so `aps` works without ./bin/ prefix
+setup_path() {
+  local target_dir="$1"
+
+  echo ""
+  if command -v direnv &>/dev/null; then
+    local envrc="$target_dir/.envrc"
+    if [[ -f "$envrc" ]] && grep -q 'PATH_add bin' "$envrc" 2>/dev/null; then
+      info "PATH already configured in .envrc"
+    elif ask_yn "Set up direnv so you can run 'aps' without ./bin/ prefix?" "y"; then
+      if [[ -f "$envrc" ]]; then
+        echo 'PATH_add bin' >> "$envrc"
+      else
+        echo 'PATH_add bin' > "$envrc"
+      fi
+      info "Added 'PATH_add bin' to .envrc"
+      echo "  Run 'direnv allow' to activate"
+    else
+      info "To run aps without the path prefix, add to your .envrc:"
+      echo "  PATH_add bin"
+    fi
+  else
+    info "To run 'aps' without ./bin/ prefix, either:"
+    echo "  - Install direnv and add 'PATH_add bin' to .envrc"
+    echo "  - Or add 'export PATH=\"./bin:\$PATH\"' to your shell config"
+  fi
 }
 
 # Check if APS hooks are already configured in settings
@@ -171,23 +228,23 @@ if [[ "$UPDATE_MODE" == true ]]; then
   mkdir -p "$PLANS_DIR/execution"
   mkdir -p "$PLANS_DIR/decisions"
 
+  # CLI
+  install_cli "$TARGET"
+
+  # Templates and rules
   step "Updating templates and rules"
-  copy_or_download "plans/aps-rules.md" "$PLANS_DIR/aps-rules.md"
-  copy_or_download "plans/modules/.module.template.md" "$PLANS_DIR/modules/.module.template.md"
-  copy_or_download "plans/modules/.simple.template.md" "$PLANS_DIR/modules/.simple.template.md"
-  copy_or_download "plans/modules/.index-monorepo.template.md" "$PLANS_DIR/modules/.index-monorepo.template.md"
-  copy_or_download "plans/execution/.steps.template.md" "$PLANS_DIR/execution/.steps.template.md"
+  copy_or_download "scaffold/plans/aps-rules.md" "$PLANS_DIR/aps-rules.md"
+  copy_or_download "scaffold/plans/modules/.module.template.md" "$PLANS_DIR/modules/.module.template.md"
+  copy_or_download "scaffold/plans/modules/.simple.template.md" "$PLANS_DIR/modules/.simple.template.md"
+  copy_or_download "scaffold/plans/modules/.index-monorepo.template.md" "$PLANS_DIR/modules/.index-monorepo.template.md"
+  copy_or_download "scaffold/plans/execution/.steps.template.md" "$PLANS_DIR/execution/.steps.template.md"
 
-  info "aps-rules.md (agent guidance + session rituals)"
-  info "modules/.module.template.md"
-  info "modules/.simple.template.md"
-  info "modules/.index-monorepo.template.md (for monorepos)"
-  info "execution/.steps.template.md"
+  info "plans/ (templates, rules)"
 
-  # Update skill files (always overwrite — these are ours, not user content)
+  # Skill and commands
   install_skill "$TARGET"
 
-  # Prompt for hooks only if not already configured
+  # Hooks: prompt only if not already configured
   if ! has_aps_hooks "$TARGET"; then
     prompt_hooks "$TARGET"
   else
@@ -206,26 +263,33 @@ else
     exit 1
   fi
 
+  # CLI
+  install_cli "$TARGET"
+
+  # Plans
   step "Creating APS structure"
 
   mkdir -p "$PLANS_DIR/modules"
   mkdir -p "$PLANS_DIR/execution"
   mkdir -p "$PLANS_DIR/decisions"
 
-  copy_or_download "plans/aps-rules.md" "$PLANS_DIR/aps-rules.md"
-  copy_or_download "plans/index.aps.md" "$PLANS_DIR/index.aps.md"
-  copy_or_download "plans/modules/.module.template.md" "$PLANS_DIR/modules/.module.template.md"
-  copy_or_download "plans/modules/.simple.template.md" "$PLANS_DIR/modules/.simple.template.md"
-  copy_or_download "plans/modules/.index-monorepo.template.md" "$PLANS_DIR/modules/.index-monorepo.template.md"
-  copy_or_download "plans/execution/.steps.template.md" "$PLANS_DIR/execution/.steps.template.md"
+  copy_or_download "scaffold/plans/aps-rules.md" "$PLANS_DIR/aps-rules.md"
+  copy_or_download "scaffold/plans/index.aps.md" "$PLANS_DIR/index.aps.md"
+  copy_or_download "scaffold/plans/modules/.module.template.md" "$PLANS_DIR/modules/.module.template.md"
+  copy_or_download "scaffold/plans/modules/.simple.template.md" "$PLANS_DIR/modules/.simple.template.md"
+  copy_or_download "scaffold/plans/modules/.index-monorepo.template.md" "$PLANS_DIR/modules/.index-monorepo.template.md"
+  copy_or_download "scaffold/plans/execution/.steps.template.md" "$PLANS_DIR/execution/.steps.template.md"
 
   touch "$PLANS_DIR/decisions/.gitkeep"
 
   info "plans/ (templates, rules, index)"
 
-  # Install skill and commands
+  # Skill and commands
   install_skill "$TARGET"
 
+  echo ""
+  echo "  bin/"
+  echo "  └── aps                              <- CLI (lint, init, update)"
   echo ""
   echo "  plans/"
   echo "  ├── aps-rules.md                     <- Agent guidance (READ THIS)"
@@ -248,10 +312,12 @@ else
   echo "  .claude/commands/"
   echo "  ├── plan.md                          <- /plan command"
   echo "  └── plan-status.md                   <- /plan-status command"
-  echo ""
 
-  # Interactive hook prompt (init only, not update)
+  # Hooks
   prompt_hooks "$TARGET"
+
+  # PATH setup
+  setup_path "$TARGET"
 
   echo ""
   step "Next steps"

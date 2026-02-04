@@ -4,32 +4,44 @@
 #
 
 APS_VERSION="${APS_VERSION:-main}"
-APS_BASE_URL="https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/$APS_VERSION/scaffold"
+APS_BASE_URL="https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/$APS_VERSION"
 
 # Files to download for plans/
 PLAN_FILES=(
-  "plans/aps-rules.md"
-  "plans/modules/.module.template.md"
-  "plans/modules/.simple.template.md"
-  "plans/modules/.index-monorepo.template.md"
-  "plans/execution/.steps.template.md"
+  "scaffold/plans/aps-rules.md"
+  "scaffold/plans/modules/.module.template.md"
+  "scaffold/plans/modules/.simple.template.md"
+  "scaffold/plans/modules/.index-monorepo.template.md"
+  "scaffold/plans/execution/.steps.template.md"
 )
 
 # Files to download for the planning skill
 SKILL_FILES=(
-  "aps-planning/SKILL.md"
-  "aps-planning/reference.md"
-  "aps-planning/examples.md"
-  "aps-planning/hooks.md"
-  "aps-planning/scripts/install-hooks.sh"
-  "aps-planning/scripts/init-session.sh"
-  "aps-planning/scripts/check-complete.sh"
+  "scaffold/aps-planning/SKILL.md"
+  "scaffold/aps-planning/reference.md"
+  "scaffold/aps-planning/examples.md"
+  "scaffold/aps-planning/hooks.md"
+  "scaffold/aps-planning/scripts/install-hooks.sh"
+  "scaffold/aps-planning/scripts/init-session.sh"
+  "scaffold/aps-planning/scripts/check-complete.sh"
 )
 
 # Files to download for slash commands
 COMMAND_FILES=(
-  "commands/plan.md"
-  "commands/plan-status.md"
+  "scaffold/commands/plan.md"
+  "scaffold/commands/plan-status.md"
+)
+
+# CLI files (bin/ and lib/)
+CLI_FILES=(
+  "bin/aps"
+  "lib/output.sh"
+  "lib/lint.sh"
+  "lib/scaffold.sh"
+  "lib/rules/common.sh"
+  "lib/rules/module.sh"
+  "lib/rules/index.sh"
+  "lib/rules/workitem.sh"
 )
 
 # Download a file from GitHub
@@ -79,14 +91,16 @@ install_plans() {
   mkdir -p "$plans_dir/modules" "$plans_dir/execution" "$plans_dir/decisions"
 
   for f in "${PLAN_FILES[@]}"; do
-    download "$f" "$plans_dir/${f#plans/}"
+    # Strip "scaffold/plans/" prefix → destination under plans/
+    local rel="${f#scaffold/plans/}"
+    download "$f" "$plans_dir/$rel"
   done
 }
 
 # Download the index template (init only, not update)
 install_index() {
   local target="$1"
-  download "plans/index.aps.md" "$target/plans/index.aps.md"
+  download "scaffold/plans/index.aps.md" "$target/plans/index.aps.md"
   touch "$target/plans/decisions/.gitkeep"
 }
 
@@ -95,7 +109,9 @@ install_skill() {
   local target="$1"
 
   for f in "${SKILL_FILES[@]}"; do
-    download "$f" "$target/$f"
+    # Strip "scaffold/" prefix → destination under aps-planning/
+    local rel="${f#scaffold/}"
+    download "$f" "$target/$rel"
   done
   chmod +x "$target/aps-planning/scripts/"*.sh
 }
@@ -107,8 +123,48 @@ install_commands() {
 
   mkdir -p "$commands_dir"
   for f in "${COMMAND_FILES[@]}"; do
-    download "$f" "$commands_dir/${f#commands/}"
+    # Strip "scaffold/commands/" prefix
+    local rel="${f#scaffold/commands/}"
+    download "$f" "$commands_dir/$rel"
   done
+}
+
+# Download the CLI (bin/aps + lib/) to target
+install_cli() {
+  local target="$1"
+
+  for f in "${CLI_FILES[@]}"; do
+    download "$f" "$target/$f"
+  done
+  chmod +x "$target/bin/aps"
+}
+
+# Set up PATH so `aps` works without ./bin/ prefix
+setup_path() {
+  local target="$1"
+
+  echo ""
+  if command -v direnv &>/dev/null; then
+    local envrc="$target/.envrc"
+    if [[ -f "$envrc" ]] && grep -q 'PATH_add bin' "$envrc" 2>/dev/null; then
+      info "PATH already configured in .envrc"
+    elif ask_yn "Set up direnv so you can run 'aps' without ./bin/ prefix?" "y"; then
+      if [[ -f "$envrc" ]]; then
+        echo 'PATH_add bin' >> "$envrc"
+      else
+        echo 'PATH_add bin' > "$envrc"
+      fi
+      info "Added 'PATH_add bin' to .envrc"
+      echo "  Run 'direnv allow' to activate"
+    else
+      info "To run aps without the path prefix, add to your .envrc:"
+      echo "  PATH_add bin"
+    fi
+  else
+    info "To run 'aps' without ./bin/ prefix, either:"
+    echo "  - Install direnv and add 'PATH_add bin' to .envrc"
+    echo "  - Or add 'export PATH=\"./bin:\$PATH\"' to your shell config"
+  fi
 }
 
 # Two-step hook prompt
@@ -159,6 +215,10 @@ cmd_init() {
   info "Initialising APS in $target"
   echo ""
 
+  # CLI (bin/aps + lib/)
+  install_cli "$target"
+  info "bin/aps + lib/ (CLI)"
+
   # Templates and rules
   install_plans "$target"
   install_index "$target"
@@ -172,6 +232,9 @@ cmd_init() {
   install_commands "$target"
   info ".claude/commands/ (plan, plan-status)"
 
+  echo ""
+  echo "  bin/"
+  echo "  └── aps                              <- CLI (lint, init, update)"
   echo ""
   echo "  plans/"
   echo "  ├── aps-rules.md                     <- Agent guidance (READ THIS)"
@@ -198,6 +261,9 @@ cmd_init() {
   # Hooks
   prompt_hooks "$target"
 
+  # PATH setup
+  setup_path "$target"
+
   echo ""
   info "Next steps:"
   echo "  1. Edit plans/index.aps.md to define your plan"
@@ -213,8 +279,10 @@ aps init - Create APS structure in a new project
 Usage:
   aps init [target-dir]
 
-Creates plans/, aps-planning/ skill, .claude/commands/, and optionally
-installs hooks. Refuses to run if plans/ already exists.
+Creates bin/aps CLI, plans/, aps-planning/ skill, .claude/commands/,
+and optionally installs hooks and sets up PATH via direnv.
+
+Refuses to run if plans/ already exists.
 
 Options:
   --help    Show this help
@@ -252,6 +320,10 @@ cmd_update() {
   info "Updating APS in $target"
   echo ""
 
+  # CLI (always update — this is how users get new features)
+  install_cli "$target"
+  info "bin/aps + lib/ (CLI)"
+
   # Templates and rules (preserves user specs)
   install_plans "$target"
   info "plans/ (templates, rules)"
@@ -280,13 +352,13 @@ cmd_update() {
 
 cmd_update_help() {
   cat <<EOF
-aps update - Update APS templates, skill, and commands
+aps update - Update APS templates, skill, CLI, and commands
 
 Usage:
   aps update [target-dir]
 
-Updates templates, rules, skill files, and commands without touching
-your specs (index.aps.md, modules/*.aps.md, execution/*.actions.md).
+Updates the CLI, templates, rules, skill files, and commands without
+touching your specs (index.aps.md, modules/*.aps.md, execution/*.actions.md).
 
 If hooks are not yet configured, prompts to install them.
 

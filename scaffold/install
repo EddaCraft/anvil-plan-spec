@@ -51,6 +51,20 @@ download() {
   local path="$1"
   local dest="$2"
   local url="$BASE_URL/scaffold/$path"
+  mkdir -p "$(dirname "$dest")"
+  if ! curl -fsSL "$url" -o "$dest"; then
+    error "Failed to download '$path' from $url"
+    echo "       Please check your network connectivity and ensure VERSION='$VERSION' is correct."
+    exit 1
+  fi
+}
+
+# Download from repo root (for non-scaffold files like bin/ and lib/)
+download_root() {
+  local path="$1"
+  local dest="$2"
+  local url="$BASE_URL/$path"
+  mkdir -p "$(dirname "$dest")"
   if ! curl -fsSL "$url" -o "$dest"; then
     error "Failed to download '$path' from $url"
     echo "       Please check your network connectivity and ensure VERSION='$VERSION' is correct."
@@ -76,6 +90,32 @@ ask_yn() {
   fi
 }
 
+# Set up PATH so `aps` works without ./bin/ prefix
+setup_path() {
+  echo ""
+  if command -v direnv &>/dev/null; then
+    local envrc="$TARGET/.envrc"
+    if [[ -f "$envrc" ]] && grep -q 'PATH_add bin' "$envrc" 2>/dev/null; then
+      info "PATH already configured in .envrc"
+    elif ask_yn "Set up direnv so you can run 'aps' without ./bin/ prefix?" "y"; then
+      if [[ -f "$envrc" ]]; then
+        echo 'PATH_add bin' >> "$envrc"
+      else
+        echo 'PATH_add bin' > "$envrc"
+      fi
+      info "Added 'PATH_add bin' to .envrc"
+      echo "  Run 'direnv allow' to activate"
+    else
+      info "To run aps without the path prefix, add to your .envrc:"
+      echo "  PATH_add bin"
+    fi
+  else
+    info "To run 'aps' without ./bin/ prefix, either:"
+    echo "  - Install direnv and add 'PATH_add bin' to .envrc"
+    echo "  - Or add 'export PATH=\"./bin:\$PATH\"' to your shell config"
+  fi
+}
+
 # Header
 echo ""
 echo -e "${BOLD}Anvil Plan Spec (APS)${NC}"
@@ -94,6 +134,14 @@ if [[ -d "$PLANS_DIR" ]]; then
   echo ""
   exit 1
 fi
+
+# Install CLI
+step "Installing APS CLI"
+for f in bin/aps lib/output.sh lib/lint.sh lib/scaffold.sh lib/rules/common.sh lib/rules/module.sh lib/rules/index.sh lib/rules/workitem.sh; do
+  download_root "$f" "$TARGET/$f"
+done
+chmod +x "$TARGET/bin/aps"
+info "bin/aps + lib/ (CLI)"
 
 # Create directory structure
 step "Creating directory structure"
@@ -151,6 +199,9 @@ info ".claude/commands/ (plan, plan-status)"
 echo ""
 step "Installation complete"
 echo ""
+echo "  bin/"
+echo "  └── aps                              <- CLI (lint, init, update)"
+echo ""
 echo "  plans/"
 echo "  ├── aps-rules.md              # Agent guidance"
 echo "  ├── index.aps.md              # Your main plan"
@@ -187,6 +238,9 @@ else
     echo "  ./aps-planning/scripts/install-hooks.sh"
   fi
 fi
+
+# PATH setup
+setup_path
 
 echo ""
 step "Next steps"

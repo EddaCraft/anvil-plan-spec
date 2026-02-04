@@ -75,6 +75,20 @@ download() {
   local path="$1"
   local dest="$2"
   local url="$BASE_URL/scaffold/$path"
+  mkdir -p "$(dirname "$dest")"
+  if ! curl -fsSL "$url" -o "$dest"; then
+    error "Failed to download '$path' from $url"
+    echo "       Please check your network connectivity and ensure VERSION='$VERSION' is correct."
+    exit 1
+  fi
+}
+
+# Download from repo root (for non-scaffold files like bin/ and lib/)
+download_root() {
+  local path="$1"
+  local dest="$2"
+  local url="$BASE_URL/$path"
+  mkdir -p "$(dirname "$dest")"
   if ! curl -fsSL "$url" -o "$dest"; then
     error "Failed to download '$path' from $url"
     echo "       Please check your network connectivity and ensure VERSION='$VERSION' is correct."
@@ -101,6 +115,14 @@ fi
 mkdir -p "$PLANS_DIR/modules"
 mkdir -p "$PLANS_DIR/execution"
 mkdir -p "$PLANS_DIR/decisions"
+
+# Update CLI
+step "Updating APS CLI"
+for f in bin/aps lib/output.sh lib/lint.sh lib/scaffold.sh lib/rules/common.sh lib/rules/module.sh lib/rules/index.sh lib/rules/workitem.sh; do
+  download_root "$f" "$TARGET/$f"
+done
+chmod +x "$TARGET/bin/aps"
+info "bin/aps + lib/ (CLI)"
 
 # Update templates and rules
 step "Updating templates and rules"
@@ -149,6 +171,7 @@ echo ""
 step "Update complete"
 echo ""
 echo "  Updated:"
+echo "    - bin/aps + lib/ (CLI)"
 echo "    - aps-rules.md (agent guidance)"
 echo "    - modules/.module.template.md"
 echo "    - modules/.simple.template.md"
