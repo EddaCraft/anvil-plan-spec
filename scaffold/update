@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #
 # APS Update Script
-# Updates templates and rules in an existing APS project.
+# Updates templates, rules, and skill in an existing APS project.
 # Your specs (index.aps.md, modules/*.aps.md) are preserved.
 #
 # Usage:
@@ -51,7 +51,7 @@ step()  { echo -e "${BLUE}==>${NC} ${BOLD}$1${NC}"; }
 download() {
   local path="$1"
   local dest="$2"
-  local url="$BASE_URL/scaffold/plans/$path"
+  local url="$BASE_URL/scaffold/$path"
   if ! curl -fsSL "$url" -o "$dest"; then
     error "Failed to download '$path' from $url"
     echo "       Please check your network connectivity and ensure VERSION='$VERSION' is correct."
@@ -82,17 +82,41 @@ mkdir -p "$PLANS_DIR/decisions"
 # Update templates and rules
 step "Updating templates and rules"
 
-download "aps-rules.md" "$PLANS_DIR/aps-rules.md"
+download "plans/aps-rules.md" "$PLANS_DIR/aps-rules.md"
 info "aps-rules.md"
 
-download "modules/.module.template.md" "$PLANS_DIR/modules/.module.template.md"
+download "plans/modules/.module.template.md" "$PLANS_DIR/modules/.module.template.md"
 info "modules/.module.template.md"
 
-download "modules/.simple.template.md" "$PLANS_DIR/modules/.simple.template.md"
+download "plans/modules/.simple.template.md" "$PLANS_DIR/modules/.simple.template.md"
 info "modules/.simple.template.md"
 
-download "execution/.steps.template.md" "$PLANS_DIR/execution/.steps.template.md"
+download "plans/execution/.steps.template.md" "$PLANS_DIR/execution/.steps.template.md"
 info "execution/.steps.template.md"
+
+# Update skill files
+step "Updating APS planning skill"
+
+SKILL_DIR="$TARGET/aps-planning"
+COMMANDS_DIR="$TARGET/.claude/commands"
+
+mkdir -p "$SKILL_DIR/scripts"
+download "aps-planning/SKILL.md" "$SKILL_DIR/SKILL.md"
+download "aps-planning/reference.md" "$SKILL_DIR/reference.md"
+download "aps-planning/examples.md" "$SKILL_DIR/examples.md"
+download "aps-planning/hooks.md" "$SKILL_DIR/hooks.md"
+download "aps-planning/scripts/install-hooks.sh" "$SKILL_DIR/scripts/install-hooks.sh"
+download "aps-planning/scripts/init-session.sh" "$SKILL_DIR/scripts/init-session.sh"
+download "aps-planning/scripts/check-complete.sh" "$SKILL_DIR/scripts/check-complete.sh"
+chmod +x "$SKILL_DIR/scripts/"*.sh
+
+info "aps-planning/ (skill, reference, examples, hooks, scripts)"
+
+mkdir -p "$COMMANDS_DIR"
+download "commands/plan.md" "$COMMANDS_DIR/plan.md"
+download "commands/plan-status.md" "$COMMANDS_DIR/plan-status.md"
+
+info ".claude/commands/ (plan, plan-status)"
 
 # Success
 echo ""
@@ -103,9 +127,14 @@ echo "    - aps-rules.md (agent guidance)"
 echo "    - modules/.module.template.md"
 echo "    - modules/.simple.template.md"
 echo "    - execution/.steps.template.md"
+echo "    - aps-planning/ (skill + scripts)"
+echo "    - .claude/commands/ (plan, plan-status)"
 echo ""
 warn "Your specs were preserved:"
 echo "    - index.aps.md"
 echo "    - modules/*.aps.md"
 echo "    - execution/*.actions.md"
+echo ""
+warn "Hook configuration was NOT modified."
+echo "    To update hooks: ./aps-planning/scripts/install-hooks.sh"
 echo ""

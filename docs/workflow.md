@@ -14,7 +14,7 @@ Plan → Execute → Validate → Learn → Plan again
   └──────────────────────────────────────┘
 ```
 
-| Phase | What Happens | APS Artifacts | How It Serves Planning |
+| Phase | What Happens | APS Artefacts | How It Serves Planning |
 |-------|--------------|---------------|------------------------|
 | **Plan** | Define scope and success | Index, Modules, Work Items | Reference past patterns and solutions |
 | **Execute** | Work against specs | Action Plans, status updates | Clean implementation from clear specs |
