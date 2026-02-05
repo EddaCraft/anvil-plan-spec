@@ -139,6 +139,7 @@ Tasks use the module's ID prefix: `AUTH-001`, `AUTH-002`, `CORE-001`, etc.
 plans/
 ├── aps-rules.md           # This file (agent guidance)
 ├── index.aps.md           # Root plan
+├── issues.md              # Development-time discoveries (issues & questions)
 ├── modules/               # Module specs (numbered by dependency order)
 │   ├── 01-core.aps.md
 │   └── 02-auth.aps.md
@@ -177,10 +178,41 @@ After completing work:
 
 1. **Update status** — Mark work items: `In Progress`, `Complete: YYYY-MM-DD`, or `Blocked: [reason]`
 2. **Capture discovered work** — Add as Draft items with package tags
-3. **Update "What's Next"** — Remove completed, add new Ready items, re-sequence if needed
-4. **Session summary** — Brief note: what completed, what discovered, what's next
+3. **Log discoveries** — Add issues (ISS-NNN) or questions (Q-NNN) to `plans/issues.md`
+4. **Update "What's Next"** — Remove completed, add new Ready items, re-sequence if needed
+5. **Session summary** — Brief note: what completed, what discovered, what's next
 
 **Key principle:** The next agent should pick up exactly where you left off without archaeology.
+
+## Issues & Questions Tracker
+
+Use `plans/issues.md` to log development-time discoveries:
+
+- **Issues (ISS-NNN)** — Bugs, limitations, edge cases noticed during development
+- **Questions (Q-NNN)** — Unknowns that need answers, deferred decisions
+
+### When to Log
+
+| Log as Issue | Log as Question |
+|--------------|-----------------|
+| "API rate-limits at 100 req/min" | "Should retry logic live in client or transport?" |
+| "Login fails intermittently on Safari" | "What's the session expiry policy?" |
+| "Edge case: empty array not handled" | "Do we need to support IE11?" |
+
+### Referencing
+
+From work items, notes, or commits:
+
+- `See ISS-001` or `Related: ISS-001, Q-002`
+- In commits: `Addresses ISS-001`
+
+### Not a Bug Tracker
+
+This is for **planning-level visibility**, not routine bugs. Use your project's bug tracker for:
+
+- User-reported bugs
+- Production incidents
+- Detailed reproduction steps
 
 ## Quick Reference
 
@@ -191,3 +223,4 @@ After completing work:
 | Planning module | Boundaries clear? No premature tasks? |
 | Executing | Task status is Ready? Prerequisites met? |
 | In monorepo | Packages tagged? "What's Next" updated? |
+| Found issue/question | Logged in issues.md with proper ID? |
