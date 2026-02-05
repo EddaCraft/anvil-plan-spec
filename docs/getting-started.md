@@ -15,6 +15,7 @@ Start here. Pick based on what you're trying to do:
 | **Large initiative** (6+ modules) | [index-expanded](../templates/index-expanded.template.md) | 1-2 hours |
 | **Monorepo** (multiple packages/apps) | [index-monorepo](../templates/index-monorepo.template.md) | 1-2 hours |
 | **Breaking a work item into actions** | [actions](../templates/actions.template.md) | 15 minutes |
+| **Tracking dev-time discoveries** | [issues](../templates/issues.template.md) | 10 minutes |
 
 ### Decision Tree
 
@@ -82,6 +83,7 @@ If you prefer manual setup over the scaffold script:
 your-project/
 ├── plans/
 │   ├── index.aps.md           # Your main plan
+│   ├── issues.md              # Development-time discoveries
 │   ├── modules/               # Module specs
 │   │   └── feature.aps.md
 │   ├── execution/             # Action plan files
@@ -131,6 +133,15 @@ Steps translate "what to achieve" into "what actions to take":
 
 - Each step has a **checkpoint** (observable state)
 - Steps describe **what**, not **how**
+
+### 6. Track Issues & Questions
+
+As you develop, you'll discover issues and questions that emerge during implementation — things that weren't apparent during planning. Log these in `plans/issues.md`:
+
+- **Issues (ISS-NNN)** — Bugs, limitations, tech debt, edge cases
+- **Questions (Q-NNN)** — Unknowns that need answers, deferred decisions
+
+This keeps planning-level concerns visible without cluttering work items or your bug tracker.
 
 ## Monorepo Setup
 

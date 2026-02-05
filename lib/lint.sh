@@ -27,6 +27,12 @@ get_file_type() {
     return
   fi
 
+  # Issues tracker files
+  if [[ "$basename" == "issues.md" ]]; then
+    echo "issues"
+    return
+  fi
+
   # Actions files
   if [[ "$file" == *"/execution/"* && "$basename" == *.actions.md ]]; then
     echo "actions"
@@ -53,8 +59,8 @@ get_file_type() {
 find_aps_files() {
   local dir="$1"
 
-  # Find .aps.md and .actions.md files, excluding dotfiles
-  find "$dir" -type f \( -name "*.aps.md" -o -name "*.actions.md" \) ! -name ".*" 2>/dev/null | sort
+  # Find .aps.md, .actions.md, and issues.md files, excluding dotfiles
+  find "$dir" -type f \( -name "*.aps.md" -o -name "*.actions.md" -o -name "issues.md" \) ! -name ".*" 2>/dev/null | sort
 }
 
 # Lint a single file
@@ -73,6 +79,9 @@ lint_file() {
       ;;
     module|simple)
       lint_module "$file"
+      ;;
+    issues)
+      lint_issues "$file"
       ;;
     actions)
       # Actions files have minimal validation for now
