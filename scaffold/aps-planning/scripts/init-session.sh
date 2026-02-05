@@ -115,3 +115,9 @@ fi
 
 echo ""
 echo "Tip: Read the relevant module spec before starting work."
+
+# Save session baseline for enforce-plan-update.sh
+if git rev-parse --is-inside-work-tree &>/dev/null; then
+  mkdir -p .claude
+  git rev-parse HEAD > .claude/.aps-session-baseline 2>/dev/null || true
+fi

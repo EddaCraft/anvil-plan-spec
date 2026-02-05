@@ -132,6 +132,13 @@ stop = {
     }]
 }
 
+enforce_plan = {
+    "hooks": [{
+        "type": "command",
+        "command": "./aps-planning/scripts/enforce-plan-update.sh"
+    }]
+}
+
 session_start = {
     "hooks": [{
         "type": "command",
@@ -143,13 +150,13 @@ session_start = {
 if mode == "minimal":
     new_hooks = {
         "PreToolUse": [pretool],
-        "Stop": [stop],
+        "Stop": [stop, enforce_plan],
     }
 else:
     new_hooks = {
         "PreToolUse": [pretool],
         "PostToolUse": [posttool],
-        "Stop": [stop],
+        "Stop": [stop, enforce_plan],
         "SessionStart": [session_start],
     }
 
@@ -185,10 +192,12 @@ else
     echo "    PreToolUse   — Reminds agent to check plan before code changes"
     echo "    PostToolUse  — Nudges agent to update specs after changes"
     echo "    Stop         — Blocks session end if work items unresolved"
+    echo "    Stop         — Blocks session end if code changed but plans untouched"
     echo "    SessionStart — Shows planning status at session start"
   else
     echo "    PreToolUse   — Reminds agent to check plan before code changes"
     echo "    Stop         — Blocks session end if work items unresolved"
+    echo "    Stop         — Blocks session end if code changed but plans untouched"
   fi
   echo ""
   info "See aps-planning/hooks.md for details on each hook."

@@ -56,6 +56,14 @@ If you prefer manual setup, add these to your project's
             "command": "./aps-planning/scripts/check-complete.sh"
           }
         ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./aps-planning/scripts/enforce-plan-update.sh"
+          }
+        ]
       }
     ],
     "SessionStart": [
@@ -97,7 +105,7 @@ ensures status changes and new discoveries get captured immediately.
 **What it says:** "If you completed a work item or discovered new scope, update
 the APS spec now."
 
-### Stop Hook
+### Stop Hook — Completion Check
 
 **When:** Before the session ends.
 
@@ -107,6 +115,35 @@ out what happened.
 
 **What it does:** Runs `check-complete.sh` which exits non-zero if work items
 are still in progress, prompting the agent to update statuses.
+
+### Stop Hook — Plan Update Enforcer
+
+**When:** Before the session ends.
+
+**Why:** Agents frequently modify code but forget to update the corresponding
+plan files. The PostToolUse nudge is a soft reminder; this hook is a hard gate.
+If source code was changed during the session but no `plans/` files were
+touched, the agent cannot stop until it updates the specs.
+
+**How it works:**
+1. At session start, `init-session.sh` records the current git HEAD as a
+   baseline in `.claude/.aps-session-baseline`.
+2. At session end, `enforce-plan-update.sh` diffs all changes (committed and
+   uncommitted) since that baseline.
+3. If non-plan files were modified but zero plan files were touched, it exits
+   with code 2 — blocking the session — and lists the changed files so the
+   agent knows what to account for.
+
+**What it catches:**
+- Agent wrote code but never updated work item statuses
+- Agent committed implementation but forgot to mark items Complete
+- Agent discovered new scope but didn't add Draft work items
+
+**What it allows through:**
+- Plan-only sessions (no code changes)
+- Sessions where both code and plans were modified
+- Sessions with no file changes at all
+- Projects without a `plans/` directory
 
 ### SessionStart Hook
 
@@ -148,6 +185,10 @@ preventing goal drift:
   that don't use APS.
 - The PreToolUse and PostToolUse hooks output JSON with `additionalContext`
   so their reminders reach Claude (plain stdout only shows in verbose mode).
-- The Stop hook blocks by exiting with code 2 when work is incomplete.
-  Its stderr message is fed back to Claude explaining what needs attention.
+- The Stop hooks block by exiting with code 2 when work is incomplete.
+  Their stderr messages are fed back to Claude explaining what needs attention.
+- The plan update enforcer uses a session baseline file
+  (`.claude/.aps-session-baseline`) written by the SessionStart hook. If the
+  SessionStart hook didn't run, it falls back to checking uncommitted changes
+  only. Add `.claude/.aps-session-baseline` to `.gitignore`.
 - Scripts need execute permissions: `chmod +x aps-planning/scripts/*.sh`
