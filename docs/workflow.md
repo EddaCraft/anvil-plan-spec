@@ -111,7 +111,27 @@ You're halfway through AUTH-001 and realize you need database migrations.
    - **Blocked:** Waiting on Google API credentials from infra team
    ```
 
-3. **Track progress.** Update work item status as you go:
+3. **Log discoveries.** When you find issues or questions during implementation,
+   add them to `plans/issues.md`:
+
+   ```markdown
+   ### ISS-001: API rate limit lower than documented
+
+   | Field | Value |
+   |-------|-------|
+   | Status | Open |
+   | Severity | medium |
+   | Discovered | AUTH-002 |
+   | Module | AUTH |
+
+   **Context:** During OAuth testing, discovered the API rate-limits at 100 req/min, not 1000 as documented.
+
+   **Impact:** Will need retry logic or request batching for production.
+   ```
+
+   This keeps issues visible without cluttering work items.
+
+4. **Track progress.** Update work item status as you go:
    - Remove status line = not started
    - `In Progress` = actively working
    - `Blocked` = waiting on something
@@ -274,14 +294,36 @@ For complex changes, consider multiple review angles:
 3. **Update spec if needed.** If implementation diverged from plan (for good
    reasons), update the spec to reflect reality.
 
-4. **Note issues found.** If review catches problems, document them:
+4. **Note issues found.** If review catches problems, add them to `plans/issues.md`:
 
    ```markdown
-   ## Notes
+   ### ISS-002: Rate limiting needed on AUTH-002
 
-   Review findings:
-   - AUTH-002 needs rate limiting (deferred to AUTH-005)
-   - Token expiry should be configurable (added to backlog)
+   | Field | Value |
+   |-------|-------|
+   | Status | Open |
+   | Severity | medium |
+   | Discovered | code review |
+   | Module | AUTH |
+
+   **Context:** Review identified missing rate limiting on login endpoint.
+
+   **Impact:** Potential for brute force attacks without rate limiting.
+   ```
+
+   For questions that need team discussion, log them as questions:
+
+   ```markdown
+   ### Q-001: Should token expiry be configurable?
+
+   | Field | Value |
+   |-------|-------|
+   | Status | Open |
+   | Priority | low |
+   | Discovered | code review |
+   | Assigned | @teamlead |
+
+   **Context:** Currently hardcoded to 1 hour. Some enterprise clients may need longer.
    ```
 
 ---

@@ -28,6 +28,7 @@ source "$LIB_DIR/rules/common.sh"
 source "$LIB_DIR/rules/module.sh"
 source "$LIB_DIR/rules/index.sh"
 source "$LIB_DIR/rules/workitem.sh"
+source "$LIB_DIR/rules/issues.sh"
 source "$LIB_DIR/lint.sh"
 source "$LIB_DIR/scaffold.sh"
 
