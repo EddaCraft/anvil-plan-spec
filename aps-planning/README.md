@@ -45,6 +45,9 @@ Index (what are we building?)
 | `scripts/install-hooks.sh` | Installs APS hooks into `.claude/settings.local.json` |
 | `scripts/init-session.sh` | Reports planning status at session start |
 | `scripts/check-complete.sh` | Verifies work items are resolved before stopping |
+| `scripts/install-hooks.ps1` | PowerShell version of install-hooks |
+| `scripts/init-session.ps1` | PowerShell version of init-session |
+| `scripts/check-complete.ps1` | PowerShell version of check-complete |
 
 | Command | Purpose |
 |---------|---------|
@@ -66,14 +69,27 @@ Copy `commands/plan.md` and `commands/plan-status.md` into your project's
 
 Run the install script:
 
+**macOS / Linux (Bash)**
 ```bash
 ./aps-planning/scripts/install-hooks.sh           # All hooks
 ./aps-planning/scripts/install-hooks.sh --minimal  # PreToolUse + Stop only
 ./aps-planning/scripts/install-hooks.sh --remove   # Remove APS hooks
 ```
 
+**Windows (PowerShell)**
+```powershell
+.\aps-planning\scripts\install-hooks.ps1            # All hooks
+.\aps-planning\scripts\install-hooks.ps1 -Minimal   # PreToolUse + Stop only
+.\aps-planning\scripts\install-hooks.ps1 -Remove    # Remove APS hooks
+```
+
 This merges APS hooks into `.claude/settings.local.json` without clobbering
 existing settings. See `hooks.md` for what each hook does.
+
+> **Note for Windows users:** The hooks themselves still use Bash syntax
+> (Claude Code runs hooks through a shell). The PowerShell scripts are for
+> the *installer* and *manual diagnostics* — running `init-session.ps1` or
+> `check-complete.ps1` directly to verify your planning state.
 
 ### 4. Use it
 
