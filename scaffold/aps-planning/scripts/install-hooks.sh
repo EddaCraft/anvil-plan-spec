@@ -151,6 +151,7 @@ if mode == "minimal":
     new_hooks = {
         "PreToolUse": [pretool],
         "Stop": [stop, enforce_plan],
+        "SessionStart": [session_start],
     }
 else:
     new_hooks = {
@@ -189,15 +190,16 @@ else
   echo ""
   echo "  Hooks added:"
   if [ "$MODE" = "full" ]; then
-    echo "    PreToolUse   — Reminds agent to check plan before code changes"
-    echo "    PostToolUse  — Nudges agent to update specs after changes"
-    echo "    Stop         — Blocks session end if work items unresolved"
-    echo "    Stop         — Blocks session end if code changed but plans untouched"
-    echo "    SessionStart — Shows planning status at session start"
+    echo "    PreToolUse          — Reminds agent to check plan before code changes"
+    echo "    PostToolUse         — Nudges agent to update specs after changes"
+    echo "    Stop (Completion)   — Blocks session end if work items unresolved"
+    echo "    Stop (Plan Update)  — Blocks session end if code changed but plans untouched"
+    echo "    SessionStart        — Shows planning status at session start"
   else
-    echo "    PreToolUse   — Reminds agent to check plan before code changes"
-    echo "    Stop         — Blocks session end if work items unresolved"
-    echo "    Stop         — Blocks session end if code changed but plans untouched"
+    echo "    PreToolUse          — Reminds agent to check plan before code changes"
+    echo "    Stop (Completion)   — Blocks session end if work items unresolved"
+    echo "    Stop (Plan Update)  — Blocks session end if code changed but plans untouched"
+    echo "    SessionStart        — Writes session baseline for change detection"
   fi
   echo ""
   info "See aps-planning/hooks.md for details on each hook."
