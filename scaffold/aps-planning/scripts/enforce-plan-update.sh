@@ -42,7 +42,10 @@ if [ -f "$BASELINE_FILE" ]; then
     UNCOMMITTED=$(git diff --name-only HEAD 2>/dev/null || true)
     STAGED=$(git diff --name-only --cached 2>/dev/null || true)
 
-    CHANGED_FILES=$(printf '%s\n%s\n%s' "$COMMITTED" "$UNCOMMITTED" "$STAGED" | sort -u)
+    # Untracked files (new files not yet staged)
+    UNTRACKED=$(git ls-files --others --exclude-standard 2>/dev/null || true)
+
+    CHANGED_FILES=$(printf '%s\n%s\n%s\n%s' "$COMMITTED" "$UNCOMMITTED" "$STAGED" "$UNTRACKED" | sort -u)
   fi
 fi
 
@@ -50,7 +53,8 @@ fi
 if [ -z "$CHANGED_FILES" ]; then
   UNCOMMITTED=$(git diff --name-only 2>/dev/null || true)
   STAGED=$(git diff --name-only --cached 2>/dev/null || true)
-  CHANGED_FILES=$(printf '%s\n%s' "$UNCOMMITTED" "$STAGED" | sort -u)
+  UNTRACKED=$(git ls-files --others --exclude-standard 2>/dev/null || true)
+  CHANGED_FILES=$(printf '%s\n%s\n%s' "$UNCOMMITTED" "$STAGED" "$UNTRACKED" | sort -u)
 fi
 
 # Filter out empty lines
@@ -62,8 +66,8 @@ if [ -z "$CHANGED_FILES" ]; then
 fi
 
 # Split into plan files and non-plan files
-PLAN_CHANGES=$(echo "$CHANGED_FILES" | grep "^${PLANS_DIR}/" || true)
-CODE_CHANGES=$(echo "$CHANGED_FILES" | grep -v "^${PLANS_DIR}/" || true)
+PLAN_CHANGES=$(echo "$CHANGED_FILES" | grep -F "${PLANS_DIR}/" || true)
+CODE_CHANGES=$(echo "$CHANGED_FILES" | grep -vF "${PLANS_DIR}/" || true)
 
 # If no code changes (plan-only session), nothing to enforce
 if [ -z "$CODE_CHANGES" ]; then
@@ -74,7 +78,7 @@ fi
 if [ -z "$PLAN_CHANGES" ]; then
   # Block: code changed but plans weren't touched
   {
-    echo "Code was modified but no plan files were updated."
+    echo "Code was modified but no plan files were touched."
     echo ""
     echo "Changed files outside plans/:"
     echo "$CODE_CHANGES" | head -10 | sed 's/^/  /'
