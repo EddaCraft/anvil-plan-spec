@@ -126,6 +126,7 @@ If source code was changed during the session but no `plans/` files were
 touched, the agent cannot stop until it updates the specs.
 
 **How it works:**
+
 1. At session start, `init-session.sh` records the current git HEAD as a
    baseline in `.claude/.aps-session-baseline`.
 2. At session end, `enforce-plan-update.sh` diffs all changes (committed and
@@ -135,11 +136,13 @@ touched, the agent cannot stop until it updates the specs.
    agent knows what to account for.
 
 **What it catches:**
+
 - Agent wrote code but never updated work item statuses
 - Agent committed implementation but forgot to mark items Complete
 - Agent discovered new scope but didn't add Draft work items
 
 **What it allows through:**
+
 - Plan-only sessions (no code changes)
 - Sessions where both code and plans were modified
 - Sessions with no file changes at all
@@ -188,7 +191,10 @@ preventing goal drift:
 - The Stop hooks block by exiting with code 2 when work is incomplete.
   Their stderr messages are fed back to Claude explaining what needs attention.
 - The plan update enforcer uses a session baseline file
-  (`.claude/.aps-session-baseline`) written by the SessionStart hook. If the
-  SessionStart hook didn't run, it falls back to checking uncommitted changes
-  only. Add `.claude/.aps-session-baseline` to `.gitignore`.
+  (`.claude/.aps-session-baseline`) written by the SessionStart hook to detect
+  all changes — committed and uncommitted — during the session. The SessionStart
+  hook is installed in both full and minimal modes. If the baseline is missing
+  for any reason, checks fall back to uncommitted changes only. The install
+  script automatically adds `.claude/.aps-session-baseline` to `.gitignore`; if
+  you manage Claude settings manually, add it to `.gitignore` yourself.
 - Scripts need execute permissions: `chmod +x aps-planning/scripts/*.sh`
