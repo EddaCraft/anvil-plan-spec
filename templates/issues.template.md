@@ -19,7 +19,7 @@ Add entries here when you discover:
 Issues are problems discovered during development.
 ID format: ISS-NNN (e.g., ISS-001)
 Status: Open | Resolved | Deferred | Won't Fix
-Severity: Critical | High | Medium | Low
+Severity: critical | high | medium | low
 -->
 
 ### ISS-001: [Brief description]
@@ -49,7 +49,7 @@ Severity: Critical | High | Medium | Low
 Questions are unknowns that emerged during development.
 ID format: Q-NNN (e.g., Q-001)
 Status: Open | Answered | Deferred
-Priority: High | Medium | Low
+Priority: high | medium | low
 -->
 
 ### Q-001: [The question]
@@ -64,6 +64,7 @@ Priority: High | Medium | Low
 **Context:** [Why this question came up]
 
 **Options considered:** *(optional)*
+
 1. [Option A] — [tradeoffs]
 2. [Option B] — [tradeoffs]
 
@@ -108,14 +109,15 @@ Keep entries for 1-2 sprints as reference, then archive or delete.
 
 | Severity | Meaning |
 |----------|---------|
-| Critical | Blocks work, data loss risk, security issue |
-| High | Significant impact, needs attention soon |
-| Medium | Moderate impact, can be scheduled |
-| Low | Minor inconvenience, fix when convenient |
+| critical | Blocks work, data loss risk, security issue |
+| high | Significant impact, needs attention soon |
+| medium | Moderate impact, can be scheduled |
+| low | Minor inconvenience, fix when convenient |
 
 ### Referencing from Other Documents
 
 From work items or notes, reference as:
+
 - `See ISS-001` or `Related: ISS-001, Q-002`
 - In commit messages: `Addresses ISS-001`
 

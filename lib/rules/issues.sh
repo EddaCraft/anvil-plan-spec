@@ -23,7 +23,7 @@ check_e011_questions_section() {
   return 0
 }
 
-# W010: Issue missing required fields (Status, Severity, Discovered)
+# W010: Issue missing required fields (Status, Discovered, Severity)
 check_w010_issue_fields() {
   local file="$1"
   local issues_content
@@ -57,10 +57,15 @@ check_w010_issue_fields() {
     if ! echo "$issue_content" | grep -qE '^\| *Discovered *\|'; then
       add_result "$file" "warning" "W010" "$issue_id: Missing Discovered field (traceability)"
     fi
+
+    # Check for Severity field
+    if ! echo "$issue_content" | grep -qE '^\| *Severity *\|'; then
+      add_result "$file" "warning" "W010" "$issue_id: Missing Severity field in metadata table"
+    fi
   done <<< "$issue_headers"
 }
 
-# W011: Question missing required fields (Status, Priority, Discovered)
+# W011: Question missing required fields (Status, Discovered, Priority)
 check_w011_question_fields() {
   local file="$1"
   local questions_content
@@ -94,6 +99,11 @@ check_w011_question_fields() {
     if ! echo "$question_content" | grep -qE '^\| *Discovered *\|'; then
       add_result "$file" "warning" "W011" "$question_id: Missing Discovered field (traceability)"
     fi
+
+    # Check for Priority field
+    if ! echo "$question_content" | grep -qE '^\| *Priority *\|'; then
+      add_result "$file" "warning" "W011" "$question_id: Missing Priority field in metadata table"
+    fi
   done <<< "$question_headers"
 }
 
@@ -101,9 +111,9 @@ check_w011_question_fields() {
 check_w012_issue_id_format() {
   local file="$1"
 
-  # Find any ### ISS-xxx that doesn't match ISS-NNN pattern
+  # Find any ### ISS- header that doesn't match ISS-NNN: format (digits-only suffix)
   local bad_ids
-  bad_ids=$(grep -nE '^### ISS-[^0-9]' "$file" 2>/dev/null || true)
+  bad_ids=$(grep -nE '^### ISS-' "$file" 2>/dev/null | grep -vE '^[0-9]+:### ISS-[0-9]+:' || true)
 
   while IFS= read -r line; do
     [[ -z "$line" ]] && continue
@@ -117,9 +127,9 @@ check_w012_issue_id_format() {
 check_w013_question_id_format() {
   local file="$1"
 
-  # Find any ### Q-xxx that doesn't match Q-NNN pattern
+  # Find any ### Q- header that doesn't match Q-NNN: format (digits-only suffix)
   local bad_ids
-  bad_ids=$(grep -nE '^### Q-[^0-9]' "$file" 2>/dev/null || true)
+  bad_ids=$(grep -nE '^### Q-' "$file" 2>/dev/null | grep -vE '^[0-9]+:### Q-[0-9]+:' || true)
 
   while IFS= read -r line; do
     [[ -z "$line" ]] && continue
