@@ -70,6 +70,7 @@ Copy `commands/plan.md` and `commands/plan-status.md` into your project's
 Run the install script:
 
 **macOS / Linux (Bash)**
+
 ```bash
 ./aps-planning/scripts/install-hooks.sh           # All hooks
 ./aps-planning/scripts/install-hooks.sh --minimal  # PreToolUse + Stop only
@@ -77,6 +78,7 @@ Run the install script:
 ```
 
 **Windows (PowerShell)**
+
 ```powershell
 .\aps-planning\scripts\install-hooks.ps1            # All hooks
 .\aps-planning\scripts\install-hooks.ps1 -Minimal   # PreToolUse + Stop only
