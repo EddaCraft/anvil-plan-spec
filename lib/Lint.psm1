@@ -34,7 +34,7 @@ function Get-ApsFileType {
 
 function Find-ApsFiles {
     param([string]$Directory)
-    Get-ChildItem -Path $Directory -Recurse -File |
+    Get-ChildItem -Path $Directory -Recurse -File -ErrorAction SilentlyContinue |
         Where-Object {
             -not $_.Name.StartsWith('.') -and
             ($_.Name -match '\.aps\.md$' -or $_.Name -match '\.actions\.md$' -or $_.Name -eq 'issues.md')

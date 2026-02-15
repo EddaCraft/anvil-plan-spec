@@ -25,15 +25,16 @@ $ErrorActionPreference = "Stop"
 
 # Resolve script location (handles symlinks on PS 6+)
 $ScriptDir = Split-Path -Parent $MyInvocation.MyCommand.Definition
-$LibDir = Join-Path $ScriptDir ".." "lib"
+$LibDir = Join-Path (Join-Path $ScriptDir "..") "lib"
+$RulesDir = Join-Path $LibDir "rules"
 
 # Import all modules globally (order matters: foundations first, then rules, then orchestrator)
 Import-Module (Join-Path $LibDir "Output.psm1") -Force -Global
-Import-Module (Join-Path $LibDir "rules" "Common.psm1") -Force -Global
-Import-Module (Join-Path $LibDir "rules" "WorkItem.psm1") -Force -Global
-Import-Module (Join-Path $LibDir "rules" "Module.psm1") -Force -Global
-Import-Module (Join-Path $LibDir "rules" "Index.psm1") -Force -Global
-Import-Module (Join-Path $LibDir "rules" "Issues.psm1") -Force -Global
+Import-Module (Join-Path $RulesDir "Common.psm1") -Force -Global
+Import-Module (Join-Path $RulesDir "WorkItem.psm1") -Force -Global
+Import-Module (Join-Path $RulesDir "Module.psm1") -Force -Global
+Import-Module (Join-Path $RulesDir "Index.psm1") -Force -Global
+Import-Module (Join-Path $RulesDir "Issues.psm1") -Force -Global
 Import-Module (Join-Path $LibDir "Lint.psm1") -Force -Global
 
 function Show-Help {

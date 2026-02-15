@@ -15,8 +15,8 @@ $script:FileTypes = @{}
 
 function Write-ApsError {
     param([string]$Message)
-    Write-Host "error: " -ForegroundColor Red -NoNewline
-    Write-Host $Message
+    [Console]::Error.Write("error: ")
+    [Console]::Error.WriteLine($Message)
 }
 
 function Write-ApsWarning {
