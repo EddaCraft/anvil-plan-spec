@@ -131,6 +131,62 @@ helps AI agents follow APS conventions.
 
 See [Getting Started](docs/getting-started.md) for a complete walkthrough.
 
+## Platform Support
+
+| Platform | CLI | Hooks | Install Script |
+|----------|-----|-------|----------------|
+| **Linux** | Bash 4.0+ | Bash 4.0+ | `curl \| bash` |
+| **macOS** | Bash 4.0+ (Homebrew) | Bash 4.0+ (Homebrew) | `curl \| bash` |
+| **Windows** | PowerShell 5.1+ | Coming soon | Manual setup |
+
+### Prerequisites
+
+- **Linux/macOS:** Bash 4.0+, curl, git
+- **Windows:** PowerShell 5.1+ (ships with Windows 10+) or PowerShell 7+
+- **All platforms:** git (optional, needed for hooks)
+
+### macOS
+
+macOS ships with Bash 3.2 (2007). APS requires Bash 4.0+ for associative
+arrays. Install a modern version via Homebrew:
+
+```bash
+# Check your version
+bash --version
+
+# Install Bash 4+ via Homebrew
+brew install bash
+
+# The APS CLI uses #!/usr/bin/env bash, so Homebrew's bash is picked up
+# automatically if /usr/local/bin (Intel) or /opt/homebrew/bin (Apple Silicon)
+# is in your PATH (Homebrew sets this up by default).
+```
+
+### Windows
+
+APS includes a native PowerShell port of the CLI. No WSL or Git Bash needed
+for linting:
+
+```powershell
+# Lint all plans
+.\bin\aps.ps1 lint plans\
+
+# Lint a specific file
+.\bin\aps.ps1 lint plans\modules\auth.aps.md
+
+# JSON output
+.\bin\aps.ps1 lint plans\ --json
+
+# Help
+.\bin\aps.ps1 --help
+```
+
+Alternatively, use WSL or Git Bash to run the standard Bash CLI.
+
+> **Note:** Hook scripts (SessionStart, PreToolUse, Stop, etc.) are currently
+> Bash-only. A PowerShell port is planned. Windows users can use hooks via WSL
+> or Git Bash in the meantime.
+
 ## Validation
 
 Validate your APS documents with the built-in CLI:

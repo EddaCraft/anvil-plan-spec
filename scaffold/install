@@ -137,7 +137,7 @@ fi
 
 # Install CLI
 step "Installing APS CLI"
-for f in bin/aps lib/output.sh lib/lint.sh lib/scaffold.sh lib/rules/common.sh lib/rules/module.sh lib/rules/index.sh lib/rules/workitem.sh; do
+for f in bin/aps lib/output.sh lib/lint.sh lib/scaffold.sh lib/rules/common.sh lib/rules/module.sh lib/rules/index.sh lib/rules/workitem.sh lib/rules/issues.sh; do
   download_root "$f" "$TARGET/$f"
 done
 chmod +x "$TARGET/bin/aps"
@@ -187,6 +187,7 @@ download "aps-planning/scripts/init-session.sh" "$SKILL_DIR/scripts/init-session
 download "aps-planning/scripts/check-complete.sh" "$SKILL_DIR/scripts/check-complete.sh"
 download "aps-planning/scripts/pre-tool-check.sh" "$SKILL_DIR/scripts/pre-tool-check.sh"
 download "aps-planning/scripts/post-tool-nudge.sh" "$SKILL_DIR/scripts/post-tool-nudge.sh"
+download "aps-planning/scripts/enforce-plan-update.sh" "$SKILL_DIR/scripts/enforce-plan-update.sh"
 chmod +x "$SKILL_DIR/scripts/"*.sh
 
 info "aps-planning/ (skill, reference, examples, hooks, scripts)"
