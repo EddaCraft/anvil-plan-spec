@@ -12,15 +12,15 @@ function Test-E005RequiredFields {
     $content = Get-ApsWorkItemContent -FilePath $File -StartLine $ItemLine
     $contentText = $content -join "`n"
 
-    if ($contentText -notmatch '(?m)^- \*\*Intent:\*\*') {
+    if ($contentText -cnotmatch '(?m)^- \*\*Intent:\*\*') {
         Add-ApsResult -Path $File -Type "error" -Code "E005" -Message "$ItemHeader`: Missing **Intent:** field" -Line "$ItemLine"
         $hasErrors = $true
     }
-    if ($contentText -notmatch '(?m)^- \*\*Expected Outcome:\*\*') {
+    if ($contentText -cnotmatch '(?m)^- \*\*Expected Outcome:\*\*') {
         Add-ApsResult -Path $File -Type "error" -Code "E005" -Message "$ItemHeader`: Missing **Expected Outcome:** field" -Line "$ItemLine"
         $hasErrors = $true
     }
-    if ($contentText -notmatch '(?m)^- \*\*Validation:\*\*') {
+    if ($contentText -cnotmatch '(?m)^- \*\*Validation:\*\*') {
         Add-ApsResult -Path $File -Type "error" -Code "E005" -Message "$ItemHeader`: Missing **Validation:** field" -Line "$ItemLine"
         $hasErrors = $true
     }
@@ -32,7 +32,7 @@ function Test-W001IdFormat {
     param([string]$File, [string]$ItemHeader, [int]$ItemLine)
     if ($ItemHeader -match '^### ([A-Za-z0-9-]+):') {
         $itemId = $Matches[1]
-        if ($itemId -notmatch '^[A-Z]+-[0-9]{3}$') {
+        if ($itemId -cnotmatch '^[A-Z]+-[0-9]{3}$') {
             Add-ApsResult -Path $File -Type "warning" -Code "W001" `
                 -Message "Work item ID '$itemId' should match pattern PREFIX-NNN (e.g., AUTH-001)" -Line "$ItemLine"
         }

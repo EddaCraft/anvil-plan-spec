@@ -52,7 +52,7 @@ function Test-W004EmptySectionsModule {
 function Test-W005ReadyNoItems {
     param([string]$File)
     $status = Get-ApsStatus -FilePath $File
-    if ($status -eq "Ready") {
+    if ($status -ceq "Ready") {
         $items = Get-ApsWorkItems -FilePath $File
         if ($items.Count -eq 0) {
             Add-ApsResult -Path $File -Type "warning" -Code "W005" -Message "Status is Ready but no work items defined"

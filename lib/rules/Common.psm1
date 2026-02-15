@@ -8,7 +8,7 @@ function Test-ApsSection {
     $lines = Get-Content -LiteralPath $FilePath -ErrorAction SilentlyContinue
     if (-not $lines) { return $false }
     foreach ($line in $lines) {
-        if ($line -eq $SectionHeader) { return $true }
+        if ($line -ceq $SectionHeader) { return $true }
     }
     return $false
 }
@@ -31,7 +31,7 @@ function Get-ApsSectionContent {
     $found = $false
     $content = [System.Collections.ArrayList]::new()
     foreach ($line in $lines) {
-        if ($line -eq $SectionHeader) {
+        if ($line -ceq $SectionHeader) {
             $found = $true
             continue
         }
@@ -99,7 +99,7 @@ function Get-ApsStatus {
         if ($line -match '^\| *ID *\|') {
             $cols = ($line -split '\|') | ForEach-Object { $_.Trim() }
             for ($i = 0; $i -lt $cols.Count; $i++) {
-                if ($cols[$i] -eq "Status") { $statusCol = $i }
+                if ($cols[$i] -ceq "Status") { $statusCol = $i }
             }
             $foundHeader = $true
             continue
