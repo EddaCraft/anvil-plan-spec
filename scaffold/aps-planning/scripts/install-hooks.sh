@@ -25,7 +25,7 @@ while [[ $# -gt 0 ]]; do
       echo "Usage: ./aps-planning/scripts/install-hooks.sh [OPTIONS]"
       echo ""
       echo "Options:"
-      echo "  --minimal, -m  Install only PreToolUse + Stop hooks"
+      echo "  --minimal, -m  Install PreToolUse + Stop + SessionStart hooks"
       echo "  --remove, -r   Remove all APS hooks"
       echo "  --help, -h     Show this help"
       exit 0
@@ -182,6 +182,23 @@ with open(settings_path, "w") as f:
     json.dump(settings, f, indent=2)
     f.write("\n")
 PYEOF
+
+# Ensure session baseline is gitignored
+BASELINE_ENTRY=".claude/.aps-session-baseline"
+if [ "$MODE" != "remove" ]; then
+  if [ -f .gitignore ]; then
+    if ! grep -qF "$BASELINE_ENTRY" .gitignore 2>/dev/null; then
+      echo "" >> .gitignore
+      echo "# APS session baseline (ephemeral)" >> .gitignore
+      echo "$BASELINE_ENTRY" >> .gitignore
+      info "Added $BASELINE_ENTRY to .gitignore"
+    fi
+  else
+    echo "# APS session baseline (ephemeral)" > .gitignore
+    echo "$BASELINE_ENTRY" >> .gitignore
+    info "Created .gitignore with $BASELINE_ENTRY"
+  fi
+fi
 
 if [ "$MODE" = "remove" ]; then
   info "Removed APS hooks from $SETTINGS_FILE"
