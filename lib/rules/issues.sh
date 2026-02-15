@@ -31,14 +31,14 @@ check_w010_issue_fields() {
 
   # Find all issue headers (### ISS-NNN: ...)
   local issue_headers
-  issue_headers=$(echo "$issues_content" | grep -nE '^### ISS-[0-9]+:' 2>/dev/null || true)
+  issue_headers=$(echo "$issues_content" | grep -nE '^### ISS-[0-9]{3}:' 2>/dev/null || true)
 
   while IFS= read -r header_line; do
     [[ -z "$header_line" ]] && continue
     local line_num
     line_num=$(echo "$header_line" | cut -d: -f1)
     local issue_id
-    issue_id=$(echo "$header_line" | grep -oE 'ISS-[0-9]+' | head -1)
+    issue_id=$(echo "$header_line" | grep -oE 'ISS-[0-9]{3}' | head -1)
 
     # Get content until next ### or ## heading
     local issue_content
@@ -50,17 +50,17 @@ check_w010_issue_fields() {
 
     # Check for Status field in table
     if ! echo "$issue_content" | grep -qE '^\| *Status *\|'; then
-      add_result "$file" "warning" "W010" "$issue_id: Missing Status field in metadata table"
+      add_result "$file" "warning" "W010" "$issue_id: Missing Status field in metadata table" "$line_num"
     fi
 
     # Check for Discovered field
     if ! echo "$issue_content" | grep -qE '^\| *Discovered *\|'; then
-      add_result "$file" "warning" "W010" "$issue_id: Missing Discovered field (traceability)"
+      add_result "$file" "warning" "W010" "$issue_id: Missing Discovered field (traceability)" "$line_num"
     fi
 
     # Check for Severity field
     if ! echo "$issue_content" | grep -qE '^\| *Severity *\|'; then
-      add_result "$file" "warning" "W010" "$issue_id: Missing Severity field in metadata table"
+      add_result "$file" "warning" "W010" "$issue_id: Missing Severity field in metadata table" "$line_num"
     fi
   done <<< "$issue_headers"
 }
@@ -73,14 +73,14 @@ check_w011_question_fields() {
 
   # Find all question headers (### Q-NNN: ...)
   local question_headers
-  question_headers=$(echo "$questions_content" | grep -nE '^### Q-[0-9]+:' 2>/dev/null || true)
+  question_headers=$(echo "$questions_content" | grep -nE '^### Q-[0-9]{3}:' 2>/dev/null || true)
 
   while IFS= read -r header_line; do
     [[ -z "$header_line" ]] && continue
     local line_num
     line_num=$(echo "$header_line" | cut -d: -f1)
     local question_id
-    question_id=$(echo "$header_line" | grep -oE 'Q-[0-9]+' | head -1)
+    question_id=$(echo "$header_line" | grep -oE 'Q-[0-9]{3}' | head -1)
 
     # Get content until next ### or ## heading
     local question_content
@@ -92,28 +92,28 @@ check_w011_question_fields() {
 
     # Check for Status field in table
     if ! echo "$question_content" | grep -qE '^\| *Status *\|'; then
-      add_result "$file" "warning" "W011" "$question_id: Missing Status field in metadata table"
+      add_result "$file" "warning" "W011" "$question_id: Missing Status field in metadata table" "$line_num"
     fi
 
     # Check for Discovered field
     if ! echo "$question_content" | grep -qE '^\| *Discovered *\|'; then
-      add_result "$file" "warning" "W011" "$question_id: Missing Discovered field (traceability)"
+      add_result "$file" "warning" "W011" "$question_id: Missing Discovered field (traceability)" "$line_num"
     fi
 
     # Check for Priority field
     if ! echo "$question_content" | grep -qE '^\| *Priority *\|'; then
-      add_result "$file" "warning" "W011" "$question_id: Missing Priority field in metadata table"
+      add_result "$file" "warning" "W011" "$question_id: Missing Priority field in metadata table" "$line_num"
     fi
   done <<< "$question_headers"
 }
 
-# W012: Issue ID format warning
+# W012: Issue ID format warning (also catches wrong-case prefixes)
 check_w012_issue_id_format() {
   local file="$1"
 
-  # Find any ### ISS- header that doesn't match ISS-NNN: format (digits-only suffix)
+  # Find any ### ISS- header that doesn't match ISS-NNN: format (exactly 3 digits)
   local bad_ids
-  bad_ids=$(grep -nE '^### ISS-' "$file" 2>/dev/null | grep -vE '^[0-9]+:### ISS-[0-9]+:' || true)
+  bad_ids=$(grep -nE '^### ISS-' "$file" 2>/dev/null | grep -vE '^[0-9]+:### ISS-[0-9]{3}:' || true)
 
   while IFS= read -r line; do
     [[ -z "$line" ]] && continue
@@ -121,15 +121,26 @@ check_w012_issue_id_format() {
     line_num=$(echo "$line" | cut -d: -f1)
     add_result "$file" "warning" "W012" "Issue ID should be ISS-NNN format (e.g., ISS-001)" "$line_num"
   done <<< "$bad_ids"
+
+  # Catch wrong-case prefixes (e.g., iss-, Iss-)
+  local wrong_case
+  wrong_case=$(grep -nEi '^### iss-' "$file" 2>/dev/null | grep -vE '^[0-9]+:### ISS-' || true)
+
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
+    local line_num
+    line_num=$(echo "$line" | cut -d: -f1)
+    add_result "$file" "warning" "W012" "Issue ID prefix must be uppercase ISS- (found wrong casing)" "$line_num"
+  done <<< "$wrong_case"
 }
 
-# W013: Question ID format warning
+# W013: Question ID format warning (also catches wrong-case prefixes)
 check_w013_question_id_format() {
   local file="$1"
 
-  # Find any ### Q- header that doesn't match Q-NNN: format (digits-only suffix)
+  # Find any ### Q- header that doesn't match Q-NNN: format (exactly 3 digits)
   local bad_ids
-  bad_ids=$(grep -nE '^### Q-' "$file" 2>/dev/null | grep -vE '^[0-9]+:### Q-[0-9]+:' || true)
+  bad_ids=$(grep -nE '^### Q-' "$file" 2>/dev/null | grep -vE '^[0-9]+:### Q-[0-9]{3}:' || true)
 
   while IFS= read -r line; do
     [[ -z "$line" ]] && continue
@@ -137,6 +148,17 @@ check_w013_question_id_format() {
     line_num=$(echo "$line" | cut -d: -f1)
     add_result "$file" "warning" "W013" "Question ID should be Q-NNN format (e.g., Q-001)" "$line_num"
   done <<< "$bad_ids"
+
+  # Catch wrong-case prefixes (e.g., q-)
+  local wrong_case
+  wrong_case=$(grep -nEi '^### q-' "$file" 2>/dev/null | grep -vE '^[0-9]+:### Q-' || true)
+
+  while IFS= read -r line; do
+    [[ -z "$line" ]] && continue
+    local line_num
+    line_num=$(echo "$line" | cut -d: -f1)
+    add_result "$file" "warning" "W013" "Question ID prefix must be uppercase Q- (found wrong casing)" "$line_num"
+  done <<< "$wrong_case"
 }
 
 # Run all issues rules

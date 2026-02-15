@@ -44,6 +44,7 @@ CLI_FILES=(
   "lib/rules/module.sh"
   "lib/rules/index.sh"
   "lib/rules/workitem.sh"
+  "lib/rules/issues.sh"
 )
 
 # Download a file from GitHub

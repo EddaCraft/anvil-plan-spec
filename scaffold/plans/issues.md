@@ -18,7 +18,7 @@ Example:
 | Field | Value |
 |-------|-------|
 | Status | Open |
-| Severity | medium |
+| Severity | Medium |
 | Discovered | AUTH-002 |
 | Module | AUTH |
 
@@ -45,7 +45,7 @@ Example:
 | Field | Value |
 |-------|-------|
 | Status | Open |
-| Priority | medium |
+| Priority | Medium |
 | Discovered | AUTH-002 |
 | Assigned | @username |
 

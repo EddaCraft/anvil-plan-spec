@@ -139,7 +139,7 @@ Tasks use the module's ID prefix: `AUTH-001`, `AUTH-002`, `CORE-001`, etc.
 plans/
 ├── aps-rules.md           # This file (agent guidance)
 ├── index.aps.md           # Root plan
-├── issues.md              # Development-time discoveries (issues & questions)
+├── issues.md              # Development-time discoveries (issues & questions, create manually)
 ├── modules/               # Module specs (numbered by dependency order)
 │   ├── 01-core.aps.md
 │   └── 02-auth.aps.md

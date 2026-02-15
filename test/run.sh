@@ -64,12 +64,31 @@ echo -n "Test: W001 bad task ID detected... "
 output=$($APS lint "$SCRIPT_DIR/fixtures/invalid/bad-task-id.aps.md" 2>&1) || true
 echo "$output" | grep -q "W001" && pass || fail "W001 not detected"
 
-# Test 10: JSON output works
+# Test 10: Valid issues.md passes lint
+echo -n "Test: valid issues.md passes... "
+$APS lint "$SCRIPT_DIR/fixtures/valid/issues.md" > /dev/null 2>&1 && pass || fail "valid issues.md failed"
+
+# Test 11: E010 - Missing Issues section detected
+echo -n "Test: E010 missing Issues section detected... "
+output=$($APS lint "$SCRIPT_DIR/fixtures/invalid/issues-missing-section/issues.md" 2>&1) || true
+echo "$output" | grep -q "E010" && pass || fail "E010 not detected"
+
+# Test 12: W010 - Missing issue fields detected
+echo -n "Test: W010 missing issue fields detected... "
+output=$($APS lint "$SCRIPT_DIR/fixtures/invalid/issues-bad-fields/issues.md" 2>&1) || true
+echo "$output" | grep -q "W010" && pass || fail "W010 not detected"
+
+# Test 13: W011 - Missing question fields detected
+echo -n "Test: W011 missing question fields detected... "
+output=$($APS lint "$SCRIPT_DIR/fixtures/invalid/issues-bad-fields/issues.md" 2>&1) || true
+echo "$output" | grep -q "W011" && pass || fail "W011 not detected"
+
+# Test 14: JSON output works
 echo -n "Test: JSON output valid... "
 output=$($APS lint "$SCRIPT_DIR/fixtures/valid/" --json 2>&1)
 echo "$output" | grep -q '"summary"' && pass || fail "JSON output invalid"
 
-# Test 11: Dogfood - lint our own plans/
+# Test 15: Dogfood - lint our own plans/
 echo -n "Test: plans/ directory passes lint... "
 $APS lint "$PROJECT_ROOT/plans/" > /dev/null 2>&1 && pass || fail "our own plans failed lint"
 
