@@ -19,7 +19,7 @@ Add entries here when you discover:
 Issues are problems discovered during development.
 ID format: ISS-NNN (e.g., ISS-001)
 Status: Open | Resolved | Deferred | Won't Fix
-Severity: critical | high | medium | low
+Severity: Critical | High | Medium | Low
 -->
 
 ### ISS-001: [Brief description]
@@ -27,7 +27,7 @@ Severity: critical | high | medium | low
 | Field | Value |
 |-------|-------|
 | Status | Open |
-| Severity | medium |
+| Severity | Medium |
 | Discovered | [WORK-ITEM-ID or activity, e.g., "AUTH-002" or "manual testing"] |
 | Module | [MODULE-ID, e.g., "AUTH"] |
 
@@ -49,7 +49,7 @@ Severity: critical | high | medium | low
 Questions are unknowns that emerged during development.
 ID format: Q-NNN (e.g., Q-001)
 Status: Open | Answered | Deferred
-Priority: high | medium | low
+Priority: High | Medium | Low
 -->
 
 ### Q-001: [The question]
@@ -57,7 +57,7 @@ Priority: high | medium | low
 | Field | Value |
 |-------|-------|
 | Status | Open |
-| Priority | medium |
+| Priority | Medium |
 | Discovered | [WORK-ITEM-ID or activity] |
 | Assigned | [@username or "unassigned"] |
 
@@ -89,7 +89,7 @@ Keep entries for 1-2 sprints as reference, then archive or delete.
 | Field | Value |
 |-------|-------|
 | Status | Resolved |
-| Severity | medium |
+| Severity | Medium |
 | Discovered | AUTH-001 |
 | Module | AUTH |
 
@@ -109,10 +109,10 @@ Keep entries for 1-2 sprints as reference, then archive or delete.
 
 | Severity | Meaning |
 |----------|---------|
-| critical | Blocks work, data loss risk, security issue |
-| high | Significant impact, needs attention soon |
-| medium | Moderate impact, can be scheduled |
-| low | Minor inconvenience, fix when convenient |
+| Critical | Blocks work, data loss risk, security issue |
+| High | Significant impact, needs attention soon |
+| Medium | Moderate impact, can be scheduled |
+| Low | Minor inconvenience, fix when convenient |
 
 ### Referencing from Other Documents
 
