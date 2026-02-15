@@ -195,6 +195,8 @@ preventing goal drift:
   all changes — committed and uncommitted — during the session. The SessionStart
   hook is installed in both full and minimal modes. If the baseline is missing
   for any reason, checks fall back to uncommitted changes only. The install
-  script automatically adds `.claude/.aps-session-baseline` to `.gitignore`; if
-  you manage Claude settings manually, add it to `.gitignore` yourself.
+  script adds `.claude/.aps-session-baseline` to `.gitignore` automatically. If
+  you manage Claude settings manually, add it to `.gitignore` yourself. The
+  enforcer also filters out `.claude/` ephemeral files from change detection,
+  so even if the file isn't gitignored it won't cause spurious failures.
 - Scripts need execute permissions: `chmod +x aps-planning/scripts/*.sh`

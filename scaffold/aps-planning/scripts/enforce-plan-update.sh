@@ -57,17 +57,17 @@ if [ -z "$CHANGED_FILES" ]; then
   CHANGED_FILES=$(printf '%s\n%s\n%s' "$UNCOMMITTED" "$STAGED" "$UNTRACKED" | sort -u)
 fi
 
-# Filter out empty lines
-CHANGED_FILES=$(echo "$CHANGED_FILES" | grep -v '^$' || true)
+# Filter out empty lines and ephemeral .claude/ files (e.g. session baseline)
+CHANGED_FILES=$(echo "$CHANGED_FILES" | grep -v '^$' | grep -v '^\.claude/' || true)
 
 # Nothing changed at all — nothing to enforce
 if [ -z "$CHANGED_FILES" ]; then
   exit 0
 fi
 
-# Split into plan files and non-plan files
-PLAN_CHANGES=$(echo "$CHANGED_FILES" | grep -F "${PLANS_DIR}/" || true)
-CODE_CHANGES=$(echo "$CHANGED_FILES" | grep -vF "${PLANS_DIR}/" || true)
+# Split into plan files and non-plan files (anchor match to path start)
+PLAN_CHANGES=$(echo "$CHANGED_FILES" | grep -E "^${PLANS_DIR}/" || true)
+CODE_CHANGES=$(echo "$CHANGED_FILES" | grep -Ev "^${PLANS_DIR}/" || true)
 
 # If no code changes (plan-only session), nothing to enforce
 if [ -z "$CODE_CHANGES" ]; then

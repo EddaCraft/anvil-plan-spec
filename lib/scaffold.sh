@@ -26,6 +26,7 @@ SKILL_FILES=(
   "scaffold/aps-planning/scripts/check-complete.sh"
   "scaffold/aps-planning/scripts/pre-tool-check.sh"
   "scaffold/aps-planning/scripts/post-tool-nudge.sh"
+  "scaffold/aps-planning/scripts/enforce-plan-update.sh"
 )
 
 # Files to download for slash commands
