@@ -137,7 +137,7 @@ fi
 
 # Install CLI
 step "Installing APS CLI"
-for f in bin/aps lib/output.sh lib/lint.sh lib/scaffold.sh lib/rules/common.sh lib/rules/module.sh lib/rules/index.sh lib/rules/workitem.sh lib/rules/issues.sh; do
+for f in bin/aps bin/aps.ps1 lib/output.sh lib/Output.psm1 lib/lint.sh lib/Lint.psm1 lib/scaffold.sh lib/Scaffold.psm1 lib/rules/common.sh lib/rules/Common.psm1 lib/rules/module.sh lib/rules/Module.psm1 lib/rules/index.sh lib/rules/Index.psm1 lib/rules/workitem.sh lib/rules/WorkItem.psm1 lib/rules/issues.sh lib/rules/Issues.psm1; do
   download_root "$f" "$TARGET/$f"
 done
 chmod +x "$TARGET/bin/aps"
@@ -188,6 +188,12 @@ download "aps-planning/scripts/check-complete.sh" "$SKILL_DIR/scripts/check-comp
 download "aps-planning/scripts/pre-tool-check.sh" "$SKILL_DIR/scripts/pre-tool-check.sh"
 download "aps-planning/scripts/post-tool-nudge.sh" "$SKILL_DIR/scripts/post-tool-nudge.sh"
 download "aps-planning/scripts/enforce-plan-update.sh" "$SKILL_DIR/scripts/enforce-plan-update.sh"
+download "aps-planning/scripts/install-hooks.ps1" "$SKILL_DIR/scripts/install-hooks.ps1"
+download "aps-planning/scripts/init-session.ps1" "$SKILL_DIR/scripts/init-session.ps1"
+download "aps-planning/scripts/check-complete.ps1" "$SKILL_DIR/scripts/check-complete.ps1"
+download "aps-planning/scripts/pre-tool-check.ps1" "$SKILL_DIR/scripts/pre-tool-check.ps1"
+download "aps-planning/scripts/post-tool-nudge.ps1" "$SKILL_DIR/scripts/post-tool-nudge.ps1"
+download "aps-planning/scripts/enforce-plan-update.ps1" "$SKILL_DIR/scripts/enforce-plan-update.ps1"
 chmod +x "$SKILL_DIR/scripts/"*.sh
 
 info "aps-planning/ (skill, reference, examples, hooks, scripts)"

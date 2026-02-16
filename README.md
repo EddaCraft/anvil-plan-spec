@@ -139,7 +139,7 @@ No plugins. No integrations. No configuration. It's just files.
 |----------|-----|-------|----------------|
 | **Linux** | Bash 4.0+ | Bash 4.0+ | `curl \| bash` |
 | **macOS** | Bash 4.0+ (Homebrew) | Bash 4.0+ (Homebrew) | `curl \| bash` |
-| **Windows** | PowerShell 5.1+ | Coming soon | Manual setup |
+| **Windows** | PowerShell 5.1+ | PowerShell 5.1+ | `iwr .../install.ps1 \| iex` |
 
 ### Prerequisites
 
@@ -185,9 +185,8 @@ for linting:
 
 Alternatively, use WSL or Git Bash to run the standard Bash CLI.
 
-> **Note:** Hook scripts (SessionStart, PreToolUse, Stop, etc.) are currently
-> Bash-only. A PowerShell port is planned. Windows users can use hooks via WSL
-> or Git Bash in the meantime.
+> **Note:** APS includes both Bash and PowerShell versions of all scripts.
+> The installer downloads both, so your project works on any platform.
 
 ## AI Guidance
 
