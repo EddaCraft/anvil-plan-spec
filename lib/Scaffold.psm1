@@ -259,21 +259,20 @@ function Invoke-ApsHookPrompt {
     param([string]$Target)
     Write-Host ""
     if (Request-ApsYesNo -Prompt "Install APS hooks into .claude/settings.local.json?" -Default "y") {
-        $hookScript = Join-Path (Join-Path (Join-Path $Target "aps-planning") "scripts") "install-hooks.sh"
         Push-Location $Target
         try {
-            bash $hookScript
+            & ./aps-planning/scripts/install-hooks.ps1
         } finally {
             Pop-Location
         }
     } else {
         if (Request-ApsYesNo -Prompt "Would you like me to copy them for you to install/review later?" -Default "y") {
             Write-ApsInfo "Hook scripts are at: aps-planning/scripts/"
-            Write-Host "  Run ./aps-planning/scripts/install-hooks.sh when ready"
+            Write-Host "  Run .\aps-planning\scripts\install-hooks.ps1 when ready"
             Write-Host "  See aps-planning/hooks.md for what each hook does"
         } else {
             Write-ApsInfo "Skipping hooks. You can install them later:"
-            Write-Host "  ./aps-planning/scripts/install-hooks.sh"
+            Write-Host "  .\aps-planning\scripts\install-hooks.ps1"
         }
     }
 }
