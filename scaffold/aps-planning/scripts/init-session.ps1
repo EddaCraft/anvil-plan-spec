@@ -9,7 +9,7 @@ param(
 )
 
 Write-Host "APS Planning Session" -ForegroundColor White
-Write-Host ([char]0x2500 * 21)
+Write-Host ("$([char]0x2500)" * 21)
 
 # Check if plans/ exists
 if (-not (Test-Path $PlansDir -PathType Container)) {
