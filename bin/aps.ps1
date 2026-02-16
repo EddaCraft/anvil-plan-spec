@@ -3,11 +3,15 @@
     APS CLI - Anvil Plan Spec tooling (PowerShell)
 
 .DESCRIPTION
+    aps.ps1 init [dir]        Create APS structure in a new project
+    aps.ps1 update [dir]      Update templates, skill, and commands
     aps.ps1 lint [file|dir]   Validate APS documents (default: plans/)
     aps.ps1 lint --json       Output as JSON
     aps.ps1 --help            Show this help
 
 .EXAMPLE
+    .\bin\aps.ps1 init
+    .\bin\aps.ps1 update
     .\bin\aps.ps1 lint
     .\bin\aps.ps1 lint plans\index.aps.md
     .\bin\aps.ps1 lint . --json
@@ -36,12 +40,15 @@ Import-Module (Join-Path $RulesDir "Module.psm1") -Force -Global
 Import-Module (Join-Path $RulesDir "Index.psm1") -Force -Global
 Import-Module (Join-Path $RulesDir "Issues.psm1") -Force -Global
 Import-Module (Join-Path $LibDir "Lint.psm1") -Force -Global
+Import-Module (Join-Path $LibDir "Scaffold.psm1") -Force -Global
 
 function Show-Help {
     Write-Host @"
 aps - Anvil Plan Spec CLI (PowerShell)
 
 Usage:
+  aps.ps1 init [dir]        Create APS structure in a new project
+  aps.ps1 update [dir]      Update templates, skill, and commands
   aps.ps1 lint [file|dir]   Validate APS documents
   aps.ps1 lint --json       Output results as JSON
   aps.ps1 --help            Show this help
@@ -50,7 +57,12 @@ Options:
   --json    Output results in JSON format
   --help    Show help for a command
 
+Environment:
+  APS_VERSION   Git ref to download from (default: main)
+
 Examples:
+  .\bin\aps.ps1 init                       # Init in current directory
+  .\bin\aps.ps1 update                     # Update templates and skill
   .\bin\aps.ps1 lint                       # Lint plans\ directory
   .\bin\aps.ps1 lint plans\index.aps.md    # Lint specific file
   .\bin\aps.ps1 lint . --json              # Lint current dir, JSON output
@@ -82,6 +94,16 @@ Examples:
 "@
 }
 
+function Invoke-InitCommand {
+    param([string[]]$InitArgs)
+    Invoke-ApsInit -Arguments $InitArgs
+}
+
+function Invoke-UpdateCommand {
+    param([string[]]$UpdateArgs)
+    Invoke-ApsUpdate -Arguments $UpdateArgs
+}
+
 function Invoke-LintCommand {
     param([string[]]$LintArgs)
     $target = "plans"
@@ -110,6 +132,12 @@ function Invoke-LintCommand {
 
 # Main dispatch
 switch ($Command) {
+    "init" {
+        Invoke-InitCommand -InitArgs $Arguments
+    }
+    "update" {
+        Invoke-UpdateCommand -UpdateArgs $Arguments
+    }
     "lint" {
         Invoke-LintCommand -LintArgs $Arguments
     }
