@@ -3,6 +3,14 @@
 A lightweight specification format for planning and work item authorisation in
 AI-assisted development.
 
+## Quick Start
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash
+```
+
+See [docs/installation.md](docs/installation.md) for Windows, version pinning, and manual setup options.
+
 ## What is APS?
 
 APS provides a structured way to:
@@ -30,45 +38,6 @@ APS is different:
 
 APS isn't a replacement for your AI tools — it's the planning layer that works
 *across* all of them. Write your spec once, use it everywhere.
-
-> **Want to see APS in action?** Jump to [examples](examples/) or see the
-> [Hello World](#hello-world-example) below.
-
-## Philosophy: Compound Engineering
-
-APS embraces the principle of **compound engineering**: each unit of engineering
-work should make subsequent units easier—not harder.
-
-Traditional development accumulates technical debt. Every feature adds complexity.
-The codebase becomes harder to work with over time. Compound engineering inverts
-this by investing heavily in planning and review upfront, so execution is fast
-and clean.
-
-**The 80/20 split:**
-
-- **80% planning and review** — Thorough specs, clear work items, validated
-  checkpoints
-- **20% execution** — Fast implementation following well-defined plans
-
-**The planning lifecycle:**
-
-```
-Plan → Execute → Validate → Learn → Plan again
-  ↑                                      │
-  └──────────────────────────────────────┘
-```
-
-| Phase | What Happens | How It Serves Planning |
-|-------|--------------|------------------------|
-| **Plan** | Define scope, success criteria, work items | Reference past patterns and solutions |
-| **Execute** | Work against well-defined specs | Clean implementation, fewer blockers |
-| **Validate** | Check outcomes against spec | Verify plan was correct, update if not |
-| **Learn** | Document solutions and learnings | Future plans start with known answers |
-
-Planning without validation is guesswork. Validation without learning repeats
-mistakes. The cycle exists to make each plan better than the last.
-
-See [docs/workflow.md](docs/workflow.md) for the full workflow guide.
 
 ## Hierarchy
 
@@ -100,36 +69,69 @@ graph TD
 - **Action Plan** — How you *execute* a work item. Optional, generated when needed. Breaks
   a work item into checkpointed actions for granular progress tracking.
 
-## Quick Start
+## Hello World
 
-### Option A: curl (recommended)
+```markdown
+# Add Dark Mode
 
-```bash
-# Install in current directory
-curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash
+## Problem
+Users want to reduce eye strain when working at night.
 
-# Install in a specific directory
-curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash -s -- /path/to/project
+## Success
+- [ ] Toggle persists across sessions
+- [ ] All components respect theme
 
-# Install a specific version (use a git tag or branch name, e.g., v0.2.0 or main)
-curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | VERSION=v0.2.0 bash
+## Work Items
 
-# Update existing project (preserves your specs)
-curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/update | bash
+### 001: Add theme context
+- **Outcome:** ThemeProvider wraps app, exposes toggle
+- **Test:** `npm test -- theme.test.tsx`
+
+### 002: Add toggle to settings
+- **Outcome:** Settings page has working theme toggle
+- **Test:** Manual verification
+- **Depends on:** 001
 ```
 
-This creates `plans/` with templates and `aps-rules.md` — a portable guide that
-helps AI agents follow APS conventions.
+## Validation
 
-### Option B: Manual Setup
+```bash
+./bin/aps lint plans/
+```
 
-1. Copy templates from `templates/` to your project
-2. Create an Index to define your plan's scope and modules
-3. Create modules for each bounded area of work
-4. Add Work Items when a module is ready for implementation
-5. Generate Action Plans (optional) for granular execution guidance
+See [docs/usage.md](docs/usage.md) for all commands, error codes, CI integration, and JSON output.
 
-See [Getting Started](docs/getting-started.md) for a complete walkthrough.
+## Works Everywhere
+
+APS is just markdown. Use it however you work:
+
+| Context | How to use APS |
+|---------|----------------|
+| **Claude / ChatGPT** | Paste the spec into your conversation |
+| **Cursor / Copilot** | Keep specs in your repo, reference in prompts |
+| **Claude Code / aider** | Point the agent at your spec files |
+| **Jira / Linear / Notion** | Link to specs in git, or embed the markdown |
+| **Code review** | Review spec changes in PRs before implementation |
+| **Team planning** | Specs are human-readable — discuss them in meetings |
+
+No plugins. No integrations. No configuration. It's just files.
+
+## Templates
+
+| Template | Use When |
+|----------|----------|
+| [quickstart.template.md](templates/quickstart.template.md) | **Try APS in 5 minutes** — minimal single-file format |
+| [index.template.md](templates/index.template.md) | Starting a new plan or initiative |
+| [index-expanded.template.md](templates/index-expanded.template.md) | Larger initiatives with 6+ modules or rich metadata |
+| [module.template.md](templates/module.template.md) | Defining a bounded module with work items |
+| [simple.template.md](templates/simple.template.md) | Small, self-contained features |
+| [actions.template.md](templates/actions.template.md) | Breaking work items into executable actions |
+| [solution.template.md](templates/solution.template.md) | Documenting solved problems (compound phase) |
+
+## Examples
+
+- [User Authentication](examples/user-auth/) — Adding auth to an existing app
+- [OpenCode Companion App](examples/opencode-companion/) — Building a companion tool
 
 ## Platform Support
 
@@ -187,86 +189,6 @@ Alternatively, use WSL or Git Bash to run the standard Bash CLI.
 > Bash-only. A PowerShell port is planned. Windows users can use hooks via WSL
 > or Git Bash in the meantime.
 
-## Validation
-
-Validate your APS documents with the built-in CLI:
-
-```bash
-# Lint all plans
-./bin/aps lint plans/
-
-# Lint a specific file
-./bin/aps lint plans/modules/auth.aps.md
-
-# JSON output for CI
-./bin/aps lint plans/ --json
-```
-
-The linter checks for:
-
-- Missing required sections (Purpose, Work Items, Modules)
-- Missing work item fields (Intent, Expected Outcome, Validation)
-- Malformed task IDs (should be `PREFIX-NNN`, e.g., `AUTH-001`)
-- Empty sections and other common issues
-
-See [docs/ci-lint-example.yml](docs/ci-lint-example.yml) for GitHub Actions integration.
-
-## Works Everywhere
-
-APS is just markdown. Use it however you work:
-
-| Context | How to use APS |
-|---------|----------------|
-| **Claude / ChatGPT** | Paste the spec into your conversation |
-| **Cursor / Copilot** | Keep specs in your repo, reference in prompts |
-| **Claude Code / aider** | Point the agent at your spec files |
-| **Jira / Linear / Notion** | Link to specs in git, or embed the markdown |
-| **Code review** | Review spec changes in PRs before implementation |
-| **Team planning** | Specs are human-readable — discuss them in meetings |
-
-No plugins. No integrations. No configuration. It's just files.
-
-## Templates
-
-| Template | Use When |
-|----------|----------|
-| [quickstart.template.md](templates/quickstart.template.md) | **Try APS in 5 minutes** — minimal single-file format |
-| [index.template.md](templates/index.template.md) | Starting a new plan or initiative |
-| [index-expanded.template.md](templates/index-expanded.template.md) | Larger initiatives with 6+ modules or rich metadata |
-| [module.template.md](templates/module.template.md) | Defining a bounded module with work items |
-| [simple.template.md](templates/simple.template.md) | Small, self-contained features |
-| [actions.template.md](templates/actions.template.md) | Breaking work items into executable actions |
-| [solution.template.md](templates/solution.template.md) | Documenting solved problems (compound phase) |
-
-### Hello World Example
-
-```markdown
-# Add Dark Mode
-
-## Problem
-Users want to reduce eye strain when working at night.
-
-## Success
-- [ ] Toggle persists across sessions
-- [ ] All components respect theme
-
-## Work Items
-
-### 001: Add theme context
-- **Outcome:** ThemeProvider wraps app, exposes toggle
-- **Test:** `npm test -- theme.test.tsx`
-
-### 002: Add toggle to settings
-- **Outcome:** Settings page has working theme toggle
-- **Test:** Manual verification
-- **Depends on:** 001
-```
-
-## Examples
-
-- [User Authentication](examples/user-auth/) — Adding auth to an existing app
-- [OpenCode Companion App](examples/opencode-companion/) — Building a companion tool
-
 ## AI Guidance
 
 APS includes `aps-rules.md` — a portable guide that travels with your specs.
@@ -275,6 +197,42 @@ Point your AI agent at this file and it will follow APS conventions.
 - [AI Agent Implementation Guide](docs/ai-agent-guide.md) — Full guide for LLMs
 - [Prompts](docs/ai/prompting/) — Tool-agnostic prompts
 - [AGENTS.md](AGENTS.md) — Collaboration rules for this repo
+
+## Philosophy: Compound Engineering
+
+APS embraces the principle of **compound engineering**: each unit of engineering
+work should make subsequent units easier—not harder.
+
+Traditional development accumulates technical debt. Every feature adds complexity.
+The codebase becomes harder to work with over time. Compound engineering inverts
+this by investing heavily in planning and review upfront, so execution is fast
+and clean.
+
+**The 80/20 split:**
+
+- **80% planning and review** — Thorough specs, clear work items, validated
+  checkpoints
+- **20% execution** — Fast implementation following well-defined plans
+
+**The planning lifecycle:**
+
+```
+Plan → Execute → Validate → Learn → Plan again
+  ↑                                      │
+  └──────────────────────────────────────┘
+```
+
+| Phase | What Happens | How It Serves Planning |
+|-------|--------------|------------------------|
+| **Plan** | Define scope, success criteria, work items | Reference past patterns and solutions |
+| **Execute** | Work against well-defined specs | Clean implementation, fewer blockers |
+| **Validate** | Check outcomes against spec | Verify plan was correct, update if not |
+| **Learn** | Document solutions and learnings | Future plans start with known answers |
+
+Planning without validation is guesswork. Validation without learning repeats
+mistakes. The cycle exists to make each plan better than the last.
+
+See [docs/workflow.md](docs/workflow.md) for the full workflow guide.
 
 ## Principles
 
