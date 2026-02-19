@@ -24,7 +24,7 @@ A work item is **execution authority**. Keep it small.
 - Scope (what will change)
 - Non-scope (what will not change)
 - Files likely touched (best effort)
-- Validation steps (tests/checks)
+- Validation commands (tests/checks)
 - Risks + mitigations
 - Dependencies (on other work items, decisions, artefacts)
 - Provenance note template (for future suppressions/exceptions)

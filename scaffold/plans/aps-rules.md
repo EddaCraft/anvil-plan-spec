@@ -5,34 +5,43 @@
 
 ## Core Principle
 
-**Specs describe intent. Tasks authorise execution. Steps are checkpoints, not tutorials.**
+**Specs describe intent. Work Items authorise execution. Actions are checkpoints, not tutorials.**
 
 ## Hierarchy
 
 | Layer | Purpose | You Write | You DON'T Write |
 |-------|---------|-----------|-----------------|
 | Index | Plan overview | Modules, milestones, risks | Implementation details |
-| Module | Bounded work area | Interfaces, tasks, boundaries | Code snippets |
-| Task | Execution authority | Outcome, validation command | How to implement |
-| Step | Checkpoint | Observable state | Implementation steps |
+| Module | Bounded work area | Interfaces, work items, boundaries | Code snippets |
+| Work Item | Execution authority | Outcome, validation command | How to implement |
+| Action | Checkpoint | Observable state | Implementation detail |
 
-## Steps: The Lean Rule
+## Actions: The Lean Rule
 
-Steps translate task intent into **observable checkpoints**. They are NOT implementation guides.
+Actions translate work item intent into **observable checkpoints**. They are NOT implementation guides.
 
 ### Format
 
 ```markdown
-### 1. [Action verb] [target]
+### Action 1 — [Action verb] [target]
 
-- **Checkpoint:** [Observable state — max 12 words]
-- **Validate:** `[command]` (optional)
+**Purpose**
+[Why this action exists]
+
+**Produces**
+[Concrete artefacts or state]
+
+**Checkpoint**
+[Observable state — max ~12 words]
+
+**Validate**
+`[command]` *(optional)*
 ```
 
 ### What Goes WHERE
 
-| Write in Step | Write NOWHERE (emerges from patterns) |
-|---------------|---------------------------------------|
+| Write in Action | Write NOWHERE (emerges from patterns) |
+|-----------------|---------------------------------------|
 | "Auth middleware exists" | Which library to use |
 | "Tests pass" | Test implementation details |
 | "Migration applied" | SQL schema definition |
@@ -41,36 +50,39 @@ Steps translate task intent into **observable checkpoints**. They are NOT implem
 ### Anti-Patterns (NEVER do this)
 
 ```markdown
-# ❌ BAD: Implementation tutorial disguised as step
-### 1. Create authentication middleware
+# ❌ BAD: Implementation tutorial disguised as action
+### Action 1 — Create authentication middleware
 
-- **Checkpoint:** Middleware created in src/middleware/auth.ts that:
+**Checkpoint**
+Middleware created in src/middleware/auth.ts that:
   - Extracts JWT from Authorization header
-  - Validates token using jsonwebtoken library  
+  - Validates token using jsonwebtoken library
   - Decodes payload and extracts user ID
   - Attaches user object to request context
   - Returns 401 if token invalid or expired
-- **Validate:** `npm test -- auth.middleware.test.ts`
 ```
 
 ```markdown
 # ✅ GOOD: Observable checkpoint only
-### 1. Create authentication middleware
+### Action 1 — Create authentication middleware
 
-- **Checkpoint:** Auth middleware validates requests, attaches user to context
-- **Validate:** `npm test -- auth.middleware.test.ts`
+**Checkpoint**
+Auth middleware validates requests, attaches user to context
+
+**Validate**
+`npm test -- auth.middleware.test.ts`
 ```
 
-### Why Lean Steps?
+### Why Lean Actions?
 
 1. **Implementation emerges** from existing patterns + agent judgment
 2. **Specs don't rot** — checkpoints stay valid even when code changes
 3. **Agents stay autonomous** — they figure out HOW, you verify WHAT
 4. **Review stays fast** — humans scan checkpoints, not implementation plans
 
-## Task Rules
+## Work Item Rules
 
-Tasks are **execution authority** — permission to make changes.
+Work Items are **execution authority** — permission to make changes.
 
 ### Required Fields
 
@@ -81,11 +93,11 @@ Tasks are **execution authority** — permission to make changes.
 ### Optional Fields
 
 - **Scope/Non-scope:** What will and won't change
-- **Dependencies:** Other task IDs that must complete first
+- **Dependencies:** Other work item IDs that must complete first
 - **Confidence:** low/medium/high
 - **Files:** Best-effort list (not exhaustive)
 
-### Task Anti-Patterns
+### Work Item Anti-Patterns
 
 | ❌ Don't | ✅ Do |
 |----------|-------|
@@ -111,42 +123,45 @@ modules/
 - Order matches dependency flow (foundational → dependent)
 - Order should reflect the Modules table in `index.aps.md`
 
-### Task IDs
+### Work Item IDs
 
-Tasks use the module's ID prefix: `AUTH-001`, `AUTH-002`, `CORE-001`, etc.
+Work Items use the module's ID prefix: `AUTH-001`, `AUTH-002`, `CORE-001`, etc.
 
 ## Creating APS Documents
+
+**Important:** Templates are reference documents. Never edit template files directly.
+Instead, create a **new file** using the template structure as a guide.
 
 ### When Asked to Plan
 
 1. Read existing `plans/index.aps.md` if present
 2. Identify which template fits (index, module, simple)
-3. Fill sections with **intent**, not implementation
+3. Create a new document with sections populated with **intent**, not implementation
 4. Mark assumptions explicitly
-5. Leave tasks empty until module is Ready
+5. Leave work items empty until module is Ready
 
 ### When Asked to Execute
 
-1. Find the task in the relevant `.aps.md` file
-2. Check task has **Ready** status
-3. Create steps file in `plans/execution/` if complex
-4. Execute one step at a time, validate checkpoint
-5. Mark task complete when validation passes
+1. Find the work item in the relevant `.aps.md` file
+2. Check work item has **Ready** status
+3. Create an action plan in `plans/execution/` if complex
+4. Execute one action at a time, validate checkpoint
+5. Mark work item complete when validation passes
 
 ## File Locations
 
 ```text
 plans/
-├── aps-rules.md           # This file (agent guidance)
-├── index.aps.md           # Root plan
-├── issues.md              # Development-time discoveries (issues & questions, create manually)
-├── modules/               # Module specs (numbered by dependency order)
+├── aps-rules.md                # This file (agent guidance)
+├── index.aps.md                # Root plan
+├── issues.md                   # Development-time discoveries (issues & questions)
+├── modules/                    # Module specs (numbered by dependency order)
 │   ├── 01-core.aps.md
 │   └── 02-auth.aps.md
-├── execution/             # Step files
-│   ├── [TASK-ID].steps.md # Per-task (complex projects)
-│   └── [MODULE].steps.md  # Per-module (simple projects)
-└── decisions/             # ADRs (optional)
+├── execution/                  # Action plans
+│   ├── [WORKITEM-ID].actions.md  # Per-work-item (complex projects)
+│   └── [MODULE].actions.md       # Per-module (simple projects)
+└── decisions/                  # ADRs (optional)
     └── [NNN]-[title].md
 ```
 
@@ -218,9 +233,9 @@ This is for **planning-level visibility**, not routine bugs. Use your project's 
 
 | If agent is... | Check for... |
 |----------------|--------------|
-| Writing steps | Max 12 words per checkpoint? No implementation detail? |
-| Writing tasks | Outcome-focused? Has validation command? |
-| Planning module | Boundaries clear? No premature tasks? |
-| Executing | Task status is Ready? Prerequisites met? |
+| Writing actions | Max 12 words per checkpoint? No implementation detail? |
+| Writing work items | Outcome-focused? Has validation command? |
+| Planning module | Boundaries clear? No premature work items? |
+| Executing | Work item status is Ready? Prerequisites met? |
 | In monorepo | Packages tagged? "What's Next" updated? |
 | Found issue/question | Logged in issues.md with proper ID? |

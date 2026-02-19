@@ -1,6 +1,6 @@
-# Sync Task Status to APS
+# Sync Work Item Status to APS
 
-Use this prompt at session end to update APS files with task completion status.
+Use this prompt at session end to update APS files with work item completion status.
 
 ---
 
@@ -9,12 +9,12 @@ Use this prompt at session end to update APS files with task completion status.
 ```
 Session complete. Here's what was accomplished:
 
-Completed tasks:
-- {TASK_ID}: {description}
-- {TASK_ID}: {description}
+Completed work items:
+- {WORK_ITEM_ID}: {description}
+- {WORK_ITEM_ID}: {description}
 
-Blocked tasks:
-- {TASK_ID}: blocked because {reason}
+Blocked work items:
+- {WORK_ITEM_ID}: blocked because {reason}
 
 New work discovered:
 - {description of new work item}
@@ -41,11 +41,11 @@ Please update the APS files:
 Input:
 
 ```
-Completed tasks:
+Completed work items:
 - AUTH-001: User registration flow
 - AUTH-002: Email verification
 
-Blocked tasks:
+Blocked work items:
 - AUTH-003: blocked because email provider API key not configured
 
 New work discovered:
@@ -86,12 +86,12 @@ Combine with the full session end ritual:
 ```
 Session ending. Please perform the APS session end ritual:
 
-1. **Update status** - Mark work items based on task completion
+1. **Update status** - Mark work items based on completion
 2. **Capture discovered work** - Add new Draft items I mentioned
 3. **Update "What's Next"** - Reflect current priority queue
 4. **Session summary** - Brief note for next agent
 
-Completed: {list tasks}
+Completed: {list work items}
 Blocked: {list with reasons}
 Discovered: {list new work}
 

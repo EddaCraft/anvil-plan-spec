@@ -13,18 +13,18 @@ I have an APS project with these work items and dependencies:
 
 Analyze the dependency graph and create a wave-based execution plan:
 
-1. **Wave 1**: Tasks with no dependencies (can start immediately)
-2. **Wave 2**: Tasks whose dependencies are all in Wave 1
-3. **Wave 3+**: Continue until all tasks are assigned
+1. **Wave 1**: Work items with no dependencies (can start immediately)
+2. **Wave 2**: Work items whose dependencies are all in Wave 1
+3. **Wave 3+**: Continue until all work items are assigned
 
 For each wave, show:
-- Which tasks can run in parallel
+- Which work items can run in parallel
 - Expected blockers
 - Recommended agent count
 
 Output format:
-| Wave | Tasks | Parallel Agents | Blocked Until |
-|------|-------|-----------------|---------------|
+| Wave | Work Items | Parallel Agents | Blocked Until |
+|------|------------|-----------------|---------------|
 ```
 
 ---
@@ -44,8 +44,8 @@ UI-001: Login page (deps: AUTH-001, CORE-002)
 Output:
 
 ```
-| Wave | Tasks | Parallel Agents | Blocked Until |
-|------|-------|-----------------|---------------|
+| Wave | Work Items | Parallel Agents | Blocked Until |
+|------|------------|-----------------|---------------|
 | 1 | AUTH-001, CORE-001 | 2 | - |
 | 2 | AUTH-002, CORE-002 | 2 | Wave 1 complete |
 | 3 | UI-001 | 1 | AUTH-002, CORE-002 |

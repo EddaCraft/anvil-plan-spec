@@ -12,7 +12,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 
 - CLI tool to validate APS markdown files
 - Check required fields are present
-- Validate task ID format (MODULE-NNN)
+- Validate work item ID format (MODULE-NNN)
 - Check dependency references resolve
 - Warning on common issues (empty sections, missing checkpoints)
 
@@ -20,7 +20,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 
 - IDE plugins or extensions (separate module)
 - Automated fixes or corrections
-- Semantic validation (e.g., "is this task well-written?")
+- Semantic validation (e.g., "is this work item well-written?")
 
 ## Interfaces
 
@@ -38,14 +38,14 @@ Provide tooling to validate APS documents against expected structure, catching c
 
 - [x] Purpose and scope are clear
 - [x] Dependencies identified (TPL complete)
-- [x] At least one task defined
+- [x] At least one work item defined
 
 ## Work Items
 
 ### VAL-001: Define validation rules
 
 - **Intent:** Establish what constitutes a valid APS document before writing code
-- **Expected Outcome:** Markdown document listing required fields per template type (index, module, simple, steps)
+- **Expected Outcome:** Markdown document listing required fields per template type (index, module, simple, actions)
 - **Validation:** File exists at docs/validation-rules.md or plans/decisions/
 - **Confidence:** high
 - **Status:** ✓ Complete (docs/plans/2026-01-27-validation-cli-design.md)
@@ -61,26 +61,26 @@ Provide tooling to validate APS documents against expected structure, catching c
 ### VAL-003: Implement field presence checks
 
 - **Intent:** Detect missing required fields in APS documents
-- **Expected Outcome:** CLI reports errors for missing Status, Purpose, Tasks sections
+- **Expected Outcome:** CLI reports errors for missing Status, Purpose, Work Items sections
 - **Validation:** Running against malformed test fixture returns non-zero exit
 - **Confidence:** high
 - **Status:** ✓ Complete
 
-### VAL-004: Implement task ID format validation
+### VAL-004: Implement work item ID format validation
 
-- **Intent:** Catch malformed task IDs early (e.g., "Task 1" instead of "MOD-001")
-- **Expected Outcome:** CLI warns on task IDs not matching `[A-Z]+-[0-9]{3}` pattern
+- **Intent:** Catch malformed work item IDs early (e.g., "Task 1" instead of "MOD-001")
+- **Expected Outcome:** CLI warns on work item IDs not matching `[A-Z]+-[0-9]{3}` pattern
 - **Validation:** Test fixture with bad IDs triggers warning
 - **Confidence:** medium
 - **Status:** ✓ Complete
 
 ### VAL-005: Implement dependency resolution
 
-- **Intent:** Catch broken references to other modules or tasks
+- **Intent:** Catch broken references to other modules or work items
 - **Expected Outcome:** CLI warns when `Depends on` references non-existent modules
 - **Validation:** Test fixture with broken dep triggers warning
 - **Confidence:** medium
-- **Status:** ✓ Complete (W003 rule for task deps; W002 for module deps deferred)
+- **Status:** ✓ Complete (W003 rule for work item deps; W002 for module deps deferred)
 
 ### VAL-006: Add CI example
 
@@ -97,7 +97,7 @@ Provide tooling to validate APS documents against expected structure, catching c
 
 ## Execution
 
-Steps: Not needed — all tasks complete
+Action Plan: Not needed — all work items complete
 
 ## Notes
 

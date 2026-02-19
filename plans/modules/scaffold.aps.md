@@ -35,14 +35,14 @@ Provide one-command setup that copies APS templates and agent guidance into any 
 
 - [x] Purpose and scope are clear
 - [x] Dependencies identified (none)
-- [x] At least one task defined
+- [x] At least one work item defined
 
 ## Work Items
 
 ### SCAFFOLD-001: Create scaffold directory structure
 
 - **Intent:** Establish source files that init.sh will copy to target projects
-- **Expected Outcome:** scaffold/plans/ contains aps-rules.md, index template, module templates, steps template
+- **Expected Outcome:** scaffold/plans/ contains aps-rules.md, index template, module templates, actions template
 - **Validation:** `ls scaffold/plans/` shows all expected files
 - **Confidence:** high
 - **Status:** ✓ Complete
@@ -73,7 +73,7 @@ Provide one-command setup that copies APS templates and agent guidance into any 
 
 ## Execution
 
-Steps: Not needed — all tasks complete
+Action Plan: Not needed — all work items complete
 
 ## Notes
 

@@ -37,7 +37,7 @@ Improve onboarding and workflow clarity through better documentation structure, 
 
 - [x] Purpose and scope are clear
 - [x] Dependencies identified (TPL complete)
-- [x] At least one task defined
+- [x] At least one work item defined
 
 ## Work Items
 
@@ -83,7 +83,7 @@ Improve onboarding and workflow clarity through better documentation structure, 
 
 ## Execution
 
-Steps: [../execution/DOCS.steps.md](../execution/DOCS.steps.md)
+Action Plan: [../execution/DOCS.actions.md](../execution/DOCS.actions.md)
 
 ## Notes
 

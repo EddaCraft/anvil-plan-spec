@@ -58,7 +58,7 @@ Directory scanning:
 |------|------------|-------|
 | W001 | work item | ID doesn't match `[A-Z]+-[0-9]{3}` pattern |
 | W002 | module | `Depends on` references unknown module |
-| W003 | work item | `Dependencies` references unknown task ID |
+| W003 | work item | `Dependencies` references unknown work item ID |
 | W004 | any | Empty section (just header, no content) |
 | W005 | module | Status=Ready but no work items defined |
 

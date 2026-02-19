@@ -34,14 +34,14 @@ curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaf
 
 Your specs are preserved -- the updater only replaces templates, rules,
 the CLI, and skill files. It does not touch your `index.aps.md`, module
-specs, or action steps.
+specs, or action plans.
 
 **Updated files:**
 
 - `bin/aps` + `lib/` (CLI)
 - `aps-rules.md` (agent guidance)
 - `modules/.module.template.md`, `.simple.template.md`, `.index-monorepo.template.md`
-- `execution/.steps.template.md`
+- `execution/.actions.template.md`
 - `aps-planning/` (skill + scripts)
 - `.claude/commands/` (plan, plan-status)
 
@@ -84,7 +84,7 @@ plans/
 │   ├── .simple.template.md          # Simple feature template
 │   └── .index-monorepo.template.md  # Index for monorepos
 ├── execution/
-│   └── .steps.template.md           # Action steps template
+│   └── .actions.template.md          # Action plan template
 └── decisions/
 
 aps-planning/

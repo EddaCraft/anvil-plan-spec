@@ -62,8 +62,8 @@ Read APS modules at:
 - plans/modules/02-auth.aps.md
 - plans/modules/03-ui.aps.md
 
-Create Tasks from all Ready work items. Show cross-module dependencies
-and recommend agent assignment to minimize file conflicts.
+Create Tasks from all Ready work items across modules. Show cross-module
+dependencies and recommend agent assignment to minimize file conflicts.
 ```
 
 ### Action Plan Expansion

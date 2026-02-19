@@ -37,7 +37,7 @@ Reduce template friction by marking optional fields, providing inline guidance, 
 
 - [x] Purpose and scope are clear
 - [x] Dependencies identified (none)
-- [x] At least one task defined
+- [x] At least one work item defined
 
 ## Work Items
 
@@ -91,7 +91,7 @@ Reduce template friction by marking optional fields, providing inline guidance, 
 
 ## Execution
 
-Steps: Not needed — all tasks complete
+Action Plan: Not needed — all work items complete
 
 ## Notes
 

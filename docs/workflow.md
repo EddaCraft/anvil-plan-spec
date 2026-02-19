@@ -77,7 +77,7 @@ You've been asked to add user authentication to an existing app.
    - **Validation:** curl test returns 201
    ```
 
-6. **Execute.** Work through work items. If a work item is complex, create a Action Plan file.
+6. **Execute.** Work through work items. If a work item is complex, create an Action Plan file.
 
 ---
 
@@ -226,11 +226,11 @@ Update specs as you work, not after. Stale specs lose trust.
 Work Items describe **what**, not **how**. Implementation details belong in code
 and comments, not specs.
 
-### Use Steps sparingly
+### Use Action Plans sparingly
 
-Most work items don't need a Action Plan file. Only create one when:
+Most work items don't need an Action Plan file. Only create one when:
 
-- Task has 5+ distinct actions
+- Work item has 5+ distinct actions
 - Multiple people might work on it
 - You want granular progress tracking
 

@@ -38,11 +38,11 @@ Enable APS documents to integrate with external tooling through structured data 
 
 - [x] Purpose and scope are clear
 - [x] Dependencies identified
-- [ ] At least one task defined
+- [ ] At least one work item defined
 
 ## Work Items
 
-*Define tasks when promoting to Ready*
+*Define work items when promoting to Ready*
 
 ## Notes
 
