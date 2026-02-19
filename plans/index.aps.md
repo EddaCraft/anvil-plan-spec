@@ -5,7 +5,7 @@
 | Status | Active |
 | Owner | @aneki |
 | Created | 2025-12-31 |
-| Updated | 2026-01-27 |
+| Updated | 2026-02-19 |
 
 ## Problem
 
@@ -38,6 +38,13 @@ APS needs continued development to:
 | [templates](./modules/templates.aps.md) | Reduce friction, mark optional fields | Complete |
 | [docs](./modules/docs.aps.md) | Workflow guide, improved onboarding | Complete |
 | [validation](./modules/validation.aps.md) | CLI tool to validate APS documents | Complete |
+
+### Current (v0.3 — Distribution)
+
+| Module | Purpose | Status |
+|--------|---------|--------|
+| [install](./modules/install.aps.md) | Interactive install, `.aps/` layout, multi-tool | Ready |
+| [agents](./modules/agents.aps.md) | APS Planner + Librarian agents, multi-harness | Ready |
 
 ### Near Term
 
@@ -85,3 +92,12 @@ These are explicitly out of scope:
 - **D-008:** Solution docs organization — *decided: per-project with monorepo support*
 - **D-009:** npm init module — *decided: merged into scaffold module, no separate npm package*
 - **D-010:** Claude Code Tasks integration — *decided: yes, APS as planning layer + Tasks as execution layer*
+- **D-011:** `.aps/` as tooling root — *decided: yes, CLI + scripts + config + ephemeral under `.aps/`*
+- **D-012:** CLI location — *decided: `.aps/bin/aps` with PATH hint (direnv or shell)*
+- **D-013:** Skill format per tool — *decided: `.claude/skills/` as cross-tool path (Claude Code + Copilot + OpenCode auto-discover), `.agents/skills/` for Codex + Gemini (both require explicit install/link cmd); instruction files per tool (AGENTS.md, GEMINI.md)*
+- **D-014:** Agent model defaults — *decided: Planner on Opus, Librarian on Sonnet*
+- **D-015:** Commands deprecated — *decided: yes, fold `/plan` and `/plan-status` into skill*
+- **D-016:** Agent scope split — *decided: Planner = planning + execution + status + waves; Librarian = archiving + cross-refs + orphans*
+- **D-017:** Agent path references — *decided: agents reference `plans/` and `.aps/scripts/`, not `.aps/config.yml`*
+- **D-018:** Shared core vs per-tool rewrite — *decided: shared core prompt, tool-specific frontmatter/packaging*
+- **D-019:** Agent format per tool — *decided: 4/5 tools have native agent mechanisms (Claude Code `.claude/agents/`, Copilot `.github/agents/`, OpenCode `.opencode/agents/`, Codex `.codex/config.toml` + TOML overlays); Gemini is skill-only. Port to each tool's native format, not just skills.*
