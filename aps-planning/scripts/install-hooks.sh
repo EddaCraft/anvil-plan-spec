@@ -25,7 +25,7 @@ while [[ $# -gt 0 ]]; do
       echo "Usage: ./aps-planning/scripts/install-hooks.sh [OPTIONS]"
       echo ""
       echo "Options:"
-      echo "  --minimal, -m  Install only PreToolUse + Stop hooks"
+      echo "  --minimal, -m  Install PreToolUse + Stop + SessionStart hooks"
       echo "  --remove, -r   Remove all APS hooks"
       echo "  --help, -h     Show this help"
       exit 0
@@ -76,15 +76,26 @@ mode = sys.argv[2]
 with open(settings_path) as f:
     settings = json.load(f)
 
+def is_aps_hook(entry):
+    """Check if a hook entry is APS-related (handles both old and new format)."""
+    # Old format: {"hook": "...aps-planning/scripts..."}
+    hook_str = entry.get("hook", "")
+    if "[APS]" in hook_str or "aps-planning/scripts" in hook_str:
+        return True
+    # New format: {"hooks": [{"command": "...aps-planning/scripts..."}]}
+    for h in entry.get("hooks", []):
+        cmd = h.get("command", "")
+        if "aps-planning/scripts" in cmd:
+            return True
+    return False
+
 if mode == "remove":
-    # Remove APS hooks by filtering out entries with [APS] in the hook command
+    # Remove APS hooks (handles both old and new format)
     if "hooks" in settings:
         for event in list(settings["hooks"].keys()):
             hooks = settings["hooks"][event]
             settings["hooks"][event] = [
-                h for h in hooks
-                if "[APS]" not in h.get("hook", "")
-                and "aps-planning/scripts" not in h.get("hook", "")
+                h for h in hooks if not is_aps_hook(h)
             ]
             # Clean up empty arrays
             if not settings["hooks"][event]:
@@ -97,36 +108,56 @@ if mode == "remove":
         f.write("\n")
     sys.exit(0)
 
-# Define APS hooks
+# Define APS hooks (new format: matcher + hooks array with type/command)
 pretool = {
     "matcher": "Write|Edit|Bash",
-    "hook": "if [ -d plans ] && [ -f plans/index.aps.md -o -d plans/modules ]; then echo '[APS] Re-read your current work item before making changes. Are you still on-plan?'; fi"
+    "hooks": [{
+        "type": "command",
+        "command": "./aps-planning/scripts/pre-tool-check.sh"
+    }]
 }
 
 posttool = {
     "matcher": "Write|Edit",
-    "hook": "if [ -d plans ]; then echo '[APS] If you completed a work item or discovered new scope, update the APS spec now.'; fi"
+    "hooks": [{
+        "type": "command",
+        "command": "./aps-planning/scripts/post-tool-nudge.sh"
+    }]
 }
 
 stop = {
-    "hook": "./aps-planning/scripts/check-complete.sh"
+    "hooks": [{
+        "type": "command",
+        "command": "./aps-planning/scripts/check-complete.sh"
+    }]
+}
+
+enforce_plan = {
+    "hooks": [{
+        "type": "command",
+        "command": "./aps-planning/scripts/enforce-plan-update.sh"
+    }]
 }
 
 session_start = {
-    "hook": "./aps-planning/scripts/init-session.sh"
+    "hooks": [{
+        "type": "command",
+        "command": "./aps-planning/scripts/init-session.sh"
+    }]
 }
 
 # Build hooks based on mode
 if mode == "minimal":
     new_hooks = {
         "PreToolUse": [pretool],
-        "Stop": [stop],
+        "Stop": [stop, enforce_plan],
+        "SessionStart": [session_start],
     }
 else:
     new_hooks = {
         "PreToolUse": [pretool],
         "PostToolUse": [posttool],
-        "Stop": [stop],
+        "Stop": [stop, enforce_plan],
         "SessionStart": [session_start],
     }
 
@@ -138,11 +169,10 @@ for event, aps_hooks in new_hooks.items():
     if event not in settings["hooks"]:
         settings["hooks"][event] = []
 
-    # Remove any existing APS hooks first (idempotent)
+    # Remove any existing APS hooks first (idempotent, handles old+new format)
     existing = [
         h for h in settings["hooks"][event]
-        if "[APS]" not in h.get("hook", "")
-        and "aps-planning/scripts" not in h.get("hook", "")
+        if not is_aps_hook(h)
     ]
 
     # Append new APS hooks
@@ -153,6 +183,23 @@ with open(settings_path, "w") as f:
     f.write("\n")
 PYEOF
 
+# Ensure session baseline is gitignored
+BASELINE_ENTRY=".claude/.aps-session-baseline"
+if [ "$MODE" != "remove" ]; then
+  if [ -f .gitignore ]; then
+    if ! grep -qF "$BASELINE_ENTRY" .gitignore 2>/dev/null; then
+      echo "" >> .gitignore
+      echo "# APS session baseline (ephemeral)" >> .gitignore
+      echo "$BASELINE_ENTRY" >> .gitignore
+      info "Added $BASELINE_ENTRY to .gitignore"
+    fi
+  else
+    echo "# APS session baseline (ephemeral)" > .gitignore
+    echo "$BASELINE_ENTRY" >> .gitignore
+    info "Created .gitignore with $BASELINE_ENTRY"
+  fi
+fi
+
 if [ "$MODE" = "remove" ]; then
   info "Removed APS hooks from $SETTINGS_FILE"
 else
@@ -160,13 +207,16 @@ else
   echo ""
   echo "  Hooks added:"
   if [ "$MODE" = "full" ]; then
-    echo "    PreToolUse   — Reminds agent to check plan before code changes"
-    echo "    PostToolUse  — Nudges agent to update specs after changes"
-    echo "    Stop         — Blocks session end if work items unresolved"
-    echo "    SessionStart — Shows planning status at session start"
+    echo "    PreToolUse          — Reminds agent to check plan before code changes"
+    echo "    PostToolUse         — Nudges agent to update specs after changes"
+    echo "    Stop (Completion)   — Blocks session end if work items unresolved"
+    echo "    Stop (Plan Update)  — Blocks session end if code changed but plans untouched"
+    echo "    SessionStart        — Shows planning status at session start"
   else
-    echo "    PreToolUse   — Reminds agent to check plan before code changes"
-    echo "    Stop         — Blocks session end if work items unresolved"
+    echo "    PreToolUse          — Reminds agent to check plan before code changes"
+    echo "    Stop (Completion)   — Blocks session end if work items unresolved"
+    echo "    Stop (Plan Update)  — Blocks session end if code changed but plans untouched"
+    echo "    SessionStart        — Writes session baseline for change detection"
   fi
   echo ""
   info "See aps-planning/hooks.md for details on each hook."

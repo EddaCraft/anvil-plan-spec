@@ -29,27 +29,51 @@ If you prefer manual setup, add these to your project's
     "PreToolUse": [
       {
         "matcher": "Write|Edit|Bash",
-        "hook": "if [ -d plans ] && [ -f plans/index.aps.md -o -d plans/modules ]; then echo '[APS] Re-read your current work item before making changes. Are you still on-plan?'; fi",
-        "description": "Remind agent to check APS plan before writing code"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./aps-planning/scripts/pre-tool-check.sh"
+          }
+        ]
       }
     ],
     "PostToolUse": [
       {
         "matcher": "Write|Edit",
-        "hook": "if [ -d plans ]; then echo '[APS] If you completed a work item or discovered new scope, update the APS spec now.'; fi",
-        "description": "Remind agent to update APS after code changes"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./aps-planning/scripts/post-tool-nudge.sh"
+          }
+        ]
       }
     ],
     "Stop": [
       {
-        "hook": "./aps-planning/scripts/check-complete.sh",
-        "description": "Verify all in-progress work items are resolved before ending"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./aps-planning/scripts/check-complete.sh"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./aps-planning/scripts/enforce-plan-update.sh"
+          }
+        ]
       }
     ],
     "SessionStart": [
       {
-        "hook": "./aps-planning/scripts/init-session.sh",
-        "description": "Show APS planning status at session start"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./aps-planning/scripts/init-session.sh"
+          }
+        ]
       }
     ]
   }
@@ -81,7 +105,7 @@ ensures status changes and new discoveries get captured immediately.
 **What it says:** "If you completed a work item or discovered new scope, update
 the APS spec now."
 
-### Stop Hook
+### Stop Hook — Completion Check
 
 **When:** Before the session ends.
 
@@ -91,6 +115,38 @@ out what happened.
 
 **What it does:** Runs `check-complete.sh` which exits non-zero if work items
 are still in progress, prompting the agent to update statuses.
+
+### Stop Hook — Plan Update Enforcer
+
+**When:** Before the session ends.
+
+**Why:** Agents frequently modify code but forget to update the corresponding
+plan files. The PostToolUse nudge is a soft reminder; this hook is a hard gate.
+If source code was changed during the session but no `plans/` files were
+touched, the agent cannot stop until it updates the specs.
+
+**How it works:**
+
+1. At session start, `init-session.sh` records the current git HEAD as a
+   baseline in `.claude/.aps-session-baseline`.
+2. At session end, `enforce-plan-update.sh` diffs all changes (committed and
+   uncommitted) since that baseline.
+3. If non-plan files were modified but zero plan files were touched, it exits
+   with code 2 — blocking the session — and lists the changed files so the
+   agent knows what to account for.
+
+**What it catches:**
+
+- Agent wrote code but never updated work item statuses
+- Agent committed implementation but forgot to mark items Complete
+- Agent discovered new scope but didn't add Draft work items
+
+**What it allows through:**
+
+- Plan-only sessions (no code changes)
+- Sessions where both code and plans were modified
+- Sessions with no file changes at all
+- Projects without a `plans/` directory
 
 ### SessionStart Hook
 
@@ -114,7 +170,12 @@ preventing goal drift:
     "PreToolUse": [
       {
         "matcher": "Write|Edit",
-        "hook": "if [ -d plans ]; then echo '[APS] Check your work item intent before proceeding.'; fi"
+        "hooks": [
+          {
+            "type": "command",
+            "command": "./aps-planning/scripts/pre-tool-check.sh"
+          }
+        ]
       }
     ]
   }
@@ -125,8 +186,17 @@ preventing goal drift:
 
 - Hooks only fire if a `plans/` directory exists, so they're silent in projects
   that don't use APS.
-- The PreToolUse hook is intentionally lightweight — it's a reminder, not a
-  blocker. The agent decides whether to re-read.
-- The Stop hook is the only one that can block — it exits non-zero when work
-  is incomplete, which prompts the agent to finish up.
+- The PreToolUse and PostToolUse hooks output JSON with `additionalContext`
+  so their reminders reach Claude (plain stdout only shows in verbose mode).
+- The Stop hooks block by exiting with code 2 when work is incomplete.
+  Their stderr messages are fed back to Claude explaining what needs attention.
+- The plan update enforcer uses a session baseline file
+  (`.claude/.aps-session-baseline`) written by the SessionStart hook to detect
+  all changes — committed and uncommitted — during the session. The SessionStart
+  hook is installed in both full and minimal modes. If the baseline is missing
+  for any reason, checks fall back to uncommitted changes only. The install
+  script adds `.claude/.aps-session-baseline` to `.gitignore` automatically. If
+  you manage Claude settings manually, add it to `.gitignore` yourself. The
+  enforcer also filters out `.claude/` ephemeral files from change detection,
+  so even if the file isn't gitignored it won't cause spurious failures.
 - Scripts need execute permissions: `chmod +x aps-planning/scripts/*.sh`

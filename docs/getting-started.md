@@ -9,7 +9,7 @@ Start here. Pick based on what you're trying to do:
 | Situation | Template | Time to Value |
 |-----------|----------|---------------|
 | **Just trying APS** | [quickstart](../templates/quickstart.template.md) | 5 minutes |
-| **Small feature (1-3 work items, self-contained) | [simple](../templates/simple.template.md) | 15 minutes |
+| **Small feature** (1-3 work items, self-contained) | [simple](../templates/simple.template.md) | 15 minutes |
 | **Module with boundaries** (interfaces, deps) | [module](../templates/module.template.md) | 30 minutes |
 | **Multi-module initiative** | [index](../templates/index.template.md) | 1 hour |
 | **Large initiative** (6+ modules) | [index-expanded](../templates/index-expanded.template.md) | 1-2 hours |
@@ -59,11 +59,11 @@ graph TD
 **Ready to scaffold?** Run this in your project:
 
 ```bash
-# From a cloned APS repo
-./scaffold/init.sh /path/to/your-project
+# One-liner install (curl)
+VERSION=v0.2.0 bash <(curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install)
 
-# Or via curl (once repo is public)
-curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/init.sh | bash
+# Or from a cloned APS repo
+./scaffold/install /path/to/your-project
 ```
 
 This creates `plans/` with templates and `aps-rules.md` for AI guidance.
@@ -109,27 +109,27 @@ For each module, create a file in `plans/modules/`:
 - `module.template.md` — For modules with interfaces and dependencies
 - `simple.template.md` — For small, self-contained features
 
-Fill in Purpose, Scope, and leave Tasks empty until Ready.
+Fill in Purpose, Scope, and leave Work Items empty until Ready.
 
-### 4. Add Tasks When Ready
+### 4. Add Work Items When Ready
 
-Tasks are **execution authority**. Only add them when:
+Work Items are **execution authority**. Only add them when:
 
 - The module scope is clear
 - Dependencies are resolved
 - You're ready to implement
 
-Each task needs:
+Each work item needs:
 
 - **Intent** — One sentence on what it achieves
 - **Expected Outcome** — Testable result
 - **Validation** — How to verify completion
 
-### 5. Generate Steps (Optional)
+### 5. Generate Action Plans (Optional)
 
-For complex tasks, create a steps file in `plans/execution/`.
+For complex work items, create an actions file in `plans/execution/`.
 
-Steps translate "what to achieve" into "what actions to take":
+Action plans translate "what to achieve" into "what actions to take":
 
 - Each step has a **checkpoint** (observable state)
 - Steps describe **what**, not **how**
@@ -197,8 +197,8 @@ APS includes prompts for AI tools:
 |------|--------|
 | Planning | `docs/ai/prompting/index.prompt.md` |
 | Module design | `docs/ai/prompting/module.prompt.md` |
-| Task creation | `docs/ai/prompting/task.prompt.md` |
-| Execution | `docs/ai/prompting/steps.prompt.md` |
+| Work item creation | `docs/ai/prompting/work-item.prompt.md` |
+| Execution | `docs/ai/prompting/actions.prompt.md` |
 
 OpenCode/Claude users: see `docs/ai/prompting/opencode/` for optimized variants.
 
