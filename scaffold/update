@@ -198,7 +198,7 @@ echo ""
 if ! has_aps_hooks; then
   echo ""
   if ask_yn "Install APS hooks into .claude/settings.local.json?" "y"; then
-    (cd "$TARGET" && bash "$SKILL_DIR/scripts/install-hooks.sh")
+    (cd "$TARGET" && bash aps-planning/scripts/install-hooks.sh)
   else
     if ask_yn "Copy hook scripts for you to install/review later?" "y"; then
       info "Hook scripts are at: aps-planning/scripts/"
