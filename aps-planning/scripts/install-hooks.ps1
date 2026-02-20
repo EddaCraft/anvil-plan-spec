@@ -1,162 +1,277 @@
-# APS Hooks Installer (PowerShell)
+#
+# APS Hooks Installer
 # Merges APS hook configuration into .claude/settings.local.json
 # Preserves existing settings and permissions.
 #
 # Usage:
-#   .\aps-planning\scripts\install-hooks.ps1            # Install all hooks
-#   .\aps-planning\scripts\install-hooks.ps1 -Minimal   # PreToolUse + Stop only
-#   .\aps-planning\scripts\install-hooks.ps1 -Remove    # Remove APS hooks
+#   ./aps-planning/scripts/install-hooks.ps1            # Install all hooks
+#   ./aps-planning/scripts/install-hooks.ps1 --minimal   # PreToolUse + Stop + SessionStart only
+#   ./aps-planning/scripts/install-hooks.ps1 --remove    # Remove APS hooks
 #
-# Requires: Python 3 (for JSON manipulation)
+# No external dependencies (uses native PowerShell JSON support)
 
 param(
-    [switch]$Minimal,
-    [switch]$Remove,
-    [switch]$Help
+    [Alias("m")][switch]$Minimal,
+    [Alias("r")][switch]$Remove,
+    [Alias("h")][switch]$Help
 )
 
-$ErrorActionPreference = "Stop"
-
-$SettingsDir = ".claude"
-$SettingsFile = Join-Path $SettingsDir "settings.local.json"
+# Also handle --long-form args passed as bare strings (for cross-platform consistency)
+$extraArgs = $args
+foreach ($a in $extraArgs) {
+    switch ($a) {
+        { $_ -ceq '--minimal' -or $_ -ceq '-m' } { $Minimal = $true }
+        { $_ -ceq '--remove'  -or $_ -ceq '-r' } { $Remove  = $true }
+        { $_ -ceq '--help'    -or $_ -ceq '-h' } { $Help    = $true }
+        default { Write-Host "Unknown option: $a"; exit 1 }
+    }
+}
 
 if ($Help) {
-    Write-Host "Usage: .\aps-planning\scripts\install-hooks.ps1 [OPTIONS]"
+    Write-Host "Usage: ./aps-planning/scripts/install-hooks.ps1 [OPTIONS]"
     Write-Host ""
     Write-Host "Options:"
-    Write-Host "  -Minimal   Install only PreToolUse + Stop hooks"
-    Write-Host "  -Remove    Remove all APS hooks"
-    Write-Host "  -Help      Show this help"
+    Write-Host "  --minimal, -m  Install PreToolUse + Stop + SessionStart hooks"
+    Write-Host "  --remove, -r   Remove all APS hooks"
+    Write-Host "  --help, -h     Show this help"
     exit 0
 }
 
-if ($Remove) { $Mode = "remove" }
-elseif ($Minimal) { $Mode = "minimal" }
-else { $Mode = "full" }
-
-function Write-Info  { param([string]$Msg) Write-Host "[aps] $Msg" -ForegroundColor Green }
-function Write-Warn  { param([string]$Msg) Write-Host "[aps] $Msg" -ForegroundColor Yellow }
-function Write-Err   { param([string]$Msg) Write-Host "[aps] $Msg" -ForegroundColor Red }
-
-# Check for python3
-$pythonCmd = if (Get-Command python3 -ErrorAction SilentlyContinue) { "python3" }
-             elseif (Get-Command python -ErrorAction SilentlyContinue) { "python" }
-             else { $null }
-
-if (-not $pythonCmd) {
-    Write-Err "Python 3 is required for JSON manipulation."
-    Write-Host "  Install it or manually copy hook config from aps-planning/hooks.md"
-    exit 1
+# Determine mode
+if ($Remove) {
+    $Mode = "remove"
+} elseif ($Minimal) {
+    $Mode = "minimal"
+} else {
+    $Mode = "full"
 }
 
-# Ensure .claude directory exists
+$SettingsDir  = ".claude"
+$SettingsFile = Join-Path $SettingsDir "settings.local.json"
+
+# --- Helper functions ---
+
+function Write-Info  { param([string]$Msg) Write-Host "[aps] " -ForegroundColor Green -NoNewline; Write-Host $Msg }
+function Write-Warn  { param([string]$Msg) Write-Host "[aps] " -ForegroundColor Yellow -NoNewline; Write-Host $Msg }
+function Write-Err   { param([string]$Msg) Write-Host "[aps] " -ForegroundColor Red -NoNewline; Write-Host $Msg }
+
+function Test-ApsHook {
+    <#
+    .SYNOPSIS
+        Returns $true if the given hook entry is APS-related.
+    #>
+    param([hashtable]$Entry)
+
+    # Old format: { "hook": "...aps-planning/scripts..." }
+    $hookStr = if ($Entry.ContainsKey("hook")) { $Entry["hook"] } else { "" }
+    if ($hookStr -cmatch 'aps-planning/scripts' -or $hookStr -cmatch '\[APS\]') {
+        return $true
+    }
+
+    # New format: { "hooks": [{ "command": "...aps-planning/scripts..." }] }
+    if ($Entry.ContainsKey("hooks")) {
+        foreach ($h in $Entry["hooks"]) {
+            $cmd = ""
+            if ($h -is [hashtable] -and $h.ContainsKey("command")) {
+                $cmd = $h["command"]
+            } elseif ($h.PSObject -and $h.PSObject.Properties["command"]) {
+                $cmd = $h.command
+            }
+            if ($cmd -cmatch 'aps-planning/scripts') {
+                return $true
+            }
+        }
+    }
+
+    return $false
+}
+
+function ConvertTo-Hashtable {
+    <#
+    .SYNOPSIS
+        Deep-converts a PSCustomObject (from ConvertFrom-Json) to nested hashtables.
+        PS5's ConvertFrom-Json returns PSCustomObject, not hashtable.
+    #>
+    param([Parameter(ValueFromPipeline)]$InputObject)
+
+    if ($null -eq $InputObject) { return $null }
+
+    if ($InputObject -is [System.Collections.IEnumerable] -and $InputObject -isnot [string]) {
+        $list = [System.Collections.ArrayList]::new()
+        foreach ($item in $InputObject) {
+            $null = $list.Add((ConvertTo-Hashtable $item))
+        }
+        return @(, $list.ToArray())
+    }
+
+    if ($InputObject -is [psobject] -and $InputObject -isnot [string] -and $InputObject -isnot [System.ValueType]) {
+        $ht = [ordered]@{}
+        foreach ($prop in $InputObject.PSObject.Properties) {
+            $ht[$prop.Name] = ConvertTo-Hashtable $prop.Value
+        }
+        return $ht
+    }
+
+    return $InputObject
+}
+
+# --- Ensure .claude directory and settings file exist ---
+
 if (-not (Test-Path $SettingsDir -PathType Container)) {
     New-Item -ItemType Directory -Path $SettingsDir -Force | Out-Null
 }
 
-# Create settings file if it doesn't exist
-if (-not (Test-Path $SettingsFile)) {
-    Set-Content -Path $SettingsFile -Value "{}"
+if (-not (Test-Path $SettingsFile -PathType Leaf)) {
+    Set-Content -Path $SettingsFile -Value '{}'
     Write-Info "Created $SettingsFile"
 }
 
-# Use python for safe JSON merge
-$pyScript = @'
-import json
-import sys
+# --- Load settings as hashtable ---
 
-settings_path = sys.argv[1]
-mode = sys.argv[2]
+$raw = Get-Content -Path $SettingsFile -Raw
+$settings = ConvertTo-Hashtable (ConvertFrom-Json $raw)
+if ($null -eq $settings) { $settings = [ordered]@{} }
 
-with open(settings_path) as f:
-    settings = json.load(f)
+# --- Remove mode ---
 
-if mode == "remove":
-    if "hooks" in settings:
-        for event in list(settings["hooks"].keys()):
-            hooks = settings["hooks"][event]
-            settings["hooks"][event] = [
-                h for h in hooks
-                if "[APS]" not in h.get("hook", "")
-                and "aps-planning/scripts" not in h.get("hook", "")
-            ]
-            if not settings["hooks"][event]:
-                del settings["hooks"][event]
-        if not settings["hooks"]:
-            del settings["hooks"]
-    with open(settings_path, "w") as f:
-        json.dump(settings, f, indent=2)
-        f.write("\n")
-    sys.exit(0)
-
-pretool = {
-    "matcher": "Write|Edit|Bash",
-    "hook": "if [ -d plans ] && [ -f plans/index.aps.md -o -d plans/modules ]; then echo '[APS] Re-read your current work item before making changes. Are you still on-plan?'; fi"
-}
-
-posttool = {
-    "matcher": "Write|Edit",
-    "hook": "if [ -d plans ]; then echo '[APS] If you completed a work item or discovered new scope, update the APS spec now.'; fi"
-}
-
-stop = {
-    "hook": "./aps-planning/scripts/check-complete.sh"
-}
-
-session_start = {
-    "hook": "./aps-planning/scripts/init-session.sh"
-}
-
-if mode == "minimal":
-    new_hooks = {
-        "PreToolUse": [pretool],
-        "Stop": [stop],
-    }
-else:
-    new_hooks = {
-        "PreToolUse": [pretool],
-        "PostToolUse": [posttool],
-        "Stop": [stop],
-        "SessionStart": [session_start],
+if ($Mode -ceq "remove") {
+    if ($settings.Contains("hooks")) {
+        $hookKeys = @($settings["hooks"].Keys)
+        foreach ($event in $hookKeys) {
+            $hooks = $settings["hooks"][$event]
+            $filtered = @($hooks | Where-Object { -not (Test-ApsHook $_) })
+            if ($filtered.Count -eq 0) {
+                $settings["hooks"].Remove($event)
+            } else {
+                $settings["hooks"][$event] = $filtered
+            }
+        }
+        if ($settings["hooks"].Count -eq 0) {
+            $settings.Remove("hooks")
+        }
     }
 
-if "hooks" not in settings:
-    settings["hooks"] = {}
+    $json = ConvertTo-Json $settings -Depth 10
+    Set-Content -Path $SettingsFile -Value $json -NoNewline
+    # Append trailing newline
+    Add-Content -Path $SettingsFile -Value ""
 
-for event, aps_hooks in new_hooks.items():
-    if event not in settings["hooks"]:
-        settings["hooks"][event] = []
-
-    existing = [
-        h for h in settings["hooks"][event]
-        if "[APS]" not in h.get("hook", "")
-        and "aps-planning/scripts" not in h.get("hook", "")
-    ]
-
-    settings["hooks"][event] = existing + aps_hooks
-
-with open(settings_path, "w") as f:
-    json.dump(settings, f, indent=2)
-    f.write("\n")
-'@
-
-$pyScript | & $pythonCmd - $SettingsFile $Mode
-
-if ($Mode -eq "remove") {
     Write-Info "Removed APS hooks from $SettingsFile"
-} else {
-    Write-Info "Installed APS hooks ($Mode mode) into $SettingsFile"
-    Write-Host ""
-    Write-Host "  Hooks added:"
-    if ($Mode -eq "full") {
-        Write-Host "    PreToolUse   - Reminds agent to check plan before code changes"
-        Write-Host "    PostToolUse  - Nudges agent to update specs after changes"
-        Write-Host "    Stop         - Blocks session end if work items unresolved"
-        Write-Host "    SessionStart - Shows planning status at session start"
-    } else {
-        Write-Host "    PreToolUse   - Reminds agent to check plan before code changes"
-        Write-Host "    Stop         - Blocks session end if work items unresolved"
-    }
-    Write-Host ""
-    Write-Info "See aps-planning/hooks.md for details on each hook."
+    exit 0
 }
+
+# --- Define APS hooks (pointing to .ps1 scripts) ---
+
+$pretool = [ordered]@{
+    matcher = "Write|Edit|Bash"
+    hooks   = @(
+        [ordered]@{ type = "command"; command = "./aps-planning/scripts/pre-tool-check.ps1" }
+    )
+}
+
+$posttool = [ordered]@{
+    matcher = "Write|Edit"
+    hooks   = @(
+        [ordered]@{ type = "command"; command = "./aps-planning/scripts/post-tool-nudge.ps1" }
+    )
+}
+
+$stop = [ordered]@{
+    hooks = @(
+        [ordered]@{ type = "command"; command = "./aps-planning/scripts/check-complete.ps1" }
+    )
+}
+
+$enforcePlan = [ordered]@{
+    hooks = @(
+        [ordered]@{ type = "command"; command = "./aps-planning/scripts/enforce-plan-update.ps1" }
+    )
+}
+
+$sessionStart = [ordered]@{
+    hooks = @(
+        [ordered]@{ type = "command"; command = "./aps-planning/scripts/init-session.ps1" }
+    )
+}
+
+# --- Build hooks based on mode ---
+
+if ($Mode -ceq "minimal") {
+    $newHooks = [ordered]@{
+        PreToolUse   = @($pretool)
+        Stop         = @($stop, $enforcePlan)
+        SessionStart = @($sessionStart)
+    }
+} else {
+    $newHooks = [ordered]@{
+        PreToolUse   = @($pretool)
+        PostToolUse  = @($posttool)
+        Stop         = @($stop, $enforcePlan)
+        SessionStart = @($sessionStart)
+    }
+}
+
+# --- Idempotent merge: remove existing APS hooks, then add new ones ---
+
+if (-not $settings.Contains("hooks")) {
+    $settings["hooks"] = [ordered]@{}
+}
+
+foreach ($event in $newHooks.Keys) {
+    if (-not $settings["hooks"].Contains($event)) {
+        $settings["hooks"][$event] = @()
+    }
+
+    # Filter out existing APS hooks (idempotent, handles old+new format)
+    $existing = @($settings["hooks"][$event] | Where-Object { -not (Test-ApsHook $_) })
+
+    # Append new APS hooks
+    $settings["hooks"][$event] = @($existing) + @($newHooks[$event])
+}
+
+# --- Write settings back ---
+
+$json = ConvertTo-Json $settings -Depth 10
+Set-Content -Path $SettingsFile -Value $json -NoNewline
+# Append trailing newline
+Add-Content -Path $SettingsFile -Value ""
+
+# --- Ensure session baseline is gitignored ---
+
+$BaselineEntry = ".claude/.aps-session-baseline"
+
+if (Test-Path .gitignore -PathType Leaf) {
+    $gitignoreContent = Get-Content .gitignore -Raw -ErrorAction SilentlyContinue
+    if ($gitignoreContent -notmatch [regex]::Escape($BaselineEntry)) {
+        Add-Content -Path .gitignore -Value ""
+        Add-Content -Path .gitignore -Value "# APS session baseline (ephemeral)"
+        Add-Content -Path .gitignore -Value $BaselineEntry
+        Write-Info "Added $BaselineEntry to .gitignore"
+    }
+} else {
+    Set-Content -Path .gitignore -Value "# APS session baseline (ephemeral)"
+    Add-Content -Path .gitignore -Value $BaselineEntry
+    Write-Info "Created .gitignore with $BaselineEntry"
+}
+
+# --- Summary ---
+
+Write-Info "Installed APS hooks ($Mode mode) into $SettingsFile"
+Write-Host ""
+Write-Host "  Hooks added:"
+
+if ($Mode -ceq "full") {
+    Write-Host "    PreToolUse          - Reminds agent to check plan before code changes"
+    Write-Host "    PostToolUse         - Nudges agent to update specs after changes"
+    Write-Host "    Stop (Completion)   - Blocks session end if work items unresolved"
+    Write-Host "    Stop (Plan Update)  - Blocks session end if code changed but plans untouched"
+    Write-Host "    SessionStart        - Shows planning status at session start"
+} else {
+    Write-Host "    PreToolUse          - Reminds agent to check plan before code changes"
+    Write-Host "    Stop (Completion)   - Blocks session end if work items unresolved"
+    Write-Host "    Stop (Plan Update)  - Blocks session end if code changed but plans untouched"
+    Write-Host "    SessionStart        - Writes session baseline for change detection"
+}
+
+Write-Host ""
+Write-Info "See aps-planning/hooks.md for details on each hook."
