@@ -5,12 +5,11 @@ to plan APS.
 
 ## Quick Overview
 
-| Horizon | Focus |
-|---------|-------|
-| **Current** | Usability — scaffold, templates, docs, validation |
-| **Near Term** | Examples, prompt variants, compound engineering tooling |
-| **Medium Term** | Issue tracker integration, solution search |
-| **Long Term** | GitHub Action, VS Code extension, formal spec |
+| Horizon | Focus | Status |
+|---------|-------|--------|
+| **v0.2 Usability** | Scaffold, templates, docs, validation | Done |
+| **v0.3 Distribution** | Install overhaul, multi-harness agents | Current |
+| **Future** | GitHub Action, VS Code extension, formal spec | Planned |
 
 See [plans/index.aps.md](plans/index.aps.md) for the full breakdown with modules,
 status, and work items.

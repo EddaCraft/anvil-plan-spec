@@ -47,11 +47,14 @@ specs, or action steps.
 
 ## Windows (PowerShell)
 
-There is no one-line PowerShell installer yet. Use the CLI after cloning
-the repo:
+```powershell
+irm https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install.ps1 | iex
+```
+
+To install a specific version:
 
 ```powershell
-.\bin\aps.ps1 init
+$env:VERSION='v0.2.0'; irm https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install.ps1 | iex
 ```
 
 Or follow the [Manual Setup](#manual-setup) steps below.

@@ -1,3 +1,8 @@
+<!-- markdownlint-disable MD041 -->
+[![License](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](LICENSE)
+[![Version](https://img.shields.io/badge/version-0.2.0-green.svg)](https://github.com/EddaCraft/anvil-plan-spec/releases/tag/v0.2.0)
+<!-- markdownlint-enable MD041 -->
+
 # Anvil Plan Spec (APS)
 
 A lightweight specification format for planning and work item authorisation in
@@ -258,8 +263,15 @@ your-project/
 
 ## Versioning
 
-This project does not currently publish versioned releases. The `main` branch
-is considered stable. See [CHANGELOG.md](CHANGELOG.md) for recent changes.
+The current release is **v0.2.0**. See [CHANGELOG.md](CHANGELOG.md) for what's
+included and [Releases](https://github.com/EddaCraft/anvil-plan-spec/releases)
+for downloads.
+
+To install a specific version:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | VERSION=v0.2.0 bash
+```
 
 ## Roadmap
 
