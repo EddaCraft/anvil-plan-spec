@@ -187,7 +187,7 @@ mode agents (users invoke them deliberately, not as the default primary agent).
 - **Confidence:** high
 - **Files:** scaffold/agents/claude-code/aps-librarian.md
 
-### AGENT-003: Port agents to Codex format
+### AGENT-003: Port agents to Codex format — Complete 2026-02-21
 
 - **Intent:** Make APS agents available to Codex users via multi-agent roles
 - **Expected Outcome:** Two deliverables per agent:
@@ -207,7 +207,7 @@ mode agents (users invoke them deliberately, not as the default primary agent).
 - **Confidence:** medium
 - **Dependencies:** AGENT-001, AGENT-002
 
-### AGENT-004: Port agents to Copilot, OpenCode, and Gemini formats
+### AGENT-004: Port agents to Copilot, OpenCode, and Gemini formats — Complete 2026-02-21
 
 - **Intent:** Make APS agents available to Copilot, OpenCode, and Gemini users
   using each tool's native agent or skill format

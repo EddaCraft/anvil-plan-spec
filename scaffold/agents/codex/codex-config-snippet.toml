@@ -1,0 +1,16 @@
+# APS Agent Roles for Codex
+#
+# Merge these blocks into your .codex/config.toml to register the APS agents.
+# Then place aps-planner.toml and aps-librarian.toml in .codex/agents/.
+#
+# Usage:
+#   /agent spawn aps-planner
+#   /agent spawn aps-librarian
+
+[agents.aps-planner]
+model = "o4-mini"
+config_file = ".codex/agents/aps-planner.toml"
+
+[agents.aps-librarian]
+model = "o4-mini"
+config_file = ".codex/agents/aps-librarian.toml"
