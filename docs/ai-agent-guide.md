@@ -40,8 +40,8 @@ When user asks to "set up APS" or "initialize planning":
    - This becomes the agent's reference guide
 
 3. **Create plans/index.aps.md**
-   - Use [docs/ai/prompting/index.prompt.md](ai/prompting/index.prompt.md)
-   - Fill with user's project context
+   - Use [docs/ai/prompting/index.prompt.md](ai/prompting/index.prompt.md) as a guide
+   - Create a new file with the user's project context
    - List initial modules (no work items yet)
 
 4. **Validate structure**
@@ -67,9 +67,9 @@ When user asks to plan a feature or break down work:
    - Large initiative (multiple modules)? → Update index, create leaf modules
 
 3. **Create/update module spec**
-   - Use [docs/ai/prompting/module.prompt.md](ai/prompting/module.prompt.md)
+   - Use [docs/ai/prompting/module.prompt.md](ai/prompting/module.prompt.md) as a guide
    - Name: `plans/modules/[NN-name].aps.md` (numbered by dependency order)
-   - Fill: Problem, Success Criteria, Interfaces, Boundaries
+   - Create a new document with: Problem, Success Criteria, Interfaces, Boundaries
    - **Do NOT write work items yet** — leave empty unless scope is crystal clear
 
 4. **Add work items only when module is Ready**
@@ -115,7 +115,7 @@ When user asks to implement a feature or execute a work item:
    - Write actions with observable checkpoints (max 12 words each)
    - **NO implementation detail** — just what should exist
 
-5. **Implement step-by-step**
+5. **Implement action-by-action**
    - Execute one action at a time
    - Validate checkpoint after each action
    - If checkpoint fails: Debug, fix, validate again
@@ -188,7 +188,7 @@ Before implementing, ask yourself:
 - [ ] Do I understand the Expected Outcome?
 - [ ] Do I know the Validation command?
 - [ ] Have I explored similar code patterns?
-- [ ] Am I writing checkpoints (not implementation steps)?
+- [ ] Am I writing checkpoints (not implementation detail)?
 
 ## When Uncertain
 

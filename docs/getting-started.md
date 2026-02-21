@@ -54,7 +54,7 @@ graph TD
 - Use `simple.template.md` for most features
 - Skip formal modules — go straight to work items
 - Only create an Index if you're planning weeks of work
-- Steps files are optional — use when a work item feels complex
+- Action plans are optional — use when a work item feels complex
 
 **Ready to scaffold?** Run this in your project:
 
@@ -109,30 +109,30 @@ For each module, create a file in `plans/modules/`:
 - `module.template.md` — For modules with interfaces and dependencies
 - `simple.template.md` — For small, self-contained features
 
-Fill in Purpose, Scope, and leave Tasks empty until Ready.
+Fill in Purpose, Scope, and leave Work Items empty until Ready.
 
-### 4. Add Tasks When Ready
+### 4. Add Work Items When Ready
 
-Tasks are **execution authority**. Only add them when:
+Work Items are **execution authority**. Only add them when:
 
 - The module scope is clear
 - Dependencies are resolved
 - You're ready to implement
 
-Each task needs:
+Each work item needs:
 
 - **Intent** — One sentence on what it achieves
 - **Expected Outcome** — Testable result
 - **Validation** — How to verify completion
 
-### 5. Generate Steps (Optional)
+### 5. Create Action Plans (Optional)
 
-For complex tasks, create a steps file in `plans/execution/`.
+For complex work items, create an action plan in `plans/execution/`.
 
-Steps translate "what to achieve" into "what actions to take":
+Action plans translate "what to achieve" into "what actions to take":
 
-- Each step has a **checkpoint** (observable state)
-- Steps describe **what**, not **how**
+- Each action has a **checkpoint** (observable state)
+- Actions describe **what**, not **how**
 
 ### 6. Track Issues & Questions
 
@@ -193,12 +193,12 @@ APS provides three index formats:
 
 APS includes prompts for AI tools:
 
-| Task | Prompt |
-|------|--------|
+| Document | Prompt |
+|----------|--------|
 | Planning | `docs/ai/prompting/index.prompt.md` |
 | Module design | `docs/ai/prompting/module.prompt.md` |
-| Task creation | `docs/ai/prompting/task.prompt.md` |
-| Execution | `docs/ai/prompting/steps.prompt.md` |
+| Work item creation | `docs/ai/prompting/work-item.prompt.md` |
+| Action plans | `docs/ai/prompting/actions.prompt.md` |
 
 OpenCode/Claude users: see `docs/ai/prompting/opencode/` for optimized variants.
 

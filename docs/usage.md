@@ -46,7 +46,7 @@ Errors cause a non-zero exit code. Warnings are informational.
 | Code | Scope | Description |
 |------|-------|-------------|
 | W001 | Work Item | ID does not match `PREFIX-NNN` pattern (e.g., `AUTH-001`) |
-| W003 | Work Item | Dependency references a task ID not found in the same file |
+| W003 | Work Item | Dependency references a work item ID not found in the same file |
 | W004 | Module / Index | Section exists but is empty (`## Purpose`, `## In Scope`, `## Overview`, `## Problem & Success Criteria`, `## Modules`) |
 | W005 | Module | Status is `Ready` but no work items are defined |
 | W010 | Issues | Issue entry missing `Status`, `Discovered`, or `Severity` field |

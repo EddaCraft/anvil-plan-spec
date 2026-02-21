@@ -54,7 +54,7 @@ check_w001_id_format() {
   fi
 }
 
-# W003: Dependency references unknown task ID
+# W003: Dependency references unknown work item ID
 check_w003_dependencies() {
   local file="$1"
   local item_line="$2"
@@ -68,7 +68,7 @@ check_w003_dependencies() {
   ' "$file")
 
   if [[ -n "$deps_line" ]]; then
-    # Extract task IDs from the line (e.g., "AUTH-001, AUTH-002" or just "AUTH-001")
+    # Extract work item IDs from the line (e.g., "AUTH-001, AUTH-002" or just "AUTH-001")
     local dep_ids
     dep_ids=$(echo "$deps_line" | grep -oE '[A-Z]+-[0-9]{3}' || true)
 

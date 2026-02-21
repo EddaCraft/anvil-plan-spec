@@ -18,17 +18,17 @@ guidelines for contributing to the project.
 Use clear, descriptive commit messages:
 
 ```text
-Feat: Add steps template for granular execution
+Feat: Add actions template for granular execution
 
-Steps translate task intent into ordered, observable actions.
-Each step has a checkpoint for verification.
+Actions translate work item intent into ordered, observable checkpoints.
+Each action has a checkpoint for verification.
 
 Closes #12
 ```
 
 ## Scope Guardrails
 
-APS is a specification format for planning and task authorisation.
+APS is a specification format for planning and work item authorisation.
 Contributions should align with this scope.
 
 ### In Scope

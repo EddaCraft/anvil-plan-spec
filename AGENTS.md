@@ -1,7 +1,7 @@
 # AGENTS.md — Anvil-Plan-Spec (APS) Collaboration Rules
 
 This repo defines the Anvil Plan Spec format — templates, prompts, and examples
-for planning and task authorisation in AI-assisted development.
+for planning and work item authorisation in AI-assisted development.
 
 ## What this repo is
 
@@ -10,8 +10,8 @@ APS is a **specification format**, not executable code. It contains:
 ## Execution authority
 
 - **Specs describe intent.**
-- **Tasks authorise execution.**
-- If there is no task, do not implement changes unless explicitly instructed.
+- **Work items authorise execution.**
+- If there is no work item, do not implement changes unless explicitly instructed.
 
 ## Rules for AI contributing to this repo
 
@@ -47,8 +47,8 @@ OpenCode/Claude Opus variants:
 
 ## Roles (conceptual)
 
-- **Planner**: completes index/module docs, identifies decisions
-- **Implementer**: executes one work item at a time
-- **Executor**: follows action plans to complete work items, validates checkpoints
-- **Reviewer**: flags anti-patterns and boundary issues, suggests alternatives
-- **Librarian**: updates ADR links/pattern references and keeps docs consistent
+- **Planner** — completes index/module docs, identifies decisions
+- **Implementer** — executes one work item at a time
+- **Executor** — follows action plans to complete work items, validates checkpoints
+- **Reviewer** — flags anti-patterns and boundary issues, suggests alternatives
+- **Librarian** — updates ADR links/pattern references and keeps docs consistent

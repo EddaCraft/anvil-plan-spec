@@ -13,13 +13,13 @@ I have these APS work items ready for execution:
 
 Assign these to parallel agents with goals:
 1. **Minimize file conflicts** - agents shouldn't edit same files
-2. **Respect dependencies** - blocked tasks go to same agent as blocker
-3. **Balance workload** - distribute tasks roughly evenly
+2. **Respect dependencies** - blocked work items go to same agent as blocker
+3. **Balance workload** - distribute work items roughly evenly
 4. **Domain coherence** - keep related work together
 
 Output an agent assignment table:
-| Agent | Focus Area | Tasks (in order) | Key Files |
-|-------|------------|------------------|-----------|
+| Agent | Focus Area | Work Items (in order) | Key Files |
+|-------|------------|----------------------|-----------|
 ```
 
 ---
@@ -48,8 +48,8 @@ UI-002: Dashboard (deps: UI-001)
 Output:
 
 ```
-| Agent | Focus Area | Tasks (in order) | Key Files |
-|-------|------------|------------------|-----------|
+| Agent | Focus Area | Work Items (in order) | Key Files |
+|-------|------------|----------------------|-----------|
 | Agent A | Auth + Email | AUTH-001 → AUTH-002 | src/auth/, src/db/users.ts, src/email/ |
 | Agent B | Core | CORE-001 | src/config/, src/utils/ |
 | Agent C | UI | UI-001 → UI-002 | src/pages/, src/components/ |
@@ -72,8 +72,8 @@ For monorepo projects with package tags:
 Work items have package tags (Packages field). Assign agents by package
 to completely isolate file access:
 
-| Agent | Package | Tasks |
-|-------|---------|-------|
+| Agent | Package | Work Items |
+|-------|---------|------------|
 
 This ensures zero file conflicts since packages are independent.
 ```
@@ -86,11 +86,11 @@ After assignment, provide the command to start each agent:
 
 ```bash
 # Terminal 1 - Agent A (Auth)
-CLAUDE_CODE_TASK_LIST_ID=project-sprint1 claude -p "Work on AUTH tasks: AUTH-001, AUTH-002"
+CLAUDE_CODE_TASK_LIST_ID=project-sprint1 claude -p "Work on AUTH work items: AUTH-001, AUTH-002"
 
 # Terminal 2 - Agent B (Core)
-CLAUDE_CODE_TASK_LIST_ID=project-sprint1 claude -p "Work on CORE tasks: CORE-001"
+CLAUDE_CODE_TASK_LIST_ID=project-sprint1 claude -p "Work on CORE work items: CORE-001"
 
 # Terminal 3 - Agent C (UI)
-CLAUDE_CODE_TASK_LIST_ID=project-sprint1 claude -p "Work on UI tasks: UI-001, UI-002"
+CLAUDE_CODE_TASK_LIST_ID=project-sprint1 claude -p "Work on UI work items: UI-001, UI-002"
 ```
