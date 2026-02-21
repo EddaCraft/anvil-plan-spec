@@ -75,11 +75,53 @@ cp scaffold/agents/claude-code/aps-librarian.md .claude/agents/
 Or if you installed APS via the scaffold scripts, agents are available in
 `scaffold/agents/claude-code/` within the APS repository.
 
-### Other Tools
+### Copilot
 
-Agent ports for Codex, Copilot, OpenCode, and Gemini are planned for a future
-release. The core agent logic is shared — only the packaging format differs
-per tool.
+Copy to `.github/agents/` in your repository:
+
+```bash
+mkdir -p .github/agents
+cp scaffold/agents/copilot/aps-planner.md .github/agents/
+cp scaffold/agents/copilot/aps-librarian.md .github/agents/
+```
+
+### OpenCode
+
+Copy to `.opencode/agents/` in your project:
+
+```bash
+mkdir -p .opencode/agents
+cp scaffold/agents/opencode/aps-planner.md .opencode/agents/
+cp scaffold/agents/opencode/aps-librarian.md .opencode/agents/
+```
+
+Agents are configured as subagents — invoke via `@aps-planner` or
+`@aps-librarian`.
+
+### Codex
+
+Place the TOML configs and merge the config snippet:
+
+```bash
+mkdir -p .codex/agents
+cp scaffold/agents/codex/aps-planner.toml .codex/agents/
+cp scaffold/agents/codex/aps-librarian.toml .codex/agents/
+```
+
+Then merge `scaffold/agents/codex/codex-config-snippet.toml` into your
+`.codex/config.toml`. Use `/agent spawn aps-planner` to start.
+
+### Gemini
+
+Copy skills and link them:
+
+```bash
+mkdir -p .gemini/skills
+cp -r scaffold/agents/gemini/aps-planner .gemini/skills/
+cp -r scaffold/agents/gemini/aps-librarian .gemini/skills/
+```
+
+Gemini uses skills (not agents) — activate via `activate_skill`.
 
 ## Model Cost
 
@@ -99,6 +141,6 @@ The build script generates tool-specific agents from shared core prompts:
 bash scaffold/agents/build.sh
 ```
 
-This regenerates the Claude Code agents from `scaffold/agents/core/`. When
-adding support for new tools, extend `build.sh` with the appropriate
-frontmatter generation.
+This regenerates all tool variants (Claude Code, Copilot, OpenCode, Codex)
+from `scaffold/agents/core/`. Gemini skills are handwritten since the SKILL.md
+format differs structurally — the build script verifies they exist.
