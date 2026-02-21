@@ -2,7 +2,7 @@
 
 | ID | Owner | Priority | Status |
 |----|-------|----------|--------|
-| AGENT | @aneki | high | Ready |
+| AGENT | @aneki | high | In Progress |
 
 ## Purpose
 
@@ -161,7 +161,7 @@ mode agents (users invoke them deliberately, not as the default primary agent).
 
 ## Work Items
 
-### AGENT-001: Build APS Planner agent (Claude Code)
+### AGENT-001: Build APS Planner agent (Claude Code) — Complete 2026-02-21
 
 - **Intent:** Create the primary Planner agent for Claude Code
 - **Expected Outcome:** `scaffold/agents/claude-code/aps-planner.md` with
@@ -174,7 +174,7 @@ mode agents (users invoke them deliberately, not as the default primary agent).
 - **Confidence:** high
 - **Files:** scaffold/agents/claude-code/aps-planner.md
 
-### AGENT-002: Build APS Librarian agent (Claude Code)
+### AGENT-002: Build APS Librarian agent (Claude Code) — Complete 2026-02-21
 
 - **Intent:** Create the primary Librarian agent for Claude Code
 - **Expected Outcome:** `scaffold/agents/claude-code/aps-librarian.md` with
@@ -231,7 +231,7 @@ mode agents (users invoke them deliberately, not as the default primary agent).
 - **Confidence:** high
 - **Dependencies:** AGENT-001, AGENT-002
 
-### AGENT-005: Create agent documentation
+### AGENT-005: Create agent documentation — In Progress
 
 - **Intent:** Help users understand what each agent does and how to use it in
   their tool of choice
