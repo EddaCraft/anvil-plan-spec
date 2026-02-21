@@ -159,7 +159,7 @@ plans/
 │   ├── 01-core.aps.md
 │   └── 02-auth.aps.md
 ├── execution/                  # Action plans
-│   ├── [WORKITEM-ID].actions.md  # Per-work-item (complex projects)
+│   ├── [WORK-ITEM-ID].actions.md  # Per-work-item (complex projects)
 │   └── [MODULE].actions.md       # Per-module (simple projects)
 └── decisions/                  # ADRs (optional)
     └── [NNN]-[title].md
