@@ -3,7 +3,7 @@
 # Add this to .github/workflows/lint-aps.yml in your project
 #
 # Prerequisites:
-#   1. Initialize APS in your project: curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/init.sh | bash
+#   1. Initialize APS in your project: bash <(curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install)
 #   2. The aps CLI is downloaded automatically by this workflow
 
 name: Lint APS Documents
@@ -34,6 +34,7 @@ jobs:
           curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/lib/rules/module.sh -o lib/rules/module.sh
           curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/lib/rules/index.sh -o lib/rules/index.sh
           curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/lib/rules/workitem.sh -o lib/rules/workitem.sh
+          curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/lib/rules/issues.sh -o lib/rules/issues.sh
           chmod +x bin/aps
 
       - name: Lint APS documents

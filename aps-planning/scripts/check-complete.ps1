@@ -1,18 +1,16 @@
-# APS Completion Checker (PowerShell)
+# APS Completion Checker
 # Verifies that all In Progress work items and action plans have been completed.
 # Use as a Stop hook or run before ending a session.
 #
-# Usage: .\aps-planning\scripts\check-complete.ps1 [plans-dir]
+# Usage: ./aps-planning/scripts/check-complete.ps1 [plans-dir]
 #
 # Exit codes:
-#   0 - All work items resolved (none in progress)
-#   1 - Work items or action plans still in progress
+#   0 — All work items resolved (or JSON decision returned)
+#   2 — Work items still in progress (blocks Claude from stopping)
 
 param(
     [string]$PlansDir = "plans"
 )
-
-$ErrorActionPreference = "Stop"
 
 # If no plans directory, nothing to check
 if (-not (Test-Path $PlansDir -PathType Container)) {
@@ -20,33 +18,44 @@ if (-not (Test-Path $PlansDir -PathType Container)) {
 }
 
 $incomplete = 0
-$complete = 0
+$complete   = 0
 
 # Check all APS files for work item status
 $searchPaths = @()
-$modulesDir = Join-Path $PlansDir "modules"
-if (Test-Path $modulesDir -PathType Container) {
-    $searchPaths += Get-ChildItem (Join-Path $modulesDir "*.aps.md") -ErrorAction SilentlyContinue
+$modulesGlob = Join-Path $PlansDir "modules" "*.aps.md"
+$rootGlob    = Join-Path $PlansDir "*.aps.md"
+
+foreach ($glob in @($modulesGlob, $rootGlob)) {
+    foreach ($f in Get-ChildItem $glob -File -ErrorAction SilentlyContinue) {
+        $searchPaths += $f
+    }
 }
-$searchPaths += Get-ChildItem (Join-Path $PlansDir "*.aps.md") -ErrorAction SilentlyContinue
 
 foreach ($f in $searchPaths) {
-    if ($f.Name -match '^\.') { continue }
-    if ($f.Name -match '^index') { continue }
+    # Skip hidden template files
+    if ($f.Name -cmatch '^\.') { continue }
+    # Skip index
+    if ($f.Name -cmatch '^index') { continue }
 
+    # Parse work items and their statuses
     $currentItem = ""
-    foreach ($line in (Get-Content $f.FullName)) {
-        if ($line -match '^### ([A-Z]+-[0-9]+: .+)$') {
-            $currentItem = $Matches[1]
+    $content = Get-Content $f.FullName -ErrorAction SilentlyContinue
+    foreach ($line in $content) {
+        if ($line -cmatch '^### [A-Z]+-[0-9]+:') {
+            $currentItem = $line -creplace '^### ', '' -creplace ' *$', ''
         }
 
         if ($currentItem) {
-            if ($line -match '(?i)\*\*Status:\*\* *In Progress|Status: *In Progress') {
-                Write-Host "Still in progress: $currentItem ($($f.Name))" -ForegroundColor Yellow
+            # Check for In Progress status (matches both **Status:** and Status: formats)
+            if ($line -imatch '\*\*Status:\*\* *In Progress|Status: *In Progress') {
+                $fileName = Split-Path $f.FullName -Leaf
+                Write-Host "Still in progress: " -ForegroundColor Yellow -NoNewline
+                Write-Host "$currentItem ($fileName)"
                 $incomplete++
                 $currentItem = ""
             }
-            elseif ($line -match '(?i)\*\*Status:\*\* *Complete|Status: *Complete') {
+            # Check for Complete status (matches both **Status:** and Status: formats)
+            elseif ($line -imatch '\*\*Status:\*\* *Complete|Status: *Complete') {
                 $complete++
                 $currentItem = ""
             }
@@ -55,14 +64,18 @@ foreach ($f in $searchPaths) {
 }
 
 # Check action plans for incomplete checkpoints (only In Progress ones)
-$execDir = Join-Path $PlansDir "execution"
-if (Test-Path $execDir -PathType Container) {
-    foreach ($f in Get-ChildItem (Join-Path $execDir "*.actions.md") -ErrorAction SilentlyContinue) {
-        $content = Get-Content $f.FullName -Raw
-        if ($content -match '(?i)^\| *Status *\|.*(In Progress|In-Progress)') {
-            $unchecked = (Select-String -Path $f.FullName -Pattern '^ *- \[ \]' -AllMatches).Matches.Count
+$executionDir = Join-Path $PlansDir "execution"
+if (Test-Path $executionDir -PathType Container) {
+    foreach ($f in Get-ChildItem (Join-Path $executionDir "*.actions.md") -File -ErrorAction SilentlyContinue) {
+        $content = Get-Content $f.FullName -ErrorAction SilentlyContinue
+        # Check if this action plan is In Progress
+        $isInProgress = $content | Where-Object { $_ -imatch '^\| *Status *\|.*(In Progress|In-Progress)' }
+        if ($isInProgress) {
+            $unchecked = ($content | Where-Object { $_ -match '^ *- \[ \]' }).Count
             if ($unchecked -gt 0) {
-                Write-Host "Unchecked items: $unchecked in $($f.Name)" -ForegroundColor Yellow
+                $fileName = Split-Path $f.FullName -Leaf
+                Write-Host "Unchecked items: " -ForegroundColor Yellow -NoNewline
+                Write-Host "$unchecked in $fileName"
                 $incomplete++
             }
         }
@@ -70,23 +83,18 @@ if (Test-Path $execDir -PathType Container) {
 }
 
 if ($incomplete -gt 0) {
-    Write-Host ""
-    Write-Host "Session incomplete. $incomplete item(s) still need attention." -ForegroundColor Red
+    # Exit 2 blocks Claude from stopping. stderr is fed back to Claude.
+    [Console]::Error.WriteLine("Session incomplete. $incomplete item(s) still need attention.")
     if ($complete -gt 0) {
-        Write-Host "Session status: $complete complete, $incomplete incomplete" -ForegroundColor Green
+        [Console]::Error.WriteLine("Session status: $complete complete, $incomplete incomplete")
     }
-    Write-Host ""
-    Write-Host "Before ending this session:"
-    Write-Host "  1. Complete or explicitly mark items as Blocked"
-    Write-Host "  2. Update work item statuses in the module spec"
-    Write-Host "  3. Add any discovered work as Draft items"
-    Write-Host "  4. Commit APS changes to git"
-    exit 1
+    [Console]::Error.WriteLine("")
+    [Console]::Error.WriteLine("Before ending this session:")
+    [Console]::Error.WriteLine("  1. Complete or explicitly mark items as Blocked")
+    [Console]::Error.WriteLine("  2. Update work item statuses in the module spec")
+    [Console]::Error.WriteLine("  3. Add any discovered work as Draft items")
+    [Console]::Error.WriteLine("  4. Commit APS changes to git")
+    exit 2
 } else {
-    if ($complete -gt 0) {
-        Write-Host "All work items resolved. $complete item(s) complete. Session can end cleanly." -ForegroundColor Green
-    } else {
-        Write-Host "All work items resolved. Session can end cleanly." -ForegroundColor Green
-    }
     exit 0
 }
