@@ -113,15 +113,17 @@ Then merge `scaffold/agents/codex/codex-config-snippet.toml` into your
 
 ### Gemini
 
-Copy skills and link them:
+Copy skills and register them:
 
 ```bash
 mkdir -p .gemini/skills
 cp -r scaffold/agents/gemini/aps-planner .gemini/skills/
 cp -r scaffold/agents/gemini/aps-librarian .gemini/skills/
+gemini skills link . --scope workspace
 ```
 
-Gemini uses skills (not agents) — activate via `activate_skill`.
+Gemini skills are not auto-discovered — the `gemini skills link` step is
+required. Without it, the copied files won't be available.
 
 ## Model Cost
 
