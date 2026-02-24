@@ -12,7 +12,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 CORE_DIR="$SCRIPT_DIR/core"
 
-info() { echo -e "\033[0;32mags:\033[0m $1"; }
+info() { echo -e "\033[0;32minfo:\033[0m $1"; }
 warn() { echo -e "\033[1;33mwarn:\033[0m $1" >&2; }
 
 # Verify core files exist
