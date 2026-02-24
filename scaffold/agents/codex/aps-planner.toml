@@ -5,7 +5,7 @@
 #
 # Usage: /agent spawn aps-planner
 
-sandbox_mode = "full"
+sandbox_mode = "workspace-write"
 
 developer_instructions = """
 # APS Planner

@@ -125,7 +125,7 @@ generate_codex() {
     echo "#"
     echo "# Usage: /agent spawn $name"
     echo ""
-    echo 'sandbox_mode = "full"'
+    echo 'sandbox_mode = "workspace-write"'
     echo ""
     echo 'developer_instructions = """'
     echo "$core_content"
