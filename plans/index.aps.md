@@ -55,6 +55,7 @@ APS needs continued development to:
 | [prompts](./modules/prompts.aps.md) | Tool-specific prompt variants | Draft |
 | [compound](./modules/compound.aps.md) | Review/Learn phase tooling | Draft |
 | [integrations](./modules/integrations.aps.md) | JSON export, GitHub sync | Draft |
+| [orchestrate](./modules/orchestrate.aps.md) | CLI + MCP plan navigation (alternative to tasks) | Draft |
 
 ### Long Term
 
