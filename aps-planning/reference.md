@@ -21,6 +21,7 @@ Index (non-executable overview)
 
 | You need... | Use | File pattern |
 |-------------|-----|--------------|
+| Technical design for complex work | Design | `designs/YYYY-MM-DD-slug.design.md` |
 | Quick feature (1-3 items) | Simple | `feature.aps.md` |
 | Bounded area with interfaces | Module | `NN-name.aps.md` |
 | Multi-module initiative | Index + Modules | `index.aps.md` + `modules/` |
@@ -80,6 +81,9 @@ Every work item **must** have:
 ## File Layout
 
 ```
+designs/                          # Technical designs (optional, project root)
+└── YYYY-MM-DD-slug.design.md
+
 plans/
 ├── aps-rules.md              # Agent guidance
 ├── index.aps.md              # Root plan
@@ -91,8 +95,29 @@ plans/
     └── NNN-title.md          # ADRs
 ```
 
+## Design Document Format
+
+Minimum fields for a design doc (warnings only — free-form is accepted):
+
+```markdown
+# [Design Title]
+
+| Field | Value |
+|-------|-------|
+| Status | Draft / Approved / Superseded |
+| Created | YYYY-MM-DD |
+| Modules | [module-id](plans/modules/NN-name.aps.md) |
+
+## Problem
+[What problem does this design address?]
+
+## Design
+[Architecture, approach, data flow]
+```
+
 ## Naming Rules
 
+- Design docs: `YYYY-MM-DD-slug.design.md` (in `designs/`)
 - Module files: zero-padded prefix by dependency order (`01-`, `02-`)
 - Work item IDs: module prefix + three digits (`AUTH-001`)
 - Action plans: `WORK-ITEM-ID.actions.md` or `MODULE.actions.md`
@@ -118,3 +143,6 @@ plans/
 | W003 | Dependency references unknown work item ID |
 | W004 | Empty required section |
 | W005 | Status=Ready but no work items defined |
+| W014 | Design doc missing `## Problem` section |
+| W015 | Design doc missing `## Design` section |
+| W016 | Design doc missing metadata table with Status |

@@ -15,6 +15,7 @@ Start here. Pick based on what you're trying to do:
 | **Large initiative** (6+ modules) | [index-expanded](../templates/index-expanded.template.md) | 1-2 hours |
 | **Monorepo** (multiple packages/apps) | [index-monorepo](../templates/index-monorepo.template.md) | 1-2 hours |
 | **Breaking a work item into actions** | [actions](../templates/actions.template.md) | 15 minutes |
+| **Technical/architectural design** | [design](../templates/design.template.md) | 30 minutes |
 | **Tracking dev-time discoveries** | [issues](../templates/issues.template.md) | 10 minutes |
 
 ### Decision Tree
@@ -81,6 +82,8 @@ If you prefer manual setup over the scaffold script:
 
 ```text
 your-project/
+├── designs/                   # Technical designs (optional)
+│   └── 2025-01-05-auth.design.md
 ├── plans/
 │   ├── index.aps.md           # Your main plan
 │   ├── issues.md              # Development-time discoveries
@@ -111,7 +114,20 @@ For each module, create a file in `plans/modules/`:
 
 Fill in Purpose, Scope, and leave Work Items empty until Ready.
 
-### 4. Add Work Items When Ready
+### 4. Write a Design (Optional)
+
+For complex or multi-module work where the architecture isn't obvious, create a
+design doc in `designs/` before defining work items:
+
+- Use [design.template.md](../templates/design.template.md) as a starting point
+- Name it `YYYY-MM-DD-slug.design.md`
+- Focus on the Problem, approach, and key Decisions
+- Link to the modules it covers via the metadata table
+
+Skip this for straightforward features, bug fixes, or work where the approach is
+already established.
+
+### 5. Add Work Items When Ready
 
 Work Items are **execution authority**. Only add them when:
 
@@ -125,7 +141,7 @@ Each work item needs:
 - **Expected Outcome** — Testable result
 - **Validation** — How to verify completion
 
-### 5. Generate Action Plans (Optional)
+### 6. Generate Action Plans (Optional)
 
 For complex work items, create an actions file in `plans/execution/`.
 
@@ -134,7 +150,7 @@ Action plans translate "what to achieve" into "what actions to take":
 - Each step has a **checkpoint** (observable state)
 - Steps describe **what**, not **how**
 
-### 6. Track Issues & Questions
+### 7. Track Issues & Questions
 
 As you develop, you'll discover issues and questions that emerge during implementation — things that weren't apparent during planning. Log these in `plans/issues.md`:
 

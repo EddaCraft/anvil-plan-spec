@@ -57,14 +57,16 @@ Before planning, understand what exists:
 1. Check: Does plans/ directory exist?
 2. Check: Does plans/index.aps.md exist?
 3. Check: Are there module files in plans/modules/?
-4. Read plans/aps-rules.md if present (agent guidance)
-5. Identify: Is this new work or continuing existing work?
+4. Check: Are there design docs in designs/?
+5. Read plans/aps-rules.md if present (agent guidance)
+6. Identify: Is this new work or continuing existing work?
 ```
 
 ### 2. Plan (pick the right template)
 
 | Situation | Action |
 |-----------|--------|
+| Complex architecture needing review | Create a Design doc in `designs/` |
 | Quick feature (1-3 items) | Create a Simple spec |
 | Bounded work area with interfaces | Create a Module spec |
 | Multi-module initiative | Create an Index + Modules |
@@ -197,6 +199,9 @@ When you notice yourself:
 ## File Layout
 
 ```
+designs/                          # Technical designs (optional, project root)
+└── YYYY-MM-DD-slug.design.md     # Architecture/approach documents
+
 plans/
 ├── aps-rules.md              # Agent guidance (read first)
 ├── index.aps.md              # Root plan (if multi-module)
@@ -207,6 +212,16 @@ plans/
 │   └── AUTH-001.actions.md
 └── decisions/                # Architecture decisions (optional)
 ```
+
+## Design Document Normalisation
+
+When you encounter a design doc in `designs/` that's missing standard sections:
+
+1. Don't reject it — any markdown in `designs/` is a valid design
+2. Add the minimum fields: `## Problem`, `## Design`, and Status metadata table
+3. Don't rewrite the author's content — append missing sections or infer from
+   existing content
+4. This can happen in the background, after the main planning/execution work
 
 ## Work Item Format
 

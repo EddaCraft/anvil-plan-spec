@@ -16,7 +16,7 @@ Plan → Execute → Validate → Learn → Plan again
 
 | Phase | What Happens | APS Artefacts | How It Serves Planning |
 |-------|--------------|---------------|------------------------|
-| **Plan** | Define scope and success | Index, Modules, Work Items | Reference past patterns and solutions |
+| **Plan** | Define scope and success | Designs, Index, Modules, Work Items | Reference past patterns and solutions |
 | **Execute** | Work against specs | Action Plans, status updates | Clean implementation from clear specs |
 | **Validate** | Check outcomes against spec | Review notes, checklist | Verify plan was correct, update if not |
 | **Learn** | Document solutions | Solution docs in `docs/solutions/` | Future plans start with known answers |
@@ -40,7 +40,12 @@ You've been asked to add user authentication to an existing app.
    touches login/logout, session management, password reset, maybe OAuth.
    That's at least 2 modules — create an Index.
 
-2. **Create the Index:**
+2. **Write a design (optional).** If the architecture is non-obvious or you're
+   comparing approaches (JWT vs sessions, bcrypt vs argon2), write a design doc
+   in `designs/`. This captures the "why this approach" thinking before you
+   commit to modules and work items.
+
+3. **Create the Index:**
 
    ```markdown
    # Add User Authentication
@@ -60,13 +65,13 @@ You've been asked to add user authentication to an existing app.
    | [session](./modules/session.aps.md) | Token management | Draft |
    ```
 
-3. **Draft the modules.** Create `auth.aps.md` with Purpose and Scope. Leave
+4. **Draft the modules.** Create `auth.aps.md` with Purpose and Scope. Leave
    Work Items empty — you're still exploring.
 
-4. **Get approval.** Share the Index with your team or reviewer. Discuss
+5. **Get approval.** Share the Index with your team or reviewer. Discuss
    scope, dependencies, risks.
 
-5. **Move to Ready.** Once approved, change module status to Ready and add Work Items:
+6. **Move to Ready.** Once approved, change module status to Ready and add Work Items:
 
    ```markdown
    ## Work Items
@@ -77,7 +82,7 @@ You've been asked to add user authentication to an existing app.
    - **Validation:** curl test returns 201
    ```
 
-6. **Execute.** Work through work items. If a work item is complex, create a Action Plan file.
+7. **Execute.** Work through work items. If a work item is complex, create a Action Plan file.
 
 ---
 

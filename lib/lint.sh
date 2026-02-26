@@ -33,6 +33,12 @@ get_file_type() {
     return
   fi
 
+  # Design files (in designs/ directory)
+  if [[ "$file" == *"/designs/"* && "$basename" == *.design.md ]]; then
+    echo "design"
+    return
+  fi
+
   # Actions files
   if [[ "$file" == *"/execution/"* && "$basename" == *.actions.md ]]; then
     echo "actions"
@@ -59,8 +65,8 @@ get_file_type() {
 find_aps_files() {
   local dir="$1"
 
-  # Find .aps.md, .actions.md, and issues.md files, excluding dotfiles
-  find "$dir" -type f \( -name "*.aps.md" -o -name "*.actions.md" -o -name "issues.md" \) ! -name ".*" 2>/dev/null | sort
+  # Find .aps.md, .actions.md, .design.md, and issues.md files, excluding dotfiles
+  find "$dir" -type f \( -name "*.aps.md" -o -name "*.actions.md" -o -name "*.design.md" -o -name "issues.md" \) ! -name ".*" 2>/dev/null | sort
 }
 
 # Lint a single file
@@ -82,6 +88,9 @@ lint_file() {
       ;;
     issues)
       lint_issues "$file"
+      ;;
+    design)
+      lint_design "$file"
       ;;
     actions)
       # Actions files have minimal validation for now
@@ -161,6 +170,16 @@ EOF
     while IFS= read -r file; do
       files+=("$file")
     done < <(find_aps_files "$target")
+
+    # Also scan designs/ when the target is specifically plans/
+    # (find_aps_files already recurses, so this only adds the sibling designs/ dir)
+    if [[ "$target" == "plans" || "$target" == "plans/" ]]; then
+      if [[ -d "designs" ]]; then
+        while IFS= read -r file; do
+          files+=("$file")
+        done < <(find_aps_files "designs")
+      fi
+    fi
   fi
 
   if [[ ${#files[@]} -eq 0 ]]; then

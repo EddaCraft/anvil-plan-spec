@@ -18,6 +18,10 @@ Add user authentication to an existing web application. Users should be able to 
 - [ ] Protected routes reject unauthenticated requests
 - [ ] Sessions persist across browser refreshes
 
+## Designs
+
+- [Auth Architecture](./designs/2025-01-05-auth-architecture.design.md) — JWT + refresh token strategy, module boundaries
+
 ## Constraints
 
 - Must use existing PostgreSQL database
