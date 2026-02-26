@@ -229,70 +229,144 @@ need less human intervention between steps.
 
 ---
 
-## 4. Design Space for APS
+## 4. The Gap APS Could Fill
 
-APS already follows BMAD's philosophy more closely than Overseer's: markdown is
-truth, no runtime dependencies, specs are portable. The gap is between:
+### What BMAD gets right and wrong
 
-- **Current state:** Agents re-read specs and make decisions; no programmatic
-  dependency resolution; no `nextReady()`; state transitions are freetext
-  markdown updates
-- **Desired state:** Agents can self-drive through a plan; dependencies are
-  resolved programmatically; state transitions are validated; learnings compound
+BMAD nails the philosophy: no runtime dependencies, files are truth, any LLM
+can participate. But it has no programmatic safety net. When the Dev agent is
+told "pick the next story from sprint-status.yaml," it reads a YAML file and
+makes a judgment call. If it misreads a dependency, skips a blocked story, or
+marks something done that isn't — nothing catches it. The entire workflow
+depends on prompt quality and the LLM paying attention. At scale (19+ agents,
+50+ workflows), this is a real fragility. BMAD compensates with extremely
+detailed prompts and `critical_actions` constraints, but it's guardrails on
+guardrails with no ground truth check.
 
-### Three Approaches
+### What Overseer gets right and wrong
 
-**A. Pure BMAD-style (prompt-only orchestration)**
+Overseer nails the programmatic layer: `nextReady()` resolves a real dependency
+graph, state transitions are enforced, learnings propagate. But it introduces
+a database that becomes the real source of truth, with markdown as a lossy
+export. If the SQLite state and the plan description drift, you have two
+sources of truth and no clear winner. It also requires a Rust binary and MCP —
+not portable, not inspectable by humans, not versionable in git. The database
+solves the "LLM makes mistakes" problem but creates a "humans can't see the
+state" problem.
 
-Build a Conductor agent that knows APS rules. No new tooling — the LLM scans
-specs, resolves dependencies, and drives execution. Works everywhere.
+### Where APS sits today
 
-Limitation: No programmatic validation. The LLM may misread dependencies or
-skip state transitions. Everything depends on prompt quality.
+APS has the specs right — modules, work items, dependencies, status fields,
+action plans. All in portable markdown, all git-versioned. But there's a
+practical gap when an agent is actually executing:
 
-**B. Pure Overseer-style (programmatic engine)**
+1. **"What's next?" requires scanning.** An agent starting a session has to
+   read every module, find items where status=Ready, check each item's
+   dependencies against other items' statuses, and pick one. That's 3-5 file
+   reads and a mental join across them. LLMs do this unreliably — they miss
+   items, misread statuses, or pick something whose dependency isn't actually
+   complete yet.
 
-Build an APS MCP server with SQLite state, `nextReady()`, branch management.
-Maximum automation.
+2. **State transitions aren't enforced.** Nothing prevents an agent from
+   marking AUTH-003 as Complete when AUTH-002 (its dependency) is still Draft.
+   Nothing prevents skipping "In Progress" and going straight to Complete.
+   APS describes valid states in aps-rules.md, but the LLM has to remember
+   and follow the rules every time.
 
-Limitation: Introduces runtime dependency. Markdown and database can drift.
-Less portable. Basically building Overseer with a different schema.
+3. **Context is scattered.** When starting AUTH-003, an agent needs: the work
+   item intent, the module scope, relevant decisions, what was learned from
+   AUTH-001 and AUTH-002, and the file paths involved. Today the agent has to
+   manually assemble this from multiple files. BMAD solved this with
+   self-contained "story files." Overseer solved it with progressive context
+   injection. APS has no equivalent.
 
-**C. Synthesis: CLI on markdown (recommended)**
+4. **Learnings don't compound.** When an agent finishes a work item and
+   discovers something useful ("the token library requires explicit algorithm
+   whitelisting"), there's nowhere structured to capture that insight so the
+   next work item benefits. The Compound module proposes solution docs, but
+   that's for cross-project knowledge — there's no in-plan learning loop.
 
-Layer lightweight CLI tooling on existing markdown specs. The markdown IS the
-database. The CLI provides a programmatic interface to parse, query, and update
-it. Optional MCP server wraps the CLI for agents that support MCP.
+### The gap in one sentence
+
+**APS has the data for orchestration but no programmatic interface to it.** The
+dependency graph exists in markdown. The state machine exists in aps-rules.md.
+The context exists across module files. But there's no `nextReady()` to query
+the graph, no `start()` to enforce transitions, no `context()` to assemble
+a briefing, and no `learn()` to capture insights.
+
+Neither BMAD nor Overseer fills this gap well. BMAD doesn't have the
+programmatic layer at all. Overseer has it but abandons markdown as truth.
+
+### Recommendation: CLI on markdown
+
+The synthesis is to build a thin CLI that treats markdown as a queryable
+database. The parser already exists (VAL module). The data model already exists
+(APS spec format). The gap is a handful of commands that parse the specs and
+return structured answers.
 
 ```
 ┌──────────────────────┐
-│  APS Markdown Specs   │  Source of truth (always)
+│  APS Markdown Specs   │  Source of truth (always, git-versioned)
 └──────────┬───────────┘
-           │
+           │ parse + write back
      ┌─────┼─────────────────┐
      │     │                 │
 ┌────▼───┐ ┌──▼────┐  ┌──────▼───┐
 │Conductor│ │aps CLI│  │MCP Server│
 │ Agent   │ │(shell)│  │(optional)│
-│Any tool │ │Any    │  │MCP tools │
+│(prompt) │ │       │  │          │
 └─────────┘ └───────┘  └──────────┘
      │          │            │
      └──────────┼────────────┘
                 │
      ┌──────────▼───────────┐
      │  Agent Execution      │
-     │  Planner/Implementer  │
+     │  (any tool, any LLM)  │
      └──────────────────────┘
 ```
 
-Key properties:
-- **Markdown stays canonical** — CLI reads from and writes back to `.aps.md`
-- **No drift** — there is no separate database to sync
-- **Portable by default** — Conductor agent works everywhere; CLI works
-  everywhere; MCP is optional enhancement
-- **Progressive enhancement** — start with CLI; add MCP later; add VCS later
-- **BMAD insight applied** — the LLM is the best orchestrator; give it tools
-- **Overseer insight applied** — programmatic `nextReady()` catches mistakes
+What this gives you:
+
+- **`aps next`** — resolves the dependency graph and returns the next ready
+  item. No more scanning. No more missed dependencies. An agent or human calls
+  one command and gets a definitive answer.
+- **`aps start <ID>`** — enforces the Ready → In Progress transition, rejects
+  invalid moves, optionally assembles a context package and creates a VCS
+  branch. The agent gets everything it needs in one call.
+- **`aps complete <ID>`** — enforces In Progress → Complete, rejects skipped
+  states, prompts for an optional learning. The state machine is now real, not
+  aspirational.
+- **`aps learn <ID> "insight"`** — attaches a learning to the work item and
+  propagates it to the module. When the next item starts, its context package
+  includes prior learnings.
+- **`aps graph`** — renders the dependency graph with status. Humans get
+  visibility; agents get structure.
+
+What this preserves:
+
+- **Markdown stays canonical.** The CLI reads `.aps.md` files and writes
+  changes back to them. There is no database, no separate state store, nothing
+  that can drift. `git diff` shows every state change.
+- **Fully optional.** The CLI is additive. Agents and humans can always work
+  directly with markdown. The CLI just makes it faster and less error-prone.
+  Projects that don't want the CLI lose nothing.
+- **Tool-agnostic.** The CLI runs in any shell. An optional MCP server wraps
+  it for MCP-capable agents. A Conductor agent wraps it in prompts for tools
+  that don't have MCP. Every tool gets something.
+- **Progressive enhancement.** Phase 1 is `next` + `start` + `complete`
+  (the core loop). Phase 2 adds context packaging and graph visualization.
+  Phase 3 adds MCP and the Conductor agent. Each phase is independently
+  useful.
+
+What this avoids:
+
+- **No database.** Overseer's SQLite is powerful but creates drift risk. We
+  skip it entirely — markdown is structured enough to query directly.
+- **No daemon.** BMAD's event-driven proposals (agents listening for file
+  changes) add complexity APS doesn't need. Explicit commands are simpler.
+- **No lock-in.** The CLI doesn't require MCP, doesn't require a specific
+  AI tool, doesn't require a specific LLM. It's shell commands that parse
+  markdown.
 
 ---
 
