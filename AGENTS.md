@@ -7,6 +7,11 @@ for planning and task authorisation in AI-assisted development.
 
 APS is a **specification format**, not executable code. It contains:
 
+- Templates for plans, modules, work items, action plans, and **design documents**
+- Prompts for AI agents
+- Examples and documentation
+- A CLI for validation (linting)
+
 ## Execution authority
 
 - **Specs describe intent.**

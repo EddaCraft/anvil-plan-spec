@@ -20,6 +20,9 @@ function Get-ApsFileType {
     # Issues tracker
     if ($name -eq "issues.md") { return "issues" }
 
+    # Design files (in designs/ directory)
+    if ($FilePath -match '[/\\]designs[/\\]' -and $name -match '\.design\.md$') { return "design" }
+
     # Actions files
     if ($FilePath -match '[/\\]execution[/\\]' -and $name -match '\.actions\.md$') { return "actions" }
 
@@ -37,7 +40,7 @@ function Find-ApsFiles {
     Get-ChildItem -Path $Directory -Recurse -File -ErrorAction SilentlyContinue |
         Where-Object {
             -not $_.Name.StartsWith('.') -and
-            ($_.Name -match '\.aps\.md$' -or $_.Name -match '\.actions\.md$' -or $_.Name -eq 'issues.md')
+            ($_.Name -match '\.aps\.md$' -or $_.Name -match '\.actions\.md$' -or $_.Name -match '\.design\.md$' -or $_.Name -eq 'issues.md')
         } |
         Sort-Object FullName |
         ForEach-Object { $_.FullName }
@@ -54,6 +57,7 @@ function Invoke-ApsFileLint {
         "module"   { return (Invoke-ApsModuleLint -File $File) }
         "simple"   { return (Invoke-ApsModuleLint -File $File) }
         "issues"   { return (Invoke-ApsIssuesLint -File $File) }
+        "design"   { return (Invoke-ApsDesignLint -File $File) }
         "actions"  { return $true }
         "template" { return $true }
         default {
@@ -82,6 +86,13 @@ function Invoke-ApsLint {
         $files = @($Target)
     } else {
         $files = @(Find-ApsFiles -Directory $Target)
+
+        # Also scan designs/ when the target is specifically plans/
+        if ($Target -eq "plans" -or $Target -eq "plans/" -or $Target -eq "plans\") {
+            if (Test-Path -LiteralPath "designs" -PathType Container) {
+                $files += @(Find-ApsFiles -Directory "designs")
+            }
+        }
     }
 
     if ($files.Count -eq 0) {

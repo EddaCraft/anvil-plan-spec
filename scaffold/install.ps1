@@ -142,6 +142,7 @@ $cliFilesBash = @(
     "lib/rules/index.sh"
     "lib/rules/workitem.sh"
     "lib/rules/issues.sh"
+    "lib/rules/design.sh"
 )
 
 $cliFilesPowerShell = @(
@@ -154,6 +155,7 @@ $cliFilesPowerShell = @(
     "lib/rules/Index.psm1"
     "lib/rules/WorkItem.psm1"
     "lib/rules/Issues.psm1"
+    "lib/rules/Design.psm1"
 )
 
 foreach ($f in $cliFilesBash) {
@@ -171,6 +173,7 @@ Write-Step "Creating directory structure"
 New-Item -ItemType Directory -Path (Join-Path $PlansDir "modules") -Force | Out-Null
 New-Item -ItemType Directory -Path (Join-Path $PlansDir "execution") -Force | Out-Null
 New-Item -ItemType Directory -Path (Join-Path $PlansDir "decisions") -Force | Out-Null
+New-Item -ItemType Directory -Path (Join-Path $Target "designs") -Force | Out-Null
 
 # --- Download templates ---
 
@@ -193,6 +196,9 @@ Write-Info "modules/.index-monorepo.template.md"
 
 Invoke-Download -Path "plans/execution/.steps.template.md" -Destination (Join-Path $PlansDir (Join-Path "execution" ".steps.template.md"))
 Write-Info "execution/.steps.template.md"
+
+Invoke-Download -Path "designs/.design.template.md" -Destination (Join-Path $Target (Join-Path "designs" ".design.template.md"))
+Write-Info "designs/.design.template.md"
 
 $gitkeep = Join-Path $PlansDir (Join-Path "decisions" ".gitkeep")
 New-Item -ItemType File -Path $gitkeep -Force | Out-Null
@@ -249,6 +255,9 @@ Write-Host ""
 Write-Host "  bin/"
 Write-Host "  +-- aps                              <- CLI (bash)"
 Write-Host "  +-- aps.ps1                          <- CLI (PowerShell)"
+Write-Host ""
+Write-Host "  designs/"
+Write-Host "  +-- .design.template.md              <- Template for technical designs"
 Write-Host ""
 Write-Host "  plans/"
 Write-Host "  +-- aps-rules.md              # Agent guidance"

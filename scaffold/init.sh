@@ -119,6 +119,7 @@ install_cli() {
     "lib/rules/module.sh"
     "lib/rules/index.sh"
     "lib/rules/workitem.sh"
+    "lib/rules/design.sh"
   )
 
   for f in "${cli_files[@]}"; do
@@ -229,6 +230,7 @@ if [[ "$UPDATE_MODE" == true ]]; then
   mkdir -p "$PLANS_DIR/modules"
   mkdir -p "$PLANS_DIR/execution"
   mkdir -p "$PLANS_DIR/decisions"
+  mkdir -p "$TARGET/designs"
 
   # CLI
   install_cli "$TARGET"
@@ -240,8 +242,9 @@ if [[ "$UPDATE_MODE" == true ]]; then
   copy_or_download "scaffold/plans/modules/.simple.template.md" "$PLANS_DIR/modules/.simple.template.md"
   copy_or_download "scaffold/plans/modules/.index-monorepo.template.md" "$PLANS_DIR/modules/.index-monorepo.template.md"
   copy_or_download "scaffold/plans/execution/.steps.template.md" "$PLANS_DIR/execution/.steps.template.md"
+  copy_or_download "scaffold/designs/.design.template.md" "$TARGET/designs/.design.template.md"
 
-  info "plans/ (templates, rules)"
+  info "plans/ + designs/ (templates, rules)"
 
   # Skill and commands
   install_skill "$TARGET"
@@ -274,6 +277,7 @@ else
   mkdir -p "$PLANS_DIR/modules"
   mkdir -p "$PLANS_DIR/execution"
   mkdir -p "$PLANS_DIR/decisions"
+  mkdir -p "$TARGET/designs"
 
   copy_or_download "scaffold/plans/aps-rules.md" "$PLANS_DIR/aps-rules.md"
   copy_or_download "scaffold/plans/index.aps.md" "$PLANS_DIR/index.aps.md"
@@ -281,10 +285,11 @@ else
   copy_or_download "scaffold/plans/modules/.simple.template.md" "$PLANS_DIR/modules/.simple.template.md"
   copy_or_download "scaffold/plans/modules/.index-monorepo.template.md" "$PLANS_DIR/modules/.index-monorepo.template.md"
   copy_or_download "scaffold/plans/execution/.steps.template.md" "$PLANS_DIR/execution/.steps.template.md"
+  copy_or_download "scaffold/designs/.design.template.md" "$TARGET/designs/.design.template.md"
 
   touch "$PLANS_DIR/decisions/.gitkeep"
 
-  info "plans/ (templates, rules, index)"
+  info "plans/ + designs/ (templates, rules, index)"
 
   # Skill and commands
   install_skill "$TARGET"
@@ -292,6 +297,9 @@ else
   echo ""
   echo "  bin/"
   echo "  └── aps                              <- CLI (lint, init, update)"
+  echo ""
+  echo "  designs/"
+  echo "  └── .design.template.md              <- Template for technical designs"
   echo ""
   echo "  plans/"
   echo "  ├── aps-rules.md                     <- Agent guidance (READ THIS)"

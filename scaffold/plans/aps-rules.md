@@ -136,6 +136,9 @@ Tasks use the module's ID prefix: `AUTH-001`, `AUTH-002`, `CORE-001`, etc.
 ## File Locations
 
 ```text
+designs/                       # Technical designs (optional, project root)
+└── YYYY-MM-DD-slug.design.md  # Architecture/approach documents
+
 plans/
 ├── aps-rules.md           # This file (agent guidance)
 ├── index.aps.md           # Root plan
@@ -149,6 +152,50 @@ plans/
 └── decisions/             # ADRs (optional)
     └── [NNN]-[title].md
 ```
+
+## Design Documents
+
+Design docs live in `designs/` at the project root. They capture architectural
+thinking **before** committing to modules and work items.
+
+### When to Create
+
+- Multi-module work with non-obvious architecture
+- Multiple viable approaches that need comparison
+- Work that needs review before defining work items
+- Cross-cutting concerns that span several modules
+
+### When to Skip
+
+- Straightforward single-module features
+- Bug fixes or small enhancements
+- Work where the approach is already well established
+
+### Naming
+
+`designs/YYYY-MM-DD-slug.design.md` — date-prefixed, descriptive slug.
+
+### Linking
+
+Reference designs from the Index or Module metadata:
+
+```markdown
+## Designs
+- [Auth Architecture](../designs/2025-01-05-auth-architecture.design.md)
+```
+
+A design can cover one module or span multiple — the `Modules` field in the
+design's metadata table links to the relevant module files.
+
+### Accept-Then-Normalise
+
+If a design doc already exists in free-form (created by another agent or human),
+**accept it**. Don't reject it for missing sections. Instead:
+
+1. Add the minimum fields: `## Problem`, `## Design`, and the Status metadata table
+2. Don't rewrite the author's content — append missing sections or infer from
+   existing content
+3. This normalisation can happen in the background, after the main work
 
 ## Monorepo Conventions
 
@@ -218,6 +265,7 @@ This is for **planning-level visibility**, not routine bugs. Use your project's 
 
 | If agent is... | Check for... |
 |----------------|--------------|
+| Writing a design | Problem + Design sections present? No implementation prescriptions? |
 | Writing steps | Max 12 words per checkpoint? No implementation detail? |
 | Writing tasks | Outcome-focused? Has validation command? |
 | Planning module | Boundaries clear? No premature tasks? |

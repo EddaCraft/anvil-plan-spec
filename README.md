@@ -131,6 +131,7 @@ No plugins. No integrations. No configuration. It's just files.
 | [module.template.md](templates/module.template.md) | Defining a bounded module with work items |
 | [simple.template.md](templates/simple.template.md) | Small, self-contained features |
 | [actions.template.md](templates/actions.template.md) | Breaking work items into executable actions |
+| [design.template.md](templates/design.template.md) | Technical/architectural design for complex work |
 | [solution.template.md](templates/solution.template.md) | Documenting solved problems (compound phase) |
 
 ## Examples
@@ -249,6 +250,8 @@ See [docs/workflow.md](docs/workflow.md) for the full workflow guide.
 
 ```text
 your-project/
+├── designs/                      # Technical designs (optional)
+│   └── 2025-01-05-auth.design.md
 ├── plans/
 │   ├── aps-rules.md              # AI agent guidance (portable)
 │   ├── index.aps.md              # Main plan
