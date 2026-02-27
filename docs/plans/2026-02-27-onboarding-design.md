@@ -160,15 +160,15 @@ no-dependency alternative. Both paths produce the same end state.
 ```
 aps-cli/
   src/
-    index.ts                    Entry point
+    index.ts                    Entry point (commander)
     commands/
       init.ts                   Init wizard command
       lint.ts                   Lint (port from bash or shell out)
       update.ts                 Update command
     tui/
-      components/               TUI components (framework TBD)
+      components/               OpenTUI components (SolidJS)
         Select.tsx              Single-select prompt
-        MultiSelect.tsx         Checkbox multi-select
+        MultiSelect.tsx         Checkbox multi-select (custom)
         Confirm.tsx             Y/N dialog
         Spinner.tsx             Progress indicator
         Header.tsx              Branded header
@@ -183,13 +183,15 @@ aps-cli/
       utils/
         theme.ts                EddaCraft shared theme
         tty-detection.ts        TTY/fallback detection
+  build.ts                      Bun compile script (cross-platform)
   package.json
   tsconfig.json
 ```
 
-The TUI components should match the visual language of Anvil-001 (shared
-theme, keyboard conventions: arrow/j-k navigation, space to toggle, enter
-to confirm, esc to go back, q to quit).
+Built with OpenTUI (Bun/Zig) using the SolidJS reconciler. Components
+should match the visual language of Anvil-001 (shared EddaCraft theme,
+keyboard conventions). Compiled to a single binary via
+`bun build --compile` for each target platform.
 
 ## Keyboard Conventions (from Anvil-001)
 
@@ -201,17 +203,29 @@ to confirm, esc to go back, q to quit).
 | Go back | Esc or left arrow |
 | Quit | q or Ctrl+C |
 
-## Open Decisions
+## Decisions
 
-| Decision | Options | Notes |
-|----------|---------|-------|
-| TUI framework | Ink (Node/React), Bubbletea (Go), Ratatui (Rust), other | Anvil-001 uses Ink; may migrate. Investigate before committing. |
-| Distribution | Single binary, `npx`, `bun install`, `curl` bootstrap | Tied to framework choice. Single binary avoids runtime deps. |
-| Where source lives | APS public repo, Anvil monorepo, new repo | APS is public, Anvil is private. Shared TUI components need a strategy. |
-| Shared TUI components | Public npm package, copy into APS, compile from private repo | Depends on framework and source location decisions. |
+| Decision | Choice | Notes |
+|----------|--------|-------|
+| TUI framework | **OpenTUI** (Bun/Zig) | SolidJS reconciler, native Zig TUI core, same product family as Anvil. Migrating from Ink. |
+| Distribution | **Single binary** via `bun build --compile` | Cross-compile for linux-x64, darwin-arm64, windows-x64. Zero runtime deps for end users. |
+| Where source lives | TBD | APS is public, Anvil is private. Need to decide whether aps-cli lives in APS repo or elsewhere. |
+| Shared TUI components | TBD | Depends on source location. OpenTUI components may be extracted as a shared public package or copied. |
 
-These decisions are interdependent. The TUI framework choice drives
-distribution, which drives where the source lives.
+### Why OpenTUI
+
+- Same product family as Anvil-001 (migrating Anvil from Ink to OpenTUI)
+- Bun-compiled single binary — same approach Claude Code uses in production
+- SolidJS reconciler for reactive components
+- Built-in Select, Input, Textarea, TabSelect, Slider, ScrollBox, Markdown
+- Native Zig core delivers sub-ms rendering
+- Bun cross-compilation covers all target platforms
+
+### Risk: Native Zig Addon in Compiled Binary
+
+OpenTUI's Zig TUI core is a native addon. There is an open Bun issue
+about `--compile` not always embedding native addons correctly. A spike
+should verify this works before committing to the architecture.
 
 ## Relationship to Existing Install
 
@@ -222,9 +236,39 @@ environments. The TUI wizard is the premium path for interactive setup.
 Both produce the same file structure. The wizard just makes smarter choices
 about what to include.
 
+## Build & Cross-Compilation
+
+The CLI compiles to standalone binaries via `bun build --compile`:
+
+```typescript
+// build.ts
+import solidPlugin from "@opentui/solid/bun-plugin"
+
+const targets = [
+  { target: "bun-linux-x64", outfile: "./dist/aps-linux-x64" },
+  { target: "bun-linux-arm64", outfile: "./dist/aps-linux-arm64" },
+  { target: "bun-darwin-arm64", outfile: "./dist/aps-darwin-arm64" },
+  { target: "bun-darwin-x64", outfile: "./dist/aps-darwin-x64" },
+  { target: "bun-windows-x64", outfile: "./dist/aps-windows-x64.exe" },
+]
+
+for (const { target, outfile } of targets) {
+  await Bun.build({
+    entrypoints: ["./src/index.ts"],
+    plugins: [solidPlugin],
+    compile: { target, outfile },
+  })
+}
+```
+
+Binaries are published as GitHub release assets. The `curl | bash`
+installer can optionally download the binary instead of the bash CLI.
+
 ## Prior Art
 
-- **Anvil-001** (`anvil init`) — 5-step TUI wizard with Ink, auto-detection,
-  back navigation. Direct inspiration for UX patterns.
+- **Anvil-001** (`anvil init`) — 5-step TUI wizard with Ink (migrating to
+  OpenTUI). Direct inspiration for UX patterns and shared theme.
 - **Superpowers** — Per-platform install instructions (Claude Code, Cursor,
   Codex, OpenCode). Inspiration for the multi-tool selection model.
+- **Claude Code** — Ships as a Bun-compiled single binary. Validates the
+  distribution approach at scale.
