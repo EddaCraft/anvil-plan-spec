@@ -82,7 +82,7 @@ You've been asked to add user authentication to an existing app.
    - **Validation:** curl test returns 201
    ```
 
-7. **Execute.** Work through work items. If a work item is complex, create a Action Plan file.
+7. **Execute.** Work through work items. If a work item is complex, create an Action Plan file.
 
 ---
 

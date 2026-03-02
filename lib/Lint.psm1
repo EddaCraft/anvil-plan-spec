@@ -21,7 +21,7 @@ function Get-ApsFileType {
     if ($name -eq "issues.md") { return "issues" }
 
     # Design files (in designs/ directory)
-    if ($FilePath -match '[/\\]designs[/\\]' -and $name -match '\.design\.md$') { return "design" }
+    if ($FilePath -match '(^|[/\\])designs([/\\])' -and $name -match '\.design\.md$') { return "design" }
 
     # Actions files
     if ($FilePath -match '[/\\]execution[/\\]' -and $name -match '\.actions\.md$') { return "actions" }

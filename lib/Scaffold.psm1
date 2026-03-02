@@ -54,6 +54,7 @@ $script:CliFilesBash = @(
     "lib/rules/index.sh"
     "lib/rules/workitem.sh"
     "lib/rules/issues.sh"
+    "lib/rules/design.sh"
 )
 
 # CLI files — PowerShell (bin/ and lib/)
@@ -67,6 +68,7 @@ $script:CliFilesPowerShell = @(
     "lib/rules/Index.psm1"
     "lib/rules/WorkItem.psm1"
     "lib/rules/Issues.psm1"
+    "lib/rules/Design.psm1"
 )
 
 # --- Helpers ---

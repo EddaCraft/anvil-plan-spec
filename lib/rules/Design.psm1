@@ -27,14 +27,13 @@ function Test-W016DesignMetadata {
     $lines = Get-Content -LiteralPath $File -ErrorAction SilentlyContinue
     if (-not $lines) { return }
     $limit = [Math]::Min(20, $lines.Count)
-    $found = $false
+    $hasHeader = $false
+    $hasStatus = $false
     for ($i = 0; $i -lt $limit; $i++) {
-        if ($lines[$i] -match '^\| *(Field|Status) *\|') {
-            $found = $true
-            break
-        }
+        if ($lines[$i] -match '^\| *Field *\|') { $hasHeader = $true }
+        if ($lines[$i] -match '^\| *Status *\|') { $hasStatus = $true }
     }
-    if (-not $found) {
+    if (-not ($hasHeader -and $hasStatus)) {
         Add-ApsResult -Path $File -Type "warning" -Code "W016" -Message "Missing metadata table with Status field"
     }
 }

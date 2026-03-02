@@ -159,6 +159,7 @@ $cliFilesBash = @(
     "lib/rules/index.sh"
     "lib/rules/workitem.sh"
     "lib/rules/issues.sh"
+    "lib/rules/design.sh"
 )
 
 $cliFilesPowerShell = @(
@@ -171,6 +172,7 @@ $cliFilesPowerShell = @(
     "lib/rules/Index.psm1"
     "lib/rules/WorkItem.psm1"
     "lib/rules/Issues.psm1"
+    "lib/rules/Design.psm1"
 )
 
 foreach ($f in $cliFilesBash) {

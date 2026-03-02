@@ -4,7 +4,7 @@
 |-------|-------|
 | Status | Approved |
 | Created | 2025-01-05 |
-| Modules | [AUTH](../plans/modules/auth.aps.md), [SESSION](../plans/modules/session.aps.md) |
+| Modules | [AUTH](../modules/auth.aps.md), [SESSION](../modules/session.aps.md) |
 
 ## Problem
 

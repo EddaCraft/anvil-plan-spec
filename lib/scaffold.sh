@@ -61,6 +61,8 @@ CLI_FILES=(
   "lib/rules/WorkItem.psm1"
   "lib/rules/issues.sh"
   "lib/rules/Issues.psm1"
+  "lib/rules/design.sh"
+  "lib/rules/Design.psm1"
 )
 
 # Download a file from GitHub
