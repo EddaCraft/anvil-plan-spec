@@ -13,17 +13,28 @@
 $ErrorActionPreference = "Stop"
 
 $Version = if ($env:APS_VERSION) { $env:APS_VERSION } else { "main" }
-$Target  = if ($args.Count -gt 0) { $args[0] } else { "." }
+$GlobalInstall = $false
+$Target = "."
 
-# Validate TARGET to prevent path traversal
-if ([System.IO.Path]::IsPathRooted($Target)) {
-    [Console]::Error.WriteLine("error: Absolute paths are not allowed for TARGET; please use a relative path (e.g., .\my-project).")
-    exit 1
+foreach ($a in $args) {
+    if ($a -eq "--global" -or $a -eq "-g") {
+        $GlobalInstall = $true
+    } else {
+        $Target = $a
+    }
 }
 
-if ($Target -cmatch '\.\.') {
-    [Console]::Error.WriteLine("error: Parent directory references ('..') are not allowed in TARGET.")
-    exit 1
+# Validate TARGET (only for project-scoped updates)
+if (-not $GlobalInstall) {
+    if ([System.IO.Path]::IsPathRooted($Target)) {
+        [Console]::Error.WriteLine("error: Absolute paths are not allowed for TARGET; please use a relative path (e.g., .\my-project).")
+        exit 1
+    }
+
+    if ($Target -cmatch '\.\.') {
+        [Console]::Error.WriteLine("error: Parent directory references ('..') are not allowed in TARGET.")
+        exit 1
+    }
 }
 
 $PlansDir = Join-Path $Target "plans"
@@ -120,6 +131,60 @@ function Test-ApsHooks {
     $content = Get-Content -LiteralPath $settings -Raw -ErrorAction SilentlyContinue
     if (-not $content) { return $false }
     return ($content -cmatch 'aps-planning/scripts|aps-planning\\scripts|\[APS\]')
+}
+
+# --- Global update function ---
+
+function Update-ApsGlobal {
+    <#
+    .SYNOPSIS
+        Update a global APS CLI installation (bin/ + lib/ only).
+    #>
+    $ApsHome = if ($env:APS_HOME) { $env:APS_HOME } else { Join-Path $HOME ".aps" }
+    $binDir = Join-Path $ApsHome "bin"
+
+    if (-not (Test-Path -LiteralPath $binDir -PathType Container)) {
+        Write-Err "No global APS installation found at $ApsHome"
+        Write-Host ""
+        Write-Host "To install globally:"
+        Write-Host '  irm https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install.ps1 | iex -- --global'
+        Write-Host ""
+        exit 1
+    }
+
+    Write-Host ""
+    Write-Host "Anvil Plan Spec (APS) Global Update" -ForegroundColor White
+    Write-Host ""
+
+    Write-Step "Updating APS CLI at $ApsHome"
+
+    $cliAll = @(
+        "bin/aps", "bin/aps.ps1",
+        "lib/output.sh", "lib/Output.psm1",
+        "lib/lint.sh", "lib/Lint.psm1",
+        "lib/scaffold.sh", "lib/Scaffold.psm1",
+        "lib/rules/common.sh", "lib/rules/Common.psm1",
+        "lib/rules/module.sh", "lib/rules/Module.psm1",
+        "lib/rules/index.sh", "lib/rules/Index.psm1",
+        "lib/rules/workitem.sh", "lib/rules/WorkItem.psm1",
+        "lib/rules/issues.sh", "lib/rules/Issues.psm1"
+    )
+
+    foreach ($f in $cliAll) {
+        Invoke-DownloadRoot -Path $f -Destination (Join-Path $ApsHome $f)
+    }
+
+    Write-Host ""
+    Write-Step "Global update complete"
+    Write-Info "bin/aps + bin/aps.ps1 + lib/ updated at $ApsHome"
+    Write-Host ""
+}
+
+# --- Branch: global update exits early ---
+
+if ($GlobalInstall) {
+    Update-ApsGlobal
+    exit 0
 }
 
 # --- Header ---

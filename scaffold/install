@@ -14,17 +14,28 @@
 set -euo pipefail
 
 VERSION="${VERSION:-main}"
-TARGET="${1:-.}"
+GLOBAL_INSTALL=false
+TARGET="."
 
-# Validate TARGET to prevent path traversal
-if [[ "$TARGET" == /* ]]; then
-  echo "error: Absolute paths are not allowed for TARGET; please use a relative path (e.g., ./my-project)." >&2
-  exit 1
-fi
+# Parse flags
+for arg in "$@"; do
+  case "$arg" in
+    --global|-g) GLOBAL_INSTALL=true ;;
+    *) TARGET="$arg" ;;
+  esac
+done
 
-if [[ "$TARGET" == *".."* ]]; then
-  echo "error: Parent directory references ('..') are not allowed in TARGET." >&2
-  exit 1
+# Validate TARGET (only for project-scoped installs)
+if [[ "$GLOBAL_INSTALL" == false ]]; then
+  if [[ "$TARGET" == /* ]]; then
+    echo "error: Absolute paths are not allowed for TARGET; please use a relative path (e.g., ./my-project)." >&2
+    exit 1
+  fi
+
+  if [[ "$TARGET" == *".."* ]]; then
+    echo "error: Parent directory references ('..') are not allowed in TARGET." >&2
+    exit 1
+  fi
 fi
 
 PLANS_DIR="$TARGET/plans"
@@ -115,6 +126,97 @@ setup_path() {
     echo "  - Or add 'export PATH=\"./bin:\$PATH\"' to your shell config"
   fi
 }
+
+# Set up PATH for global installs (auto-detect shell, append to rc file)
+setup_global_path() {
+  local aps_home="$1"
+  local bin_dir="$aps_home/bin"
+
+  # Check if already on PATH
+  if echo "$PATH" | tr ':' '\n' | grep -qx "$bin_dir" 2>/dev/null; then
+    info "$bin_dir is already on your PATH"
+    return
+  fi
+
+  # Detect shell and rc file
+  local shell_name rc_file
+  shell_name="$(basename "${SHELL:-/bin/bash}")"
+
+  case "$shell_name" in
+    zsh)  rc_file="$HOME/.zshrc" ;;
+    bash)
+      if [[ -f "$HOME/.bashrc" ]]; then
+        rc_file="$HOME/.bashrc"
+      else
+        rc_file="$HOME/.bash_profile"
+      fi
+      ;;
+    fish) rc_file="$HOME/.config/fish/config.fish" ;;
+    *)    rc_file="$HOME/.profile" ;;
+  esac
+
+  # Idempotent: check if rc file already contains the path
+  if [[ -f "$rc_file" ]] && grep -qF "$bin_dir" "$rc_file" 2>/dev/null; then
+    info "PATH already configured in $rc_file"
+    return
+  fi
+
+  if ask_yn "Add $bin_dir to PATH in $rc_file?" "y"; then
+    mkdir -p "$(dirname "$rc_file")"
+    if [[ "$shell_name" == "fish" ]]; then
+      printf '\n# APS CLI\nfish_add_path %s\n' "$bin_dir" >> "$rc_file"
+    else
+      printf '\n# APS CLI\nexport PATH="%s:$PATH"\n' "$bin_dir" >> "$rc_file"
+    fi
+    info "Added to $rc_file"
+    warn "Restart your shell or run: source $rc_file"
+  else
+    info "To add manually, put this in your shell config:"
+    if [[ "$shell_name" == "fish" ]]; then
+      echo "  fish_add_path $bin_dir"
+    else
+      echo "  export PATH=\"$bin_dir:\$PATH\""
+    fi
+  fi
+}
+
+# Global install: CLI only, add to shell PATH
+install_global() {
+  local aps_home="${APS_HOME:-$HOME/.aps}"
+
+  echo ""
+  echo -e "${BOLD}Anvil Plan Spec (APS)${NC}"
+  echo "Global CLI installation"
+  echo ""
+
+  step "Installing APS CLI to $aps_home"
+
+  for f in bin/aps bin/aps.ps1 lib/output.sh lib/Output.psm1 lib/lint.sh lib/Lint.psm1 lib/scaffold.sh lib/Scaffold.psm1 lib/rules/common.sh lib/rules/Common.psm1 lib/rules/module.sh lib/rules/Module.psm1 lib/rules/index.sh lib/rules/Index.psm1 lib/rules/workitem.sh lib/rules/WorkItem.psm1 lib/rules/issues.sh lib/rules/Issues.psm1; do
+    download_root "$f" "$aps_home/$f"
+  done
+  chmod +x "$aps_home/bin/aps"
+  info "bin/aps + lib/ installed to $aps_home"
+
+  setup_global_path "$aps_home"
+
+  echo ""
+  step "Global installation complete"
+  echo ""
+  echo "  $aps_home/"
+  echo "  ├── bin/aps          <- CLI (bash)"
+  echo "  ├── bin/aps.ps1      <- CLI (PowerShell)"
+  echo "  └── lib/             <- CLI libraries"
+  echo ""
+  info "To create a new APS project:"
+  echo "  cd your-project && aps init"
+  echo ""
+}
+
+# Branch: global install exits early
+if [[ "$GLOBAL_INSTALL" == true ]]; then
+  install_global
+  exit 0
+fi
 
 # Header
 echo ""

@@ -15,17 +15,28 @@
 set -euo pipefail
 
 VERSION="${VERSION:-main}"
-TARGET="${1:-.}"
+GLOBAL_INSTALL=false
+TARGET="."
 
-# Validate TARGET to prevent path traversal
-if [[ "$TARGET" == /* ]]; then
-  echo "error: Absolute paths are not allowed for TARGET; please use a relative path (e.g., ./my-project)." >&2
-  exit 1
-fi
+# Parse flags
+for arg in "$@"; do
+  case "$arg" in
+    --global|-g) GLOBAL_INSTALL=true ;;
+    *) TARGET="$arg" ;;
+  esac
+done
 
-if [[ "$TARGET" == *".."* ]]; then
-  echo "error: Parent directory references ('..') are not allowed in TARGET." >&2
-  exit 1
+# Validate TARGET (only for project-scoped updates)
+if [[ "$GLOBAL_INSTALL" == false ]]; then
+  if [[ "$TARGET" == /* ]]; then
+    echo "error: Absolute paths are not allowed for TARGET; please use a relative path (e.g., ./my-project)." >&2
+    exit 1
+  fi
+
+  if [[ "$TARGET" == *".."* ]]; then
+    echo "error: Parent directory references ('..') are not allowed in TARGET." >&2
+    exit 1
+  fi
 fi
 
 PLANS_DIR="$TARGET/plans"
@@ -95,6 +106,42 @@ download_root() {
     exit 1
   fi
 }
+
+# Global update: CLI only
+update_global() {
+  local aps_home="${APS_HOME:-$HOME/.aps}"
+
+  if [[ ! -d "$aps_home/bin" ]]; then
+    error "No global APS installation found at $aps_home"
+    echo ""
+    echo "To install globally:"
+    echo "  curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash -s -- --global"
+    echo ""
+    exit 1
+  fi
+
+  echo ""
+  echo -e "${BOLD}Anvil Plan Spec (APS) Global Update${NC}"
+  echo ""
+
+  step "Updating APS CLI at $aps_home"
+
+  for f in bin/aps bin/aps.ps1 lib/output.sh lib/Output.psm1 lib/lint.sh lib/Lint.psm1 lib/scaffold.sh lib/Scaffold.psm1 lib/rules/common.sh lib/rules/Common.psm1 lib/rules/module.sh lib/rules/Module.psm1 lib/rules/index.sh lib/rules/Index.psm1 lib/rules/workitem.sh lib/rules/WorkItem.psm1 lib/rules/issues.sh lib/rules/Issues.psm1; do
+    download_root "$f" "$aps_home/$f"
+  done
+  chmod +x "$aps_home/bin/aps"
+
+  echo ""
+  step "Global update complete"
+  info "bin/aps + lib/ updated at $aps_home"
+  echo ""
+}
+
+# Branch: global update exits early
+if [[ "$GLOBAL_INSTALL" == true ]]; then
+  update_global
+  exit 0
+fi
 
 # Header
 echo ""

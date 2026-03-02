@@ -6,8 +6,41 @@
 curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash
 ```
 
-This downloads the APS scaffold into the current directory. No global
-installs, no package managers -- just your project files.
+This downloads the APS scaffold into the current directory -- plans,
+templates, skill, and a local copy of the CLI.
+
+## Global Install
+
+Install the APS CLI system-wide so `aps` is available in any directory:
+
+```bash
+# Linux/macOS
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash -s -- --global
+
+# Windows (PowerShell)
+irm https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install.ps1 | iex -- --global
+```
+
+This installs only the CLI (`bin/aps` + `lib/`) to `~/.aps/` and adds it
+to your shell PATH. No project files are created -- use `aps init` inside
+a project directory for that.
+
+To use a custom location, set `APS_HOME`:
+
+```bash
+APS_HOME=/opt/aps curl -fsSL .../install | bash -s -- --global
+```
+
+To update a global installation:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/update | bash -s -- --global
+
+# Or from the installed CLI:
+aps update --global
+```
+
+To uninstall: remove `~/.aps/` and the PATH line from your shell config.
 
 ## Install Options
 
