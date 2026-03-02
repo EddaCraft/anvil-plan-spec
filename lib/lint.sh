@@ -34,7 +34,7 @@ get_file_type() {
   fi
 
   # Design files (in designs/ directory)
-  if [[ "$file" == *"/designs/"* && "$basename" == *.design.md ]]; then
+  if [[ "$basename" == *.design.md && ( "$file" == *"/designs/"* || "$file" == designs/* ) ]]; then
     echo "design"
     return
   fi

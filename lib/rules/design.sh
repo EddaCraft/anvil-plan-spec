@@ -23,8 +23,9 @@ check_w015_design() {
 # W016: Missing metadata table with Status field
 check_w016_design_metadata() {
   local file="$1"
-  # Look for a table with Status in the header row within the first 20 lines
-  if ! head -20 "$file" | grep -qE '^\| *(Field|Status) *\|'; then
+  # Look for a metadata table header and a Status row within the first 20 lines
+  if ! ( head -20 "$file" | grep -qE '^\| *Field *\|' && \
+         head -20 "$file" | grep -qE '^\| *Status *\|' ); then
     add_result "$file" "warning" "W016" "Missing metadata table with Status field"
   fi
 }
