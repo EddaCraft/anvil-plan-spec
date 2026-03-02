@@ -28,7 +28,7 @@ a project directory for that.
 To use a custom location, set `APS_HOME`:
 
 ```bash
-APS_HOME=/opt/aps curl -fsSL .../install | bash -s -- --global
+curl -fsSL .../install | APS_HOME=/opt/aps bash -s -- --global
 ```
 
 To update a global installation:
