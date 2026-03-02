@@ -317,13 +317,20 @@ EOF
 
 cmd_update() {
   local target="."
+  local global_install=false
 
   while [[ $# -gt 0 ]]; do
     case $1 in
       --help|-h) cmd_update_help; exit 0 ;;
+      --global|-g) global_install=true; shift ;;
       *) target="$1"; shift ;;
     esac
   done
+
+  if [[ "$global_install" == true ]]; then
+    cmd_update_global
+    return
+  fi
 
   local plans_dir="$target/plans"
 
@@ -369,12 +376,40 @@ cmd_update() {
   echo ""
 }
 
+cmd_update_global() {
+  local aps_home="${APS_HOME:-$HOME/.aps}"
+
+  if [[ ! -d "$aps_home/bin" ]]; then
+    error "No global APS installation found at $aps_home"
+    echo ""
+    echo "To install globally:"
+    echo "  curl -fsSL https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install | bash -s -- --global"
+    echo ""
+    exit 1
+  fi
+
+  echo ""
+  info "Updating global APS CLI at $aps_home"
+  echo ""
+
+  for f in "${CLI_FILES[@]}"; do
+    download "$f" "$aps_home/$f"
+  done
+  chmod +x "$aps_home/bin/aps"
+
+  echo ""
+  info "Global update complete"
+  info "bin/aps + lib/ updated at $aps_home"
+  echo ""
+}
+
 cmd_update_help() {
   cat <<EOF
 aps update - Update APS templates, skill, CLI, and commands
 
 Usage:
   aps update [target-dir]
+  aps update --global
 
 Updates the CLI, templates, rules, skill files, and commands without
 touching your specs (index.aps.md, modules/*.aps.md, execution/*.actions.md).
@@ -382,13 +417,16 @@ touching your specs (index.aps.md, modules/*.aps.md, execution/*.actions.md).
 If hooks are not yet configured, prompts to install them.
 
 Options:
+  --global  Update the global CLI installation (~/.aps/)
   --help    Show this help
 
 Environment:
   APS_VERSION   Git ref to download from (default: main)
+  APS_HOME      Custom global install location (default: ~/.aps)
 
 Examples:
   aps update              # Update current directory
   aps update ./my-project # Update a subdirectory
+  aps update --global     # Update global CLI
 EOF
 }

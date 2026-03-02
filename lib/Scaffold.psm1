@@ -406,14 +406,22 @@ function Invoke-ApsUpdate {
     #>
     param([string[]]$Arguments)
     $target = "."
+    $globalUpdate = $false
     if ($Arguments) {
         foreach ($arg in $Arguments) {
             switch ($arg) {
-                "--help" { Show-ApsUpdateHelp; return }
-                "-h"     { Show-ApsUpdateHelp; return }
-                default  { $target = $arg }
+                "--help"  { Show-ApsUpdateHelp; return }
+                "-h"      { Show-ApsUpdateHelp; return }
+                "--global" { $globalUpdate = $true }
+                "-g"       { $globalUpdate = $true }
+                default    { $target = $arg }
             }
         }
+    }
+
+    if ($globalUpdate) {
+        Update-ApsGlobal
+        return
     }
 
     $plansDir = Join-Path $target "plans"
@@ -459,12 +467,47 @@ function Invoke-ApsUpdate {
     Write-Host ""
 }
 
+function Update-ApsGlobal {
+    <#
+    .SYNOPSIS
+        Update a global APS CLI installation (bin/ + lib/ only).
+    #>
+    $ApsHome = if ($env:APS_HOME) { $env:APS_HOME } else { Join-Path $HOME ".aps" }
+    $binDir = Join-Path $ApsHome "bin"
+
+    if (-not (Test-Path -LiteralPath $binDir -PathType Container)) {
+        Write-ApsError "No global APS installation found at $ApsHome"
+        Write-Host ""
+        Write-Host "To install globally:"
+        Write-Host '  irm https://raw.githubusercontent.com/EddaCraft/anvil-plan-spec/main/scaffold/install.ps1 | iex -- --global'
+        Write-Host ""
+        exit 1
+    }
+
+    Write-Host ""
+    Write-ApsInfo "Updating global APS CLI at $ApsHome"
+    Write-Host ""
+
+    foreach ($f in $script:CliFilesBash) {
+        Invoke-ApsDownloadRoot -Source $f -Destination (Join-Path $ApsHome $f)
+    }
+    foreach ($f in $script:CliFilesPowerShell) {
+        Invoke-ApsDownloadRoot -Source $f -Destination (Join-Path $ApsHome $f)
+    }
+
+    Write-Host ""
+    Write-ApsInfo "Global update complete"
+    Write-ApsInfo "bin/aps + lib/ updated at $ApsHome"
+    Write-Host ""
+}
+
 function Show-ApsUpdateHelp {
     Write-Host @"
 aps update - Update APS templates, skill, CLI, and commands
 
 Usage:
   aps update [target-dir]
+  aps update --global
 
 Updates the CLI, templates, rules, skill files, and commands without
 touching your specs (index.aps.md, modules/*.aps.md, execution/*.actions.md).
@@ -472,14 +515,17 @@ touching your specs (index.aps.md, modules/*.aps.md, execution/*.actions.md).
 If hooks are not yet configured, prompts to install them.
 
 Options:
+  --global  Update the global CLI installation (~/.aps/)
   --help    Show this help
 
 Environment:
   APS_VERSION   Git ref to download from (default: main)
+  APS_HOME      Custom global install location (default: ~/.aps)
 
 Examples:
   aps update              # Update current directory
   aps update ./my-project # Update a subdirectory
+  aps update --global     # Update global CLI
 "@
 }
 
@@ -491,6 +537,7 @@ Export-ModuleMember -Function @(
     'Install-ApsSkill'
     'Install-ApsCommands'
     'Install-ApsCli'
+    'Update-ApsGlobal'
     'Invoke-ApsInit'
     'Invoke-ApsUpdate'
 )

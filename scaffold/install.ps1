@@ -12,17 +12,28 @@
 $ErrorActionPreference = "Stop"
 
 $Version = if ($env:APS_VERSION) { $env:APS_VERSION } else { "main" }
-$Target  = if ($args.Count -gt 0) { $args[0] } else { "." }
+$GlobalInstall = $false
+$Target = "."
 
-# Validate TARGET to prevent path traversal
-if ([System.IO.Path]::IsPathRooted($Target)) {
-    [Console]::Error.WriteLine("error: Absolute paths are not allowed for TARGET; please use a relative path (e.g., .\my-project).")
-    exit 1
+foreach ($a in $args) {
+    if ($a -eq "--global" -or $a -eq "-g") {
+        $GlobalInstall = $true
+    } else {
+        $Target = $a
+    }
 }
 
-if ($Target -cmatch '\.\.') {
-    [Console]::Error.WriteLine("error: Parent directory references ('..') are not allowed in TARGET.")
-    exit 1
+# Validate TARGET (only for project-scoped installs)
+if (-not $GlobalInstall) {
+    if ([System.IO.Path]::IsPathRooted($Target)) {
+        [Console]::Error.WriteLine("error: Absolute paths are not allowed for TARGET; please use a relative path (e.g., .\my-project).")
+        exit 1
+    }
+
+    if ($Target -cmatch '\.\.') {
+        [Console]::Error.WriteLine("error: Parent directory references ('..') are not allowed in TARGET.")
+        exit 1
+    }
 }
 
 $PlansDir = Join-Path $Target "plans"
@@ -105,6 +116,94 @@ function Request-YesNo {
     } else {
         return ($Default -ceq "y")
     }
+}
+
+# --- Global install functions ---
+
+function Set-ApsGlobalPath {
+    <#
+    .SYNOPSIS
+        Add APS bin directory to user PATH (persistent via registry).
+    #>
+    param([string]$ApsHome)
+    $binDir = Join-Path $ApsHome "bin"
+
+    # Check if already on User PATH
+    $currentPath = [Environment]::GetEnvironmentVariable("PATH", "User")
+    if ($currentPath -and ($currentPath -split ';' | Where-Object { $_ -eq $binDir })) {
+        Write-Info "$binDir is already on your PATH"
+        return
+    }
+
+    if (Request-YesNo -Prompt "Add $binDir to your user PATH?" -Default "y") {
+        if ($currentPath) {
+            $newPath = "$binDir;$currentPath"
+        } else {
+            $newPath = $binDir
+        }
+        [Environment]::SetEnvironmentVariable("PATH", $newPath, "User")
+        $env:PATH = "$binDir;$env:PATH"
+
+        Write-Info "Added to user PATH (persistent)"
+        Write-Host "  Restart your terminal for the change to take effect in new sessions."
+    } else {
+        Write-Info "To add manually, run:"
+        Write-Host "  [Environment]::SetEnvironmentVariable('PATH', '$binDir;' + [Environment]::GetEnvironmentVariable('PATH', 'User'), 'User')"
+    }
+}
+
+function Install-ApsGlobal {
+    <#
+    .SYNOPSIS
+        Install APS CLI globally (bin/ + lib/ only, no project scaffolding).
+    #>
+    $ApsHome = if ($env:APS_HOME) { $env:APS_HOME } else { Join-Path $HOME ".aps" }
+
+    Write-Host ""
+    Write-Host "Anvil Plan Spec (APS)" -ForegroundColor White
+    Write-Host "Global CLI installation"
+    Write-Host ""
+
+    Write-Step "Installing APS CLI to $ApsHome"
+
+    $cliAll = @(
+        "bin/aps", "bin/aps.ps1",
+        "lib/output.sh", "lib/Output.psm1",
+        "lib/lint.sh", "lib/Lint.psm1",
+        "lib/scaffold.sh", "lib/Scaffold.psm1",
+        "lib/rules/common.sh", "lib/rules/Common.psm1",
+        "lib/rules/module.sh", "lib/rules/Module.psm1",
+        "lib/rules/index.sh", "lib/rules/Index.psm1",
+        "lib/rules/workitem.sh", "lib/rules/WorkItem.psm1",
+        "lib/rules/issues.sh", "lib/rules/Issues.psm1"
+    )
+
+    foreach ($f in $cliAll) {
+        Invoke-DownloadRoot -Path $f -Destination (Join-Path $ApsHome $f)
+    }
+
+    Write-Info "bin/aps + bin/aps.ps1 + lib/ installed to $ApsHome"
+
+    Set-ApsGlobalPath -ApsHome $ApsHome
+
+    Write-Host ""
+    Write-Step "Global installation complete"
+    Write-Host ""
+    Write-Host "  $ApsHome\"
+    Write-Host "  +-- bin\aps          <- CLI (bash/WSL)"
+    Write-Host "  +-- bin\aps.ps1      <- CLI (PowerShell)"
+    Write-Host "  +-- lib\             <- CLI libraries"
+    Write-Host ""
+    Write-Info "To create a new APS project:"
+    Write-Host "  cd your-project; aps init"
+    Write-Host ""
+}
+
+# --- Branch: global install exits early ---
+
+if ($GlobalInstall) {
+    Install-ApsGlobal
+    exit 0
 }
 
 # --- Header ---
