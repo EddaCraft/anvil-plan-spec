@@ -21,6 +21,20 @@ See: docs/ai/prompting/actions.prompt.md
 
 - [ ] [Dependency, decision, or precondition]
 
+## Waves *(optional)*
+
+<!--
+Use waves to group actions that can run in parallel.
+Actions within the same wave have no dependencies on each other.
+Each wave completes before the next begins.
+Omit this section for purely sequential action plans.
+-->
+
+| Wave | Actions | Gate |
+|------|---------|------|
+| 1 | 1, 2 | Both checkpoints pass |
+| 2 | 3 | Checkpoint passes |
+
 ## Actions
 
 ### Action 1 — [Action verb] [target]
@@ -37,6 +51,9 @@ See: docs/ai/prompting/actions.prompt.md
 **Validate**
 `[command]` *(optional)*
 
+**Wave** 1 *(optional — omit for sequential plans)*
+**Agent** general-purpose *(optional — agent type for dispatch)*
+
 ### Action 2 — [Action verb] [target]
 
 **Purpose**
@@ -51,6 +68,8 @@ See: docs/ai/prompting/actions.prompt.md
 **Validate**
 `[command]` *(optional)*
 
+**Wave** 1
+
 ### Action 3 — [Action verb] [target]
 
 **Purpose**
@@ -61,6 +80,8 @@ See: docs/ai/prompting/actions.prompt.md
 
 **Checkpoint**
 [Observable state]
+
+**Depends on** 1, 2 *(optional — action numbers that must complete first)*
 
 **Status**
 Blocked — [reason] *(only if blocked/deferred)*

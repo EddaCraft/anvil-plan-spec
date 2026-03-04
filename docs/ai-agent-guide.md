@@ -114,9 +114,12 @@ When user asks to implement a feature or execute a work item:
    - Create: `plans/execution/[WORKITEM-ID].actions.md` using the full work item ID (e.g., `plans/execution/AUTH-001.actions.md`)
    - Write actions with observable checkpoints (max 12 words each)
    - **NO implementation detail** — just what should exist
+   - Identify independent actions and group into **waves** for parallel execution
+   - Assign **Agent** types when different actions need different expertise
 
 5. **Implement step-by-step**
-   - Execute one action at a time
+   - If action plan has **waves**: dispatch wave actions in parallel, wait for gate before next wave
+   - If no waves: execute one action at a time
    - Validate checkpoint after each action
    - If checkpoint fails: Debug, fix, validate again
    - If blocked: Document blocker, ask user

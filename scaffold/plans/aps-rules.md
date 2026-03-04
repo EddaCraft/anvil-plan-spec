@@ -93,6 +93,56 @@ Tasks are **execution authority** — permission to make changes.
 | "Create UserService class with methods..." | "User operations are encapsulated" |
 | "Add try/catch blocks to all handlers" | "API errors return consistent format" |
 
+## Action Plans: Waves and Parallel Execution
+
+Action plans can optionally group actions into **waves** for parallel execution.
+Actions in the same wave are independent — they can run concurrently. Each wave
+completes before the next begins.
+
+### Wave Table Format
+
+```markdown
+## Waves
+
+| Wave | Actions | Gate |
+|------|---------|------|
+| 1 | 1, 2 | Both checkpoints pass |
+| 2 | 3 | Checkpoint passes |
+```
+
+### Action-Level Fields
+
+Actions support optional execution metadata:
+
+- **Wave** N — which wave this action belongs to
+- **Depends on** 1, 2 — action numbers that must complete first
+- **Agent** type — agent type for dispatch (e.g., general-purpose, tdd-coach)
+
+### When to Use Waves
+
+| Use Waves | Stay Sequential |
+|-----------|-----------------|
+| 3+ actions with independent work | Each action depends on the previous |
+| Multi-agent dispatch needed | Single-agent linear execution |
+| Work item has natural parallel boundaries | Actions share mutable state |
+
+### When NOT to Use Waves
+
+- Simple work items (< 4 actions)
+- All actions modify the same files
+- Actions are inherently sequential (schema → migration → seed)
+
+### Anti-Pattern
+
+```markdown
+# ❌ BAD: Everything in one wave to look fast
+## Waves
+| Wave | Actions | Gate |
+| 1 | 1, 2, 3, 4, 5 | All pass |
+```
+
+If all actions are truly independent, they probably belong in separate work items.
+
 ## Naming Conventions
 
 ### Module Files
