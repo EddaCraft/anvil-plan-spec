@@ -61,7 +61,7 @@ Rules:
 - **When to use waves**: 3+ actions where at least two are independent
 - **When to skip**: Sequential plans where each action depends on the previous
 - **Gate**: What must be true before the next wave starts (usually "all checkpoints pass")
-- **Depends on**: Use on individual actions for fine-grained ordering within or across waves
+- **Depends on**: Use on individual actions for fine-grained ordering across waves
 - **Agent**: Assign agent types when different actions need different expertise
 
 Waves are execution metadata, not implementation detail. They describe
