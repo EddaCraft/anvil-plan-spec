@@ -303,8 +303,11 @@ info "aps-planning/ (skill, reference, examples, hooks, scripts)"
 mkdir -p "$COMMANDS_DIR"
 download "commands/plan.md" "$COMMANDS_DIR/plan.md"
 download "commands/plan-status.md" "$COMMANDS_DIR/plan-status.md"
+download "commands/work.md" "$COMMANDS_DIR/work.md"
+download "commands/review.md" "$COMMANDS_DIR/review.md"
+download "commands/compound.md" "$COMMANDS_DIR/compound.md"
 
-info ".claude/commands/ (plan, plan-status)"
+info ".claude/commands/ (plan, plan-status, work, review, compound)"
 
 # Success
 echo ""
@@ -333,7 +336,10 @@ echo "  └── scripts/                  # Hook install + session scripts"
 echo ""
 echo "  .claude/commands/"
 echo "  ├── plan.md                   # /plan command"
-echo "  └── plan-status.md            # /plan-status command"
+echo "  ├── plan-status.md            # /plan-status command"
+echo "  ├── work.md                   # /work command"
+echo "  ├── review.md                 # /review command"
+echo "  └── compound.md               # /compound command"
 echo ""
 
 # Interactive hook prompt

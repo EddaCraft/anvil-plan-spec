@@ -49,6 +49,16 @@ trivial changes.
 Assess → Plan → Execute → Validate → Update
 ```
 
+**Full lifecycle commands:**
+
+| Command | Phase | Purpose |
+|---------|-------|---------|
+| `/plan` | Plan | Create or update APS specs |
+| `/plan-status` | Any | Check current state and workflow phase |
+| `/work` | Execute | Execute work items from specs |
+| `/review` | Validate | Multi-perspective review of completed work |
+| `/compound` | Learn | Capture learnings into reusable knowledge |
+
 ### 1. Assess
 
 Before planning, understand what exists:

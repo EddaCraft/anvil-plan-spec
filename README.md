@@ -237,6 +237,16 @@ Plan → Execute → Validate → Learn → Plan again
 Planning without validation is guesswork. Validation without learning repeats
 mistakes. The cycle exists to make each plan better than the last.
 
+**APS commands for each phase:**
+
+| Phase | Command | Purpose |
+|-------|---------|---------|
+| Plan | `/plan` | Create or update specs |
+| Plan | `/plan-status` | Check state and workflow phase |
+| Execute | `/work` | Execute work items with authority checks |
+| Validate | `/review` | Multi-perspective review (architecture, security, simplicity, correctness) |
+| Learn | `/compound` | Capture learnings into reusable knowledge |
+
 See [docs/workflow.md](docs/workflow.md) for the full workflow guide.
 
 ## Principles

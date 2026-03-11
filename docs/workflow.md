@@ -468,12 +468,30 @@ known answers instead of research.
 
 ---
 
+## APS Commands for Each Phase
+
+APS provides commands that map to each lifecycle phase:
+
+| Phase | Command | What It Does |
+|-------|---------|--------------|
+| **Plan** | `/plan` | Create or update APS specs (indexes, modules, work items) |
+| **Plan** | `/plan-status` | Check current state, workflow phase, and suggested next steps |
+| **Execute** | `/work` | Execute work items with execution authority checks and spec updates |
+| **Validate** | `/review` | Multi-perspective review (architecture, security, simplicity, correctness) |
+| **Learn** | `/compound` | Capture learnings into `docs/solutions/`, `plans/decisions/`, or `plans/aps-rules.md` |
+
+You can use these commands at any point — they are guides, not gates. Run `/review`
+mid-implementation if you want early feedback. Run `/compound` whenever you solve
+something worth recording.
+
+---
+
 ## Complete Workflow Example
 
 Putting it all together for a feature:
 
-1. **Plan** — Create index and modules. Define work items with validation commands.
-2. **Execute** — Work against specs. Create action plans for complex items.
-3. **Validate** — Run validation commands. Check outcomes against spec. Update if diverged.
-4. **Learn** — Document tricky problems solved. Add to solution library.
+1. **Plan** (`/plan`) — Create index and modules. Define work items with validation commands.
+2. **Execute** (`/work`) — Work against specs. Create action plans for complex items.
+3. **Validate** (`/review`) — Review from four perspectives. Log issues to `plans/issues.md`.
+4. **Learn** (`/compound`) — Document tricky problems solved. Add to solution library.
 5. **Plan again** — Next feature references past solutions. Starts faster.

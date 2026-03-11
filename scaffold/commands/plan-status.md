@@ -41,17 +41,36 @@ Provide a summary like this:
 - [What to work on next based on dependencies and status]
 ```
 
+### Workflow phase
+
+After the status table, indicate the current workflow phase:
+
+```
+### Workflow Phase
+Current: [Plan / Work / Review / Compound]
+```
+
+Determine the phase from work item statuses:
+
+- **Plan** — Most items are Draft, no items In Progress or Complete
+- **Work** — Items are Ready or In Progress
+- **Review** — Items are Complete but `plans/issues.md` has Open issues, or no `/review` has been run
+- **Compound** — All items Complete, issues resolved, ready to capture learnings
+
 ### After reporting
 
 Ask the user if they want to:
 
-1. Start working on a Ready item
-2. Update any statuses
-3. Add new work items
-4. Create an action plan for a complex item
+1. Start working on a Ready item (`/work`)
+2. Review completed items (`/review`)
+3. Capture learnings (`/compound`)
+4. Update any statuses
+5. Add new work items
+6. Create an action plan for a complex item
 
 ### Reminders
 
 - Re-read the relevant module spec before starting any work
 - Check dependencies — don't start blocked items
 - Update statuses immediately as work progresses
+- The workflow phases are a guide, not a gate — you can `/review` mid-work or `/compound` at any time
