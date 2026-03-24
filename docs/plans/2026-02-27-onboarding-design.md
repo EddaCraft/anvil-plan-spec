@@ -160,38 +160,35 @@ no-dependency alternative. Both paths produce the same end state.
 ```
 aps-cli/
   src/
-    index.ts                    Entry point (commander)
+    main.rs                     Entry point (clap)
     commands/
-      init.ts                   Init wizard command
-      lint.ts                   Lint (port from bash or shell out)
-      update.ts                 Update command
+      init.rs                   Init wizard command
+      lint.rs                   Lint (port from bash or native)
+      update.rs                 Update command
     tui/
-      components/               OpenTUI components (SolidJS)
-        Select.tsx              Single-select prompt
-        MultiSelect.tsx         Checkbox multi-select (custom)
-        Confirm.tsx             Y/N dialog
-        Spinner.tsx             Progress indicator
-        Header.tsx              Branded header
-        ResultsDashboard.tsx    Summary panel
-      commands/
+      widgets/                  Ratatui widgets (shared EddaCraft TUI)
+        select.rs               Single-select prompt
+        multi_select.rs         Checkbox multi-select
+        confirm.rs              Y/N dialog
+        spinner.rs              Progress indicator
+        header.rs               Branded header
+        results_dashboard.rs    Summary panel
+      views/
         init/
-          InitWizard.tsx        Wizard orchestrator
-          ProfileStep.tsx       Step 1: profile selection
-          ScopeStep.tsx         Step 2: scope selection
-          ToolingStep.tsx       Step 3: AI tools multi-select
-          SummaryStep.tsx       Step 5: results dashboard
-      utils/
-        theme.ts                EddaCraft shared theme
-        tty-detection.ts        TTY/fallback detection
-  build.ts                      Bun compile script (cross-platform)
-  package.json
-  tsconfig.json
+          wizard.rs             Wizard orchestrator
+          profile_step.rs       Step 1: profile selection
+          scope_step.rs         Step 2: scope selection
+          tooling_step.rs       Step 3: AI tools multi-select
+          summary_step.rs       Step 5: results dashboard
+      theme.rs                  EddaCraft shared theme
+      tty.rs                    TTY/fallback detection
+  Cargo.toml
 ```
 
-Built with OpenTUI (Bun/Zig) using the SolidJS reconciler. Components
-should match the visual language of Anvil-001 (shared EddaCraft theme,
-keyboard conventions). Compiled to a single binary via
-`bun build --compile` for each target platform.
+Built with Rust using Ratatui for terminal UI. Components should match the
+visual language of the Anvil product family (shared EddaCraft theme,
+keyboard conventions). Compiled to a single static binary via
+`cargo build --release` for each target platform.
 
 ## Keyboard Conventions (from Anvil-001)
 
@@ -207,25 +204,19 @@ keyboard conventions). Compiled to a single binary via
 
 | Decision | Choice | Notes |
 |----------|--------|-------|
-| TUI framework | **OpenTUI** (Bun/Zig) | SolidJS reconciler, native Zig TUI core, same product family as Anvil. Migrating from Ink. |
-| Distribution | **Single binary** via `bun build --compile` | Cross-compile for linux-x64, darwin-arm64, windows-x64. Zero runtime deps for end users. |
+| TUI framework | **Ratatui** (Rust) | Shared EddaCraft TUI library, same product family as Anvil. Supersedes OpenTUI (Bun/Zig) decision from 2026-02-27. |
+| Distribution | **Single binary** via `cargo build --release` | Cross-compile for linux-x64, linux-arm64, darwin-arm64, darwin-x64, windows-x64. Zero runtime deps for end users. |
 | Where source lives | TBD | APS is public, Anvil is private. Need to decide whether aps-cli lives in APS repo or elsewhere. |
-| Shared TUI components | TBD | Depends on source location. OpenTUI components may be extracted as a shared public package or copied. |
+| Shared TUI components | TBD | Depends on source location. Ratatui widgets may be extracted as a shared crate or vendored. |
 
-### Why OpenTUI
+### Why Ratatui
 
-- Same product family as Anvil-001 (migrating Anvil from Ink to OpenTUI)
-- Bun-compiled single binary — same approach Claude Code uses in production
-- SolidJS reconciler for reactive components
-- Built-in Select, Input, Textarea, TabSelect, Slider, ScrollBox, Markdown
-- Native Zig core delivers sub-ms rendering
-- Bun cross-compilation covers all target platforms
-
-### Risk: Native Zig Addon in Compiled Binary
-
-OpenTUI's Zig TUI core is a native addon. There is an open Bun issue
-about `--compile` not always embedding native addons correctly. A spike
-should verify this works before committing to the architecture.
+- Same product family as Anvil (shared EddaCraft TUI built on Ratatui)
+- Rust compiles to true static binaries — no runtime, no VM, no native addon issues
+- Ratatui is the dominant Rust TUI framework with active ecosystem
+- Rich widget library (List, Table, Paragraph, Tabs, Gauge, etc.)
+- Crossterm backend handles cross-platform terminal compatibility
+- `cargo build --release` cross-compilation via `cross` or `cargo-zigbuild`
 
 ## Relationship to Existing Install
 
@@ -238,27 +229,20 @@ about what to include.
 
 ## Build & Cross-Compilation
 
-The CLI compiles to standalone binaries via `bun build --compile`:
+The CLI compiles to standalone binaries via `cargo build --release`.
+Cross-compilation uses `cross` or `cargo-zigbuild` for multi-platform
+targets:
 
-```typescript
-// build.ts
-import solidPlugin from "@opentui/solid/bun-plugin"
+```bash
+# Native build
+cargo build --release
 
-const targets = [
-  { target: "bun-linux-x64", outfile: "./dist/aps-linux-x64" },
-  { target: "bun-linux-arm64", outfile: "./dist/aps-linux-arm64" },
-  { target: "bun-darwin-arm64", outfile: "./dist/aps-darwin-arm64" },
-  { target: "bun-darwin-x64", outfile: "./dist/aps-darwin-x64" },
-  { target: "bun-windows-x64", outfile: "./dist/aps-windows-x64.exe" },
-]
-
-for (const { target, outfile } of targets) {
-  await Bun.build({
-    entrypoints: ["./src/index.ts"],
-    plugins: [solidPlugin],
-    compile: { target, outfile },
-  })
-}
+# Cross-compile (using cross)
+cross build --release --target x86_64-unknown-linux-gnu
+cross build --release --target aarch64-unknown-linux-gnu
+cross build --release --target aarch64-apple-darwin
+cross build --release --target x86_64-apple-darwin
+cross build --release --target x86_64-pc-windows-gnu
 ```
 
 Binaries are published as GitHub release assets. The `curl | bash`
@@ -266,9 +250,7 @@ installer can optionally download the binary instead of the bash CLI.
 
 ## Prior Art
 
-- **Anvil-001** (`anvil init`) — 5-step TUI wizard with Ink (migrating to
-  OpenTUI). Direct inspiration for UX patterns and shared theme.
+- **Anvil** (`anvil init`) — TUI wizard built with Rust/Ratatui (shared
+  EddaCraft TUI). Direct inspiration for UX patterns and shared theme.
 - **Superpowers** — Per-platform install instructions (Claude Code, Cursor,
   Codex, OpenCode). Inspiration for the multi-tool selection model.
-- **Claude Code** — Ships as a Bun-compiled single binary. Validates the
-  distribution approach at scale.
