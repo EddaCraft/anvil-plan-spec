@@ -64,7 +64,7 @@ with planning or cleanup.
 
 ### Claude Code
 
-Copy the agent files to your project:
+**Install:**
 
 ```bash
 mkdir -p .claude/agents
@@ -75,9 +75,27 @@ cp scaffold/agents/claude-code/aps-librarian.md .claude/agents/
 Or if you installed APS via the scaffold scripts, agents are available in
 `scaffold/agents/claude-code/` within the APS repository.
 
+**Usage:**
+
+Dispatch via the Agent tool or Task tool within Claude Code:
+
+```
+# Ask the planner to create a plan
+> Use @aps-planner to plan the authentication module
+
+# Ask the planner for status
+> Use @aps-planner to report the current plan status
+
+# Ask the librarian to audit
+> Use @aps-librarian to scan for orphaned files and broken references
+```
+
+The Planner runs on Opus (deep reasoning). The Librarian runs on Sonnet
+(fast, cheaper). Both are configured in the agent frontmatter.
+
 ### Copilot
 
-Copy to `.github/agents/` in your repository:
+**Install:**
 
 ```bash
 mkdir -p .github/agents
@@ -85,9 +103,21 @@ cp scaffold/agents/copilot/aps-planner.md .github/agents/
 cp scaffold/agents/copilot/aps-librarian.md .github/agents/
 ```
 
+**Usage:**
+
+Invoke in Copilot Chat by mentioning the agent:
+
+```
+@aps-planner create a plan for the payments module
+@aps-librarian check for stale docs in the repo
+```
+
+Copilot auto-discovers agents in `.github/agents/`. No model selection is
+available — Copilot uses its default model.
+
 ### OpenCode
 
-Copy to `.opencode/agents/` in your project:
+**Install:**
 
 ```bash
 mkdir -p .opencode/agents
@@ -95,12 +125,22 @@ cp scaffold/agents/opencode/aps-planner.md .opencode/agents/
 cp scaffold/agents/opencode/aps-librarian.md .opencode/agents/
 ```
 
-Agents are configured as subagents — invoke via `@aps-planner` or
-`@aps-librarian`.
+**Usage:**
+
+Agents are configured as subagents (`mode: subagent`). Invoke via `@mention`:
+
+```
+@aps-planner what's the next ready work item?
+@aps-librarian archive completed modules
+```
+
+Switch to an agent as a primary with Tab, or invoke as subagent with
+`@mention`. The Planner uses `anthropic/claude-opus-4-20250514`; edit the
+`model` field in the frontmatter to change.
 
 ### Codex
 
-Place the TOML configs and merge the config snippet:
+**Install:**
 
 ```bash
 mkdir -p .codex/agents
@@ -109,11 +149,37 @@ cp scaffold/agents/codex/aps-librarian.toml .codex/agents/
 ```
 
 Then merge `scaffold/agents/codex/codex-config-snippet.toml` into your
-`.codex/config.toml`. Use `/agent spawn aps-planner` to start.
+`.codex/config.toml`:
+
+```toml
+[agents.aps-planner]
+model = "o4-mini"
+config_file = ".codex/agents/aps-planner.toml"
+
+[agents.aps-librarian]
+model = "o4-mini"
+config_file = ".codex/agents/aps-librarian.toml"
+```
+
+**Usage:**
+
+Spawn agent threads with the `/agent` command:
+
+```
+/agent spawn aps-planner
+> Plan the user authentication module
+
+/agent spawn aps-librarian
+> Audit the repo for orphaned files
+```
+
+Agent threads run concurrently and can be managed with `/agent route` and
+`/agent close`. Codex uses `o4-mini` by default; change the `model` field in
+`.codex/config.toml` if needed.
 
 ### Gemini
 
-Copy skills and register them:
+**Install:**
 
 ```bash
 mkdir -p .gemini/skills
@@ -122,8 +188,22 @@ cp -r scaffold/agents/gemini/aps-librarian .gemini/skills/
 gemini skills link . --scope workspace
 ```
 
-Gemini skills are not auto-discovered — the `gemini skills link` step is
-required. Without it, the copied files won't be available.
+**Important:** Gemini skills are not auto-discovered — the `gemini skills link`
+step is required. Without it, the copied files won't be available.
+
+**Usage:**
+
+Gemini has no agent mechanism — the planner and librarian are skills, not
+agents. They activate when you ask about planning or repo hygiene:
+
+```
+Plan the authentication module using APS
+Scan the repo for broken cross-references
+```
+
+The skill provides guidance but doesn't have the same dispatch model as
+agents in other tools. For active orchestration, consider using Claude Code
+or Codex.
 
 ## Model Cost
 

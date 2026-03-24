@@ -231,7 +231,7 @@ mode agents (users invoke them deliberately, not as the default primary agent).
 - **Confidence:** high
 - **Dependencies:** AGENT-001, AGENT-002
 
-### AGENT-005: Create agent documentation — In Progress
+### AGENT-005: Create agent documentation — Complete 2026-03-24
 
 - **Intent:** Help users understand what each agent does and how to use it in
   their tool of choice
