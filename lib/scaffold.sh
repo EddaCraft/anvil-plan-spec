@@ -457,6 +457,7 @@ v2_install_codex() {
   mkdir -p "$agents_dir"
   download "scaffold/agents/codex/aps-planner.toml" "$agents_dir/aps-planner.toml"
   download "scaffold/agents/codex/aps-librarian.toml" "$agents_dir/aps-librarian.toml"
+  download "scaffold/agents/codex/codex-config-snippet.toml" "$agents_dir/codex-config-snippet.toml"
 
   # Skill at .agents/skills/ (shared with Gemini)
   v2_install_agents_skill "$target"
@@ -1168,22 +1169,13 @@ cmd_migrate() {
            "$target/.claude/skills/aps-planning" \
            "$target/plans/designs"
 
-  # Move CLI
-  if [[ -f "$target/bin/aps" ]]; then
-    cp -a "$target/bin/aps" "$target/.aps/bin/aps"
-    cp -a "$target/bin/aps.ps1" "$target/.aps/bin/aps.ps1" 2>/dev/null || true
-    info "Moved CLI to .aps/bin/"
-  fi
-  if [[ -d "$target/lib" ]]; then
-    cp -a "$target/lib/"* "$target/.aps/lib/"
-    info "Moved lib to .aps/lib/"
-  fi
+  # Install fresh v2 CLI (don't copy stale v1 binaries)
+  v2_install_cli "$target"
+  info "Installed v2 CLI to .aps/bin/"
 
-  # Move scripts
-  if [[ -d "$target/aps-planning/scripts" ]]; then
-    cp -a "$target/aps-planning/scripts/"* "$target/.aps/scripts/"
-    info "Moved hook scripts to .aps/scripts/"
-  fi
+  # Install fresh hook scripts (don't copy old versions)
+  v2_install_scripts "$target"
+  info "Installed v2 hook scripts to .aps/scripts/"
 
   # Move skill files
   for f in SKILL.md reference.md examples.md; do
@@ -1267,14 +1259,22 @@ cmd_migrate() {
     rm -rf "$target/aps-planning"
     info "Removed old aps-planning/"
   fi
-  # Only remove bin/ and lib/ if they contain APS files
-  if [[ -f "$target/bin/aps" ]] && [[ $(ls "$target/bin/" 2>/dev/null | wc -l) -le 2 ]]; then
-    rm -rf "$target/bin"
-    info "Removed old bin/"
+  # Remove only known APS files from bin/, then remove dir if empty
+  if [[ -f "$target/bin/aps" ]]; then
+    rm -f "$target/bin/aps" "$target/bin/aps.ps1"
+    rmdir "$target/bin" 2>/dev/null && info "Removed old bin/" || \
+      warn "bin/ contains non-APS files — removed only bin/aps"
   fi
+  # Remove only known APS files from lib/, then remove dir if empty
   if [[ -d "$target/lib" ]] && [[ -f "$target/lib/output.sh" ]]; then
-    rm -rf "$target/lib"
-    info "Removed old lib/"
+    local aps_lib_files=(output.sh Output.psm1 lint.sh Lint.psm1 scaffold.sh Scaffold.psm1)
+    local aps_rule_files=(common.sh Common.psm1 module.sh Module.psm1 index.sh Index.psm1
+                          workitem.sh WorkItem.psm1 issues.sh Issues.psm1 design.sh Design.psm1)
+    for f in "${aps_lib_files[@]}"; do rm -f "$target/lib/$f"; done
+    for f in "${aps_rule_files[@]}"; do rm -f "$target/lib/rules/$f"; done
+    rmdir "$target/lib/rules" 2>/dev/null
+    rmdir "$target/lib" 2>/dev/null && info "Removed old lib/" || \
+      warn "lib/ contains non-APS files — removed only APS files"
   fi
   # Remove designs/ at root (contents copied to plans/designs/)
   if [[ -d "$target/designs" ]]; then
