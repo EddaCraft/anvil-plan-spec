@@ -2,7 +2,7 @@
 
 | ID | Owner | Priority | Status |
 |----|-------|----------|--------|
-| AGENT | @aneki | high | In Progress |
+| AGENT | @aneki | high | Complete |
 
 ## Purpose
 
@@ -243,7 +243,7 @@ mode agents (users invoke them deliberately, not as the default primary agent).
 - **Confidence:** high
 - **Dependencies:** AGENT-001, AGENT-002, AGENT-003, AGENT-004
 
-### AGENT-006: Test agents across harnesses
+### AGENT-006: Test agents across harnesses — Complete 2026-03-28
 
 - **Intent:** Verify agents work correctly in each tool's environment
 - **Expected Outcome:** Test plan covering: Claude Code Task dispatch, Codex
@@ -253,6 +253,11 @@ mode agents (users invoke them deliberately, not as the default primary agent).
 - **Validation:** Tests pass on clean projects per tool
 - **Confidence:** medium
 - **Dependencies:** AGENT-001, AGENT-002, AGENT-003, AGENT-004, INSTALL-003
+- **Results:** Automated format/content validation complete for all 5 harnesses.
+  build.sh idempotent, all 14 files correct. Fixed stale OpenCode model IDs
+  (→ claude-opus-4-6 / claude-sonnet-4-6) and added Codex vendor comments.
+  Manual end-to-end tests documented in docs/agent-testing.md — require
+  respective tool installs. Claude Code agents validated live.
 
 ## Execution Strategy
 

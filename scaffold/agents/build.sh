@@ -103,9 +103,9 @@ generate_opencode() {
 }
 
 generate_opencode "aps-planner" "$PLANNER_DESC" \
-  "anthropic/claude-opus-4-20250514" 50 "$CORE_DIR/planner-core.md"
+  "anthropic/claude-opus-4-6" 50 "$CORE_DIR/planner-core.md"
 generate_opencode "aps-librarian" "$LIBRARIAN_DESC" \
-  "anthropic/claude-sonnet-4-20250514" 30 "$CORE_DIR/librarian-core.md"
+  "anthropic/claude-sonnet-4-6" 30 "$CORE_DIR/librarian-core.md"
 
 # --- Codex (.codex/agents/) ---
 CX_DIR="$SCRIPT_DIR/codex"
@@ -149,11 +149,11 @@ cat > "$CX_DIR/codex-config-snippet.toml" << 'SNIPPET'
 #   /agent spawn aps-librarian
 
 [agents.aps-planner]
-model = "o4-mini"
+model = "o4-mini"  # OpenAI model — Codex runs on OpenAI infrastructure
 config_file = ".codex/agents/aps-planner.toml"
 
 [agents.aps-librarian]
-model = "o4-mini"
+model = "o4-mini"  # OpenAI model — Codex runs on OpenAI infrastructure
 config_file = ".codex/agents/aps-librarian.toml"
 SNIPPET
 info "wrote $CX_DIR/codex-config-snippet.toml"
