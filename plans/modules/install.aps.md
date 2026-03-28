@@ -2,7 +2,7 @@
 
 | ID | Owner | Priority | Status |
 |----|-------|----------|--------|
-| INSTALL | @aneki | high | Ready |
+| INSTALL | @aneki | high | Complete |
 
 ## Purpose
 
@@ -28,20 +28,24 @@ Since then:
 ## In Scope
 
 - `.aps/` directory as single tooling root
-- `config.yml` to record install choices (project type, tools, options)
-- Interactive install flow with project detection and tool multi-select
+- `config.yml` to record install choices (profile, scope, tools, options)
+- Shell-prompt install wizard (profile, scope, AI tools) with non-interactive
+  fallback
 - Skill file generation replacing deprecated commands
 - Optional agent packaging (APS Planner, Librarian)
 - Multi-tool support: Claude Code, Codex, Copilot, Gemini, OpenCode, generic
 - Migration path from v1 layout to v2
 - Update script respecting `config.yml`
+- `aps-rules.md` split: APS-managed rules + user-owned `project-context.md`
+- `plans/designs/` and `plans/issues.md` as scaffold artifacts
+- Agent context bootstrap for `project-context.md`
 
 ## Out of Scope
 
-- Changing the `plans/` directory structure (user content stays as-is)
+- Changing APS spec format or templates
 - MCP server (separate TASKS module concern)
 - Tool-specific plugin/extension development
-- Changing APS spec format or templates
+- TUI wizard (future replacement for shell-prompt wizard)
 
 ## Interfaces
 
@@ -68,6 +72,14 @@ Since then:
 - **D-013:** Skill/instruction format per tool — *decided, see below*
 - **D-014:** Agent model defaults — *decided: Planner on Opus, Librarian on
   Sonnet*
+- **D-022:** External planning repo reversed — *decided: plans move back to
+  main repo*
+- **D-023:** Commands fully dropped — *decided: skills only, no
+  `.claude/commands/` shipped*
+- **D-024:** aps-rules.md split — *decided: `aps-rules.md` (APS-managed) +
+  `project-context.md` (user-owned)*
+- **D-025:** designs/ and issues.md into plans/ — *decided: single planning
+  content root*
 
 **D-013 Detail: Multi-Tool Skill Compatibility (Researched 2026-02-19)**
 
@@ -160,12 +172,15 @@ Copilot) and/or `GEMINI.md`. Agents are Claude Code-specific
 ```yaml
 # .aps/config.yml — written by installer, read by updater
 aps:
-  version: "0.3.0"                    # APS version installed
-  installed: "2026-02-19"             # Install date
+  version: "0.3.0"                    # APS release version installed
+  config_schema: 1                    # config.yml schema version
+  installed: "2026-02-19"             # date of initial install
+  updated: "2026-02-19"              # date of last aps update
 
 project:
   type: simple                        # simple | monorepo
   monorepo_tool: ~                    # pnpm | turbo | lerna | nx (null if simple)
+  profile: solo                       # solo | team | agent
 
 tools:                                # Multi-select — one or more entries
   - name: claude-code
@@ -195,22 +210,33 @@ Notes on schema:
 - `hooks` and `agents` only apply to claude-code
 - `instruction_file` records which file got an APS section appended
 - Updater reads this to know what to refresh without re-asking
+- `profile` determines template defaults and guidance tone
+- Canonical tool identifiers: `claude-code`, `copilot`, `codex`, `opencode`,
+  `gemini`, `generic`
 
-### INSTALL-003: Build interactive install flow
+### INSTALL-003: Build shell-prompt install wizard — Complete 2026-03-28
 
-- **Intent:** Replace the current non-interactive install with guided setup
-  that adapts to the project
-- **Expected Outcome:** Install script that: auto-detects monorepo (checks for
-  pnpm-workspace.yaml, turbo.json, lerna.json, nx.json), asks AI tool
-  multi-select (Claude Code / Codex / Copilot / Gemini / OpenCode / Other),
-  offers optional agents (Claude Code only), offers hook preference (Claude
-  Code only). Writes choices to `config.yml`.
+- **Intent:** Replace the current non-interactive install with a guided
+  shell-prompt wizard that adapts to the project
+- **Expected Outcome:** Install script with three prompts:
+  1. **Profile** (single-select): solo dev / team adoption / AI agent setup
+  2. **Scope** (single-select): small feature / module / multi-module / monorepo
+  3. **AI Tooling** (multi-select): Claude Code / Copilot / Codex / OpenCode /
+     Gemini / None
+  Followed by scaffold, agent context bootstrap message, and `aps lint`
+  verification. Non-interactive fallback via flags:
+  `--profile solo --scope small --tools claude-code,copilot`. Writes choices
+  to `.aps/config.yml`.
 - **Validation:** Run install in test dir; script asks questions, creates
-  `.aps/config.yml` with answers, installs correct files per selection
+  `.aps/config.yml` with answers, installs correct files per selection;
+  non-interactive mode works with flags
 - **Confidence:** medium
 - **Dependencies:** INSTALL-001, INSTALL-002
+- **Results:** Implemented in `lib/scaffold.sh` cmd_init with prompt_select,
+  prompt_multi, and full non-interactive flag support. Tested with single-tool
+  and multi-tool selections. APS_LOCAL env var for local development.
 
-### INSTALL-004: Convert commands to skill
+### INSTALL-004: Convert commands to skill — Complete 2026-03-28
 
 - **Intent:** Replace deprecated `.claude/commands/` with skill format
 - **Expected Outcome:** `/plan` and `/plan-status` behaviours merged into the
@@ -221,8 +247,11 @@ Notes on schema:
   status" intent; no `.claude/commands/` directory created
 - **Confidence:** high
 - **Non-scope:** Skill content rewrite (just repackaging)
+- **Results:** v2 init installs skill to `.claude/skills/aps-planning/`.
+  No `.claude/commands/` created. Migration backs up old commands to
+  `.aps/backup/commands/`.
 
-### INSTALL-005: Package APS Planner agent
+### INSTALL-005: Package APS Planner agent — Complete 2026-03-28
 
 - **Intent:** Ship a dispatchable APS planning agent that users can opt into
 - **Expected Outcome:** `.claude/agents/aps-planner.md` derived from the
@@ -232,8 +261,10 @@ Notes on schema:
   agent can be dispatched via Task tool
 - **Confidence:** high
 - **Dependencies:** INSTALL-003 (needs interactive install to offer it)
+- **Results:** Agent installed automatically when claude-code tool selected.
+  Agent files from scaffold/agents/claude-code/.
 
-### INSTALL-006: Package Librarian agent
+### INSTALL-006: Package Librarian agent — Complete 2026-03-28
 
 - **Intent:** Ship an optional repo hygiene agent alongside the planner
 - **Expected Outcome:** `.claude/agents/aps-librarian.md` derived from the
@@ -243,8 +274,9 @@ Notes on schema:
   agent scans plans/ and reports findings
 - **Confidence:** high
 - **Dependencies:** INSTALL-003
+- **Results:** Installed alongside planner when claude-code tool selected.
 
-### INSTALL-007: Add multi-tool instruction generation
+### INSTALL-007: Add multi-tool instruction generation — Complete 2026-03-28
 
 - **Intent:** Support all major AI coding tools with appropriate skill and
   instruction files
@@ -268,31 +300,61 @@ Notes on schema:
   in the expected locations; install-required tools get printed instructions
 - **Confidence:** medium
 - **Dependencies:** INSTALL-003
+- **Results:** All 6 tool targets implemented with correct file placement.
+  Multi-select tested with claude-code,codex,copilot combo. Post-install
+  instructions printed for Codex and Gemini. v2_install_tools dispatches
+  per tool.
 
-### INSTALL-008: Build migration from v1 to v2
+### INSTALL-008: Build migration from v1 to v2 — Complete 2026-03-28
 
 - **Intent:** Existing APS users can update without manual restructuring
-- **Expected Outcome:** Update script detects v1 layout (presence of
+- **Expected Outcome:** `aps migrate` detects v1 layout (presence of
   `aps-planning/`, `bin/aps`, `.claude/commands/plan.md`), moves files to
   `.aps/`, updates hook paths in `settings.local.json`, removes old dirs,
-  creates `config.yml` (inferring choices from what was installed)
-- **Validation:** Run update in a v1 project; old directories removed, `.aps/`
-  created, hooks still work, plans/ untouched
+  creates `config.yml` (inferring choices from what was installed), splits
+  `aps-rules.md` into APS-managed + `project-context.md`, moves `designs/`
+  to `plans/designs/`, backs up removed files to `.aps/backup/`. Supports
+  `--dry-run` to preview without modifying.
+- **Validation:** Run migrate in a v1 project; old directories removed, `.aps/`
+  created, hooks still work, plans/ untouched, backup exists, dry-run mode
+  previews without changes
 - **Confidence:** medium
-- **Dependencies:** INSTALL-001, INSTALL-002, INSTALL-003
+- **Dependencies:** INSTALL-001, INSTALL-002, INSTALL-003, INSTALL-009
 - **Risks:** Edge cases in hook path rewriting; users with custom
-  modifications to scaffolded files
+  modifications to scaffolded files; aps-rules.md split heuristic
+- **Results:** cmd_migrate implemented with dry-run, confirmation prompt,
+  file moves, backup, cleanup, hook path rewriting, and config inference.
+  Tested end-to-end on simulated v1 layout.
+
+### INSTALL-009: Split aps-rules.md and add project-context.md — Complete 2026-03-28
+
+- **Intent:** Separate APS-managed format rules from user-owned project context
+- **Expected Outcome:** New `aps-rules.md` template containing only APS format
+  rules (hierarchy, naming, status flows, work item structure, action plan
+  format). New `project-context.md` template with sections for overview, team,
+  tech stack, conventions, and active decisions. Agent bootstrap contract:
+  planner agent populates `project-context.md` on first run if it contains
+  TODO markers.
+- **Validation:** Fresh install produces both files; `aps-rules.md` contains no
+  project-specific content; `project-context.md` has TODO markers; planner
+  agent can detect and populate it
+- **Confidence:** high
+- **Dependencies:** INSTALL-001
+- **Results:** `aps-rules-v2.md` template created with v2 file locations
+  (plans/designs/, project-context.md). `project-context.md` template with
+  HTML comment TODO markers. Both installed by v2 init and migrate.
 
 ## Execution Strategy
 
 ### Wave 1: Foundations (no dependencies)
 
-- INSTALL-001: Directory structure
-- INSTALL-002: Config schema
+- INSTALL-001: Directory structure (Complete)
+- INSTALL-002: Config schema (Complete)
+- INSTALL-009: aps-rules.md split + project-context.md
 
 ### Wave 2: Core installer (depends on Wave 1)
 
-- INSTALL-003: Interactive install
+- INSTALL-003: Shell-prompt install wizard
 - INSTALL-004: Commands → skills
 
 ### Wave 3: Optional packages (depends on Wave 2)
@@ -300,7 +362,7 @@ Notes on schema:
 - INSTALL-005: APS Planner agent
 - INSTALL-006: Librarian agent
 
-### Wave 4: Stretch (depends on Wave 2 + research)
+### Wave 4: Stretch (depends on Wave 2)
 
 - INSTALL-007: Multi-tool support
 - INSTALL-008: v1 → v2 migration

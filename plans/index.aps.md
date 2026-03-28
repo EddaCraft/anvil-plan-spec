@@ -43,13 +43,14 @@ APS needs continued development to:
 
 | Module | Purpose | Status |
 |--------|---------|--------|
-| [install](./modules/install.aps.md) | Interactive install, `.aps/` layout, multi-tool | Ready |
-| [agents](./modules/agents.aps.md) | APS Planner + Librarian agents, multi-harness | Ready |
+| [install](./modules/install.aps.md) | Interactive install, `.aps/` layout, multi-tool | Complete |
+| [agents](./modules/agents.aps.md) | APS Planner + Librarian agents, multi-harness | Complete |
 
 ### Near Term
 
 | Module | Purpose | Status |
 |--------|---------|--------|
+| [orchestrate](./modules/orchestrate.aps.md) | CLI orchestration, dependency resolution, state machine | Ready |
 | [tasks](./modules/tasks.aps.md) | Claude Code Tasks integration | Draft |
 | [examples](./modules/examples.aps.md) | Additional worked examples | Draft |
 | [prompts](./modules/prompts.aps.md) | Tool-specific prompt variants | Draft |
@@ -101,3 +102,7 @@ These are explicitly out of scope:
 - **D-017:** Agent path references — *decided: agents reference `plans/` and `.aps/scripts/`, not `.aps/config.yml`*
 - **D-018:** Shared core vs per-tool rewrite — *decided: shared core prompt, tool-specific frontmatter/packaging*
 - **D-019:** Agent format per tool — *decided: 4/5 tools have native agent mechanisms (Claude Code `.claude/agents/`, Copilot `.github/agents/`, OpenCode `.opencode/agents/`, Codex `.codex/config.toml` + TOML overlays); Gemini is skill-only. Port to each tool's native format, not just skills.*
+- **D-022:** External planning repo reversed — *decided: plans move back to main repo*
+- **D-023:** Commands fully dropped — *decided: skills only, no `.claude/commands/` shipped*
+- **D-024:** aps-rules.md split — *decided: `aps-rules.md` (APS-managed) + `project-context.md` (user-owned)*
+- **D-025:** designs/ and issues.md into plans/ — *decided: single planning content root*
