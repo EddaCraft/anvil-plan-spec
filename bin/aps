@@ -3,8 +3,9 @@
 # APS CLI - Anvil Plan Spec tooling
 #
 # Usage:
-#   aps init [dir]        Create APS structure in a new project
-#   aps update [dir]      Update templates, skill, and commands
+#   aps init [dir]        Create APS structure in a new project (v2 layout)
+#   aps update [dir]      Update templates, skill, and tool files
+#   aps migrate [dir]     Convert v1 layout to v2
 #   aps lint [file|dir]   Validate APS documents (default: plans/)
 #   aps lint --json       Output as JSON
 #   aps --help            Show this help
@@ -38,8 +39,9 @@ show_help() {
 aps - Anvil Plan Spec CLI
 
 Usage:
-  aps init [dir]        Create APS structure in a new project
-  aps update [dir]      Update templates, skill, and commands
+  aps init [dir]        Create APS structure in a new project (v2 layout)
+  aps update [dir]      Update templates, skill, and tool files
+  aps migrate [dir]     Convert v1 layout to v2 (.aps/ consolidation)
   aps lint [file|dir]   Validate APS documents
   aps lint --json       Output results as JSON
   aps --help            Show this help
@@ -52,8 +54,11 @@ Environment:
   APS_VERSION   Git ref to download from (default: main)
 
 Examples:
-  aps init                    # Init in current directory
-  aps update                  # Update templates and skill
+  aps init                    # Interactive wizard (v2 layout)
+  aps init --profile solo --scope small --tools claude-code
+  aps update                  # Update templates and tool files
+  aps migrate                 # Convert v1 -> v2
+  aps migrate --dry-run       # Preview migration
   aps lint                    # Lint plans/ directory
   aps lint plans/index.aps.md # Lint specific file
   aps lint . --json           # Lint current dir, JSON output
@@ -71,6 +76,10 @@ main() {
     update)
       shift
       cmd_update "$@"
+      ;;
+    migrate)
+      shift
+      cmd_migrate "$@"
       ;;
     lint)
       shift
