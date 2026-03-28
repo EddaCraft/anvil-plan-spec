@@ -2,7 +2,7 @@
 
 | ID | Owner | Status |
 |----|-------|--------|
-| ORCH | @aneki | Draft |
+| ORCH | @aneki | Ready |
 
 > **Note:** This is an exploratory "or" spec — an alternative to the TASKS
 > module for providing programmatic plan navigation. TASKS focuses on Claude
@@ -190,78 +190,99 @@ A rich agent definition (like BMAD's BMad Master) that:
 
 - [x] Purpose and scope are clear
 - [x] Dependencies identified
-- [ ] Decisions resolved (see below)
-- [ ] At least one work item defined
+- [x] Decisions resolved (D-001 through D-005)
+- [x] Work items defined (ORCH-001 through ORCH-006)
 
 ## Work Items
-
-*Work items to be defined when promoting to Ready. Likely structure:*
 
 ### ORCH-001: Implement `aps next` command
 
 - **Intent:** Enable programmatic dependency resolution from APS markdown
-- **Expected Outcome:** `aps next [module]` parses work items, resolves
-  dependencies, returns next Ready item whose deps are all Complete
-- **Validation:** `aps next` returns correct item in example project
+- **Expected Outcome:** `aps next [module]` parses work items from `.aps.md`
+  files, resolves dependency chains, returns next Ready item whose deps are
+  all Complete. Reuses VAL module's markdown parser.
+- **Validation:** `aps next` returns correct item in a project with mixed
+  statuses and cross-module dependencies
+- **Confidence:** high
 - **Dependencies:** VAL (parser)
 
 ### ORCH-002: Implement `aps start` and `aps complete`
 
 - **Intent:** Enforce state transitions and capture learnings
-- **Expected Outcome:** Commands update Status fields in-place in markdown;
-  reject invalid transitions; prompt for optional learning on complete
-- **Validation:** Status fields update correctly; invalid transitions rejected
+- **Expected Outcome:** `aps start <ID>` marks In Progress in markdown,
+  suggests branch name (`work/<ID>`), assembles context package. `aps complete
+  <ID>` validates transition (must be In Progress), marks Complete, prompts
+  for optional learning (`- **Learning:** "..."`). Both reject invalid
+  transitions with clear error messages.
+- **Validation:** Status fields update in-place; invalid transitions rejected;
+  learning appended when provided
+- **Confidence:** high
 - **Dependencies:** ORCH-001
 
 ### ORCH-003: Implement context packaging
 
 - **Intent:** Assemble focused context when starting a work item
-- **Expected Outcome:** `aps start` generates `.aps/context/<ID>.md` with
-  item details, module scope, decisions, and dependency learnings
-- **Validation:** Context file contains all expected sections
+- **Expected Outcome:** `aps start` generates `.aps/context/<ID>.md`
+  (gitignored, ephemeral) with: work item details, module scope and
+  interfaces, relevant decisions, dependency learnings, related file paths
+- **Validation:** Context file contains all expected sections; regeneration
+  produces fresh output
+- **Confidence:** medium
 - **Dependencies:** ORCH-002
 
 ### ORCH-004: Implement `aps graph`
 
 - **Intent:** Visualize dependency graph with status
-- **Expected Outcome:** ASCII graph showing work items, dependencies, and
-  status coloring
-- **Validation:** Graph renders correctly for example project
+- **Expected Outcome:** ASCII graph showing work items, dependency arrows,
+  and status indicators (color or symbols). Optionally scoped to a module.
+- **Validation:** Graph renders correctly for example project with 5+ items
+  and cross-module deps
+- **Confidence:** medium
 - **Dependencies:** ORCH-001
 
 ### ORCH-005: Create Conductor agent
 
 - **Intent:** Provide prompt-based orchestration for any tool
-- **Expected Outcome:** Agent definition that can drive APS workflows using
-  CLI commands or direct markdown reading
+- **Expected Outcome:** Agent definition (multi-harness via scaffold/agents/)
+  that can drive APS workflows: assess plan state, pick next item, dispatch
+  to implementer agent, validate checkpoint, capture learnings. Uses CLI
+  commands when available, falls back to direct markdown reading.
 - **Validation:** Agent dispatched via Task tool navigates a plan correctly
+  across 2+ work items
+- **Confidence:** medium
 - **Dependencies:** ORCH-001, AGENT-001
 
 ### ORCH-006: Create MCP server
 
 - **Intent:** Expose orchestration to MCP-capable agents
-- **Expected Outcome:** MCP server wrapping CLI operations with codemode
-  (single tool, natural language routing)
+- **Expected Outcome:** TypeScript MCP server (using MCP SDK) wrapping CLI
+  operations. Single codemode tool with natural language routing. Agents
+  send requests like "next ready item in auth" and get structured results.
 - **Validation:** MCP tool discovery succeeds; agent can call `aps next`
+  through MCP; server handles malformed input gracefully
+- **Confidence:** low
 - **Dependencies:** ORCH-001, ORCH-002
 
 ## Decisions
 
-- **D-001:** Should ORCH absorb TASKS or coexist? — *open: start as coexist;
-  TASKS focuses on Claude Code Tasks specifically, ORCH provides the general
-  layer. Revisit after both mature.*
-- **D-002:** Learning storage format — *open: inline in work item metadata
-  (e.g., `- **Learning:** "..."` after Validation) vs. separate learnings
-  section in module. Inline is simpler; section is more discoverable.*
-- **D-003:** VCS integration scope — *open: branch-per-work-item (like
-  Overseer) vs. advisory only (suggest branch name, don't create). Advisory
-  is less invasive.*
-- **D-004:** MCP server language — *open: TypeScript (MCP SDK ecosystem) vs.
-  shell wrapper (simpler, no runtime deps). Shell may be sufficient for
-  codemode.*
-- **D-005:** Context package location — *open: `.aps/context/` (ephemeral,
-  gitignored) vs. inline in action plan (durable, versioned). Ephemeral
-  avoids clutter; durable preserves history.*
+- **D-001:** Should ORCH absorb TASKS or coexist? — *decided: coexist. ORCH
+  is the tool-agnostic CLI layer (dependency resolution, state machine,
+  context packaging). TASKS is a Claude Code-specific integration that can
+  leverage ORCH's foundation. Revisit if TASKS never matures.*
+- **D-002:** Learning storage format — *decided: inline in work item metadata
+  (`- **Learning:** "..."` after Validation field). Simpler, keeps everything
+  in one place, no sync issues. Learnings are per-work-item, not per-module.*
+- **D-003:** VCS integration scope — *decided: advisory only. `aps start`
+  suggests a branch name (`work/AUTH-003`) but does not create it. APS manages
+  planning, not git workflow. Users have their own branching strategies.*
+- **D-004:** MCP server language — *decided: TypeScript using MCP SDK (Phase 3,
+  optional). The MCP protocol requires JSON-RPC over stdio which shell can't
+  handle cleanly. CLI stays pure bash. MCP server is an optional wrapper for
+  agents that support MCP.*
+- **D-005:** Context package location — *decided: ephemeral at `.aps/context/`
+  (gitignored). Context packages are assembled fresh on `aps start` from
+  versioned source data (work items, modules, decisions). No need to version
+  the assembled output — it would just be clutter.*
 
 ## Execution Strategy
 
