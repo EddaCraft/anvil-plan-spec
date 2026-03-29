@@ -186,23 +186,23 @@ prompt_select() {
   local options=("$@")
   local count=${#options[@]}
 
-  echo ""
-  echo "$prompt"
-  echo ""
+  echo "" >&2
+  echo "$prompt" >&2
+  echo "" >&2
   for i in "${!options[@]}"; do
-    printf "  %d) %s\n" $((i + 1)) "${options[$i]}"
+    printf "  %d) %s\n" $((i + 1)) "${options[$i]}" >&2
   done
-  echo ""
+  echo "" >&2
 
   if [[ -t 0 ]]; then
     while true; do
-      printf "Choice [1-%d]: " "$count"
+      printf "Choice [1-%d]: " "$count" >&2
       read -r choice
       if [[ "$choice" =~ ^[0-9]+$ ]] && (( choice >= 1 && choice <= count )); then
         echo "$choice"
         return
       fi
-      echo "  Please enter a number between 1 and $count"
+      echo "  Please enter a number between 1 and $count" >&2
     done
   else
     echo "1"
@@ -216,17 +216,17 @@ prompt_multi() {
   local options=("$@")
   local count=${#options[@]}
 
-  echo ""
-  echo "$prompt"
-  echo ""
+  echo "" >&2
+  echo "$prompt" >&2
+  echo "" >&2
   for i in "${!options[@]}"; do
-    printf "  %d) %s\n" $((i + 1)) "${options[$i]}"
+    printf "  %d) %s\n" $((i + 1)) "${options[$i]}" >&2
   done
-  echo ""
+  echo "" >&2
 
   if [[ -t 0 ]]; then
     while true; do
-      printf "Choice (comma-separated, e.g. 1,2,4): "
+      printf "Choice (comma-separated, e.g. 1,2,4): " >&2
       read -r choices
       # Validate all choices
       local valid=true
@@ -242,7 +242,7 @@ prompt_multi() {
         echo "$choices"
         return
       fi
-      echo "  Please enter numbers between 1 and $count, separated by commas"
+      echo "  Please enter numbers between 1 and $count, separated by commas" >&2
     done
   else
     echo "1"
@@ -256,10 +256,20 @@ has_aps_hooks() {
   [[ -f "$settings" ]] && grep -q 'aps-planning/scripts\|\.aps/scripts\|\[APS\]' "$settings" 2>/dev/null
 }
 
-# Detect v1 layout
+# Detect v1 layout — require APS-specific markers to avoid false positives
+# on repos that happen to have bin/aps for unrelated purposes.
 is_v1_layout() {
   local target="${1:-.}"
-  [[ -f "$target/bin/aps" ]] || [[ -d "$target/aps-planning" ]] || [[ -f "$target/.claude/commands/plan.md" ]]
+  local markers=0
+
+  [[ -f "$target/bin/aps" ]]                  && ((markers++))
+  [[ -d "$target/aps-planning" ]]             && ((markers++))
+  [[ -f "$target/.claude/commands/plan.md" ]] && ((markers++))
+  [[ -f "$target/lib/output.sh" ]]            && ((markers++))
+  [[ -f "$target/plans/aps-rules.md" ]]       && ((markers++))
+
+  # Require at least 2 markers to confidently identify a v1 install
+  (( markers >= 2 ))
 }
 
 # Detect v2 layout
@@ -1069,10 +1079,11 @@ cmd_migrate() {
   if ! is_v1_layout "$target"; then
     if is_v2_layout "$target"; then
       info "Already using v2 layout. Nothing to migrate."
+      exit 0
     else
       error "No v1 APS installation found at $target"
+      exit 1
     fi
-    exit 0
   fi
 
   echo ""
@@ -1185,9 +1196,9 @@ cmd_migrate() {
   done
   info "Moved skill files to .claude/skills/aps-planning/"
 
-  # Move designs
+  # Move designs (use /. to include dotfiles)
   if [[ -d "$target/designs" ]] && [[ "$(ls -A "$target/designs" 2>/dev/null)" ]]; then
-    cp -a "$target/designs/"* "$target/plans/designs/"
+    cp -a "$target/designs/." "$target/plans/designs/"
     info "Moved designs/ to plans/designs/"
   fi
 
