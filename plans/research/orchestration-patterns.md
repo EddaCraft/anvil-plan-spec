@@ -84,6 +84,7 @@ development_status:
 ```
 
 Status machines:
+
 - **Epic:** backlog → in-progress → done
 - **Story:** backlog → ready-for-dev → in-progress → review → done
 
@@ -199,6 +200,7 @@ captured at task completion and propagated to related milestones.
 ### Overseer VCS Integration
 
 Branch-per-task with auto-commit:
+
 - Starting a task creates `task/plan-<id>/task-<id>` branch
 - Completing a task commits and optionally merges
 - Clean separation of work streams

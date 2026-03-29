@@ -179,6 +179,7 @@ Server parses intent, runs `aps next auth`, returns structured result.
 ### Conductor Agent (Optional)
 
 A rich agent definition (like BMAD's BMad Master) that:
+
 - Knows the full APS lifecycle and rules
 - Has a decision tree: assess plan → pick next item → dispatch to agent →
   validate checkpoint → capture learnings

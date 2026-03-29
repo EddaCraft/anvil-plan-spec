@@ -346,6 +346,7 @@ v1 layout is detected by the presence of any of: `bin/aps` at project root,
 The current `aps-rules.md` contains these section categories:
 
 **APS-managed (stays in aps-rules.md):**
+
 - APS Hierarchy (Index, Module, Work Item, Action Plan)
 - Naming conventions (ID format, file naming)
 - Status flows (Draft → Ready → In Progress → Complete)
@@ -355,6 +356,7 @@ The current `aps-rules.md` contains these section categories:
 - Template reference
 
 **Project-specific (moves to project-context.md):**
+
 - Session Start/End Ritual content
 - Project-specific conventions
 - Monorepo-specific configuration
