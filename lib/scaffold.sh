@@ -1222,7 +1222,11 @@ cmd_migrate() {
     info "Created plans/issues.md"
   fi
 
-  # Update aps-rules.md to v2 version
+  # Update aps-rules.md to v2 version (back up existing first)
+  if [[ -f "$target/plans/aps-rules.md" ]]; then
+    cp -a "$target/plans/aps-rules.md" "$target/.aps/backup/aps-rules.md"
+    info "Backed up existing plans/aps-rules.md to .aps/backup/"
+  fi
   download "scaffold/plans/aps-rules-v2.md" "$target/plans/aps-rules.md"
   info "Updated plans/aps-rules.md to v2"
 
@@ -1265,7 +1269,13 @@ cmd_migrate() {
   fi
 
   # Clean up old directories
-  # Remove aps-planning/ entirely (files moved to .claude/skills/ and .aps/scripts/)
+  # Back up custom hook scripts before removing aps-planning/
+  if [[ -d "$target/aps-planning/scripts" ]]; then
+    mkdir -p "$target/.aps/backup/scripts"
+    cp -a "$target/aps-planning/scripts/." "$target/.aps/backup/scripts/"
+    info "Backed up aps-planning/scripts/ to .aps/backup/scripts/"
+  fi
+  # Remove aps-planning/ entirely (skill files moved to .claude/skills/, scripts to .aps/scripts/)
   if [[ -d "$target/aps-planning" ]]; then
     rm -rf "$target/aps-planning"
     info "Removed old aps-planning/"
