@@ -51,6 +51,7 @@ APS needs continued development to:
 | Module | Purpose | Status |
 |--------|---------|--------|
 | [orchestrate](./modules/orchestrate.aps.md) | CLI orchestration, dependency resolution, state machine | Ready |
+| [tui](./modules/tui.aps.md) | Ratatui TUI customization wizard for project setup | Ready |
 | [tasks](./modules/tasks.aps.md) | Claude Code Tasks integration | Draft |
 | [examples](./modules/examples.aps.md) | Additional worked examples | Draft |
 | [prompts](./modules/prompts.aps.md) | Tool-specific prompt variants | Draft |
