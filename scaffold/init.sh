@@ -246,16 +246,7 @@ if [[ "$UPDATE_MODE" == true ]]; then
 
   info "plans/ + designs/ (templates, rules)"
 
-  # Skill and commands
-  install_skill "$TARGET"
-
-  # Hooks: prompt only if not already configured
-  if ! has_aps_hooks "$TARGET"; then
-    prompt_hooks "$TARGET"
-  else
-    echo ""
-    info "Hook configuration was NOT modified (run install-hooks.sh to update)."
-  fi
+  info "Skill not updated. Run: aps setup claude-code  (or codex/opencode) to install/update the planning skill."
 
   echo ""
   info "Your specs (index.aps.md, modules/*.aps.md) were NOT modified."
@@ -291,9 +282,6 @@ else
 
   info "plans/ + designs/ (templates, rules, index)"
 
-  # Skill and commands
-  install_skill "$TARGET"
-
   echo ""
   echo "  bin/"
   echo "  └── aps                              <- CLI (lint, init, update)"
@@ -319,20 +307,15 @@ else
   echo "  ├── hooks.md                         <- Hook configuration guide"
   echo "  └── scripts/                         <- Hook install + session scripts"
   echo ""
-  echo "  .claude/commands/"
-  echo "  ├── plan.md                          <- /plan command"
-  echo "  └── plan-status.md                   <- /plan-status command"
-
-  # Hooks
-  prompt_hooks "$TARGET"
-
-  # PATH setup
-  setup_path "$TARGET"
+  echo "  Harness skill not installed."
+  echo "  Run: aps setup claude-code   (Claude Code)"
+  echo "       aps setup codex         (Codex)"
+  echo "       aps setup opencode      (OpenCode)"
 
   echo ""
   step "Next steps"
   echo "  1. Edit plans/index.aps.md to define your plan"
   echo "  2. Copy templates to create modules (remove leading dot)"
-  echo "  3. Use /plan in Claude Code to start planning"
+  echo "  3. Run: aps setup <harness> to install the planning skill for your tool"
   echo ""
 fi
