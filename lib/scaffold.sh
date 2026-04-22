@@ -16,7 +16,7 @@ V2_PLAN_FILES=(
   "scaffold/plans/modules/.module.template.md"
   "scaffold/plans/modules/.simple.template.md"
   "scaffold/plans/modules/.index-monorepo.template.md"
-  "scaffold/plans/execution/.steps.template.md"
+  "scaffold/plans/execution/.actions.template.md"
 )
 
 # Skill files for .claude/skills/aps-planning/
@@ -79,7 +79,7 @@ PLAN_FILES=(
   "scaffold/plans/modules/.module.template.md"
   "scaffold/plans/modules/.simple.template.md"
   "scaffold/plans/modules/.index-monorepo.template.md"
-  "scaffold/plans/execution/.steps.template.md"
+  "scaffold/plans/execution/.actions.template.md"
 )
 
 SKILL_FILES=(
@@ -249,11 +249,16 @@ prompt_multi() {
   fi
 }
 
-# Check if APS hooks are already configured
+# Check if APS hooks are already configured in either settings file
 has_aps_hooks() {
   local target="${1:-.}"
-  local settings="$target/.claude/settings.local.json"
-  [[ -f "$settings" ]] && grep -q 'aps-planning/scripts\|\.aps/scripts\|\[APS\]' "$settings" 2>/dev/null
+  local f
+  for f in "$target/.claude/settings.local.json" "$target/.claude/settings.json"; do
+    if [[ -f "$f" ]] && grep -q 'aps-planning/scripts\|\.aps/scripts\|\[APS\]' "$f" 2>/dev/null; then
+      return 0
+    fi
+  done
+  return 1
 }
 
 # Detect v1 layout — require APS-specific markers to avoid false positives
