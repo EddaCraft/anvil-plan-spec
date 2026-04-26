@@ -92,5 +92,77 @@ echo "$output" | grep -q '"summary"' && pass || fail "JSON output invalid"
 echo -n "Test: plans/ directory passes lint... "
 $APS lint "$PROJECT_ROOT/plans/" > /dev/null 2>&1 && pass || fail "our own plans failed lint"
 
+# Test 16: aps next picks ready item with deps complete
+echo -n "Test: aps next on fixture picks ALPHA-003... "
+output=$($APS next --plans-dir "$SCRIPT_DIR/fixtures/orch" 2>&1) || true
+echo "$output" | grep -q "ALPHA-003" && pass || fail "expected ALPHA-003, got: $output"
+
+# Test 17: aps next --json emits structured output
+echo -n "Test: aps next --json includes id and module... "
+output=$($APS next --plans-dir "$SCRIPT_DIR/fixtures/orch" --json 2>&1) || true
+echo "$output" | grep -q '"id":"ALPHA-003"' && \
+  echo "$output" | grep -q '"module":"alpha"' && pass || \
+  fail "JSON missing fields: $output"
+
+# Test 18: aps next module filter restricts scope
+echo -n "Test: aps next beta filters to beta module... "
+output=$($APS next beta --plans-dir "$SCRIPT_DIR/fixtures/orch" 2>&1) || true
+echo "$output" | grep -q "BETA-001" && pass || fail "expected BETA-001, got: $output"
+
+# Test 19: aps next returns exit 1 when nothing startable
+echo -n "Test: aps next returns 1 on empty result... "
+mkdir -p /tmp/aps-orch-empty/modules
+echo "# Empty" > /tmp/aps-orch-empty/modules/empty.aps.md
+if $APS next --plans-dir /tmp/aps-orch-empty > /dev/null 2>&1; then
+  fail "expected exit 1 for empty plans"
+else
+  pass
+fi
+rm -rf /tmp/aps-orch-empty
+
+# Test 20: aps next skips In Progress items
+echo -n "Test: aps next does not return ALPHA-002 (In Progress)... "
+output=$($APS next --plans-dir "$SCRIPT_DIR/fixtures/orch" --json 2>&1) || true
+if echo "$output" | grep -q '"id":"ALPHA-002"'; then
+  fail "should not return In Progress item"
+else
+  pass
+fi
+
+# Test 21: aps next does NOT promote items in a Draft module to Ready
+echo -n "Test: aps next skips items in Draft modules... "
+if $APS next --plans-dir "$SCRIPT_DIR/fixtures/orch/edge-cases/draft-module" >/dev/null 2>&1; then
+  fail "should not return any Ready items in a Draft module"
+else
+  pass
+fi
+
+# Test 22: aps next handles duplicate IDs — Complete-wins, dependent unblocks
+echo -n "Test: aps next resolves DUP-002 (DUP-001 dup-Complete wins)... "
+output=$($APS next --plans-dir "$SCRIPT_DIR/fixtures/orch/edge-cases/dup-ids" --json 2>/dev/null) || true
+echo "$output" | grep -q '"id":"DUP-002"' && pass || fail "expected DUP-002, got: $output"
+
+# Test 23: aps next emits a warning for duplicate IDs
+echo -n "Test: aps next warns to stderr about duplicate ID... "
+stderr=$($APS next --plans-dir "$SCRIPT_DIR/fixtures/orch/edge-cases/dup-ids" 2>&1 >/dev/null) || true
+echo "$stderr" | grep -q "duplicate work item id DUP-001" && pass || fail "expected duplicate warning, got: $stderr"
+
+# Test 24: aps next does not return items with circular deps
+echo -n "Test: aps next exits 1 on circular dependencies... "
+if $APS next --plans-dir "$SCRIPT_DIR/fixtures/orch/edge-cases/circular" >/dev/null 2>&1; then
+  fail "circular deps should not produce a startable item"
+else
+  pass
+fi
+
+# Test 25: aps next --json emits valid JSON parseable by jq
+echo -n "Test: aps next --json output is valid JSON... "
+if command -v jq >/dev/null 2>&1; then
+  output=$($APS next --plans-dir "$SCRIPT_DIR/fixtures/orch" --json 2>&1)
+  echo "$output" | jq -e '.found == true and .id == "ALPHA-003"' >/dev/null && pass || fail "jq could not parse: $output"
+else
+  echo "SKIP (no jq)"
+fi
+
 echo ""
 echo -e "${GREEN}All tests passed!${NC}"

@@ -33,6 +33,7 @@ source "$LIB_DIR/rules/issues.sh"
 source "$LIB_DIR/rules/design.sh"
 source "$LIB_DIR/lint.sh"
 source "$LIB_DIR/scaffold.sh"
+source "$LIB_DIR/orch.sh"
 
 show_help() {
   cat <<EOF
@@ -44,6 +45,8 @@ Usage:
   aps migrate [dir]     Convert v1 layout to v2 (.aps/ consolidation)
   aps lint [file|dir]   Validate APS documents
   aps lint --json       Output results as JSON
+  aps next [module]     Print next Ready work item with all deps Complete
+  aps next --json       Emit JSON instead of human-readable output
   aps --help            Show this help
 
 Options:
@@ -62,7 +65,100 @@ Examples:
   aps lint                    # Lint plans/ directory
   aps lint plans/index.aps.md # Lint specific file
   aps lint . --json           # Lint current dir, JSON output
+  aps next                    # Next Ready work item across plans/
+  aps next orch               # Next Ready work item in the orch module
+  aps next --json             # JSON output for tooling
 EOF
+}
+
+cmd_next() {
+  local plans_dir="plans"
+  local filter=""
+  local json=0
+
+  while (($#)); do
+    case "$1" in
+      --json) json=1; shift ;;
+      --plans-dir)
+        if [[ -z "${2:-}" ]]; then
+          error "--plans-dir requires an argument"
+          return 1
+        fi
+        plans_dir="$2"
+        shift 2
+        ;;
+      -h|--help)
+        cat <<EOF
+aps next - Print the next Ready work item whose dependencies are all Complete
+
+Usage:
+  aps next [module] [--json] [--plans-dir <dir>]
+
+Examples:
+  aps next                 # Pick across all modules
+  aps next orch            # Restrict to a module (filename match)
+  aps next --json          # Machine-readable output
+
+Exit code:
+  0   A candidate was found
+  1   No candidate is currently startable
+EOF
+        return 0
+        ;;
+      *) filter="$1"; shift ;;
+    esac
+  done
+
+  if [[ ! -d "$plans_dir/modules" ]]; then
+    error "No modules directory at '$plans_dir/modules'"
+    return 1
+  fi
+
+  local row
+  if ! row="$(orch_resolve_next "$plans_dir" "$filter")"; then
+    if (( json == 1 )); then
+      printf '{"found":false}\n'
+    else
+      info "No Ready work items with all dependencies Complete"
+    fi
+    return 1
+  fi
+
+  IFS=$'\t' read -r f id title status deps <<< "$row"
+  local module
+  module="$(basename "$f" .aps.md)"
+
+  if (( json == 1 )); then
+    if ! command -v jq >/dev/null 2>&1; then
+      error "aps next --json requires jq on PATH"
+      return 1
+    fi
+    local deps_args=()
+    if [[ -n "$deps" ]]; then
+      local IFS_OLD="$IFS"
+      IFS=',' read -ra _dep_arr <<< "$deps"
+      IFS="$IFS_OLD"
+      deps_args=("${_dep_arr[@]}")
+    fi
+    jq -cn \
+      --arg id "$id" \
+      --arg module "$module" \
+      --arg title "$title" \
+      --arg status "$status" \
+      --arg file "$f" \
+      --args \
+      '{found:true, id:$id, module:$module, title:$title, status:$status, dependencies:$ARGS.positional, file:$file}' \
+      "${deps_args[@]}"
+  else
+    printf '%s — %s\n' "$id" "$title"
+    printf '  Module: %s\n' "$module"
+    if [[ -n "$deps" ]]; then
+      printf '  Dependencies (Complete): %s\n' "$deps"
+    else
+      printf '  Dependencies: none\n'
+    fi
+    printf '  File: %s\n' "$f"
+  fi
 }
 
 main() {
@@ -84,6 +180,10 @@ main() {
     lint)
       shift
       cmd_lint "$@"
+      ;;
+    next)
+      shift
+      cmd_next "$@"
       ;;
     --help|-h|help|"")
       show_help

@@ -5,7 +5,7 @@
 | Status | Active |
 | Owner | @aneki |
 | Created | 2025-12-31 |
-| Updated | 2026-02-19 |
+| Updated | 2026-04-26 |
 
 ## Problem
 
@@ -39,19 +39,31 @@ APS needs continued development to:
 | [docs](./modules/docs.aps.md) | Workflow guide, improved onboarding | Complete |
 | [validation](./modules/validation.aps.md) | CLI tool to validate APS documents | Complete |
 
-### Current (v0.3 — Distribution)
+### Shipped (v0.3 — Distribution)
 
 | Module | Purpose | Status |
 |--------|---------|--------|
 | [install](./modules/install.aps.md) | Interactive install, `.aps/` layout, multi-tool | Complete |
 | [agents](./modules/agents.aps.md) | APS Planner + Librarian agents, multi-harness | Complete |
 
+### In Progress (v0.4 — Orchestration & UX)
+
+| Module | Purpose | Status |
+|--------|---------|--------|
+| [orchestrate](./modules/orchestrate.aps.md) | CLI orchestration, dependency resolution, state machine | In Progress |
+| [tui](./modules/tui.aps.md) | Ratatui TUI customization wizard for project setup | In Progress |
+
+### Conductor / Crosscutting (Trialing)
+
+| Module | Purpose | Status |
+|--------|---------|--------|
+| [conductor](./modules/conductor.aps.md) | New module type for cross-module concerns (trial) | Draft (Trialing) |
+| [release-planning](./modules/release-planning.aps.md) | Release plan template + scaffold + linter (trial in anvil-001) | Draft |
+
 ### Near Term
 
 | Module | Purpose | Status |
 |--------|---------|--------|
-| [orchestrate](./modules/orchestrate.aps.md) | CLI orchestration, dependency resolution, state machine | Ready |
-| [tui](./modules/tui.aps.md) | Ratatui TUI customization wizard for project setup | Ready |
 | [tasks](./modules/tasks.aps.md) | Claude Code Tasks integration | Draft |
 | [examples](./modules/examples.aps.md) | Additional worked examples | Draft |
 | [prompts](./modules/prompts.aps.md) | Tool-specific prompt variants | Draft |
@@ -107,3 +119,5 @@ These are explicitly out of scope:
 - **D-023:** Commands fully dropped — *decided: skills only, no `.claude/commands/` shipped*
 - **D-024:** aps-rules.md split — *decided: `aps-rules.md` (APS-managed) + `project-context.md` (user-owned)*
 - **D-025:** designs/ and issues.md into plans/ — *decided: single planning content root*
+- **D-026:** Add release planning as an APS addon — *decided: yes, extract pattern from anvil-001 trial (`plans/releases/v0.3.0-beta.md`); see `release-planning.aps.md`*
+- **D-027:** Introduce conductor / crosscutting module type — *trialing. Release planning is the first use case; revisit after trial*
