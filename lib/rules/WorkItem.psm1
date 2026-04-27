@@ -39,7 +39,7 @@ function Test-W001IdFormat {
     }
 }
 
-# W003: Dependency references unknown task ID
+# W003: Dependency references unknown work item ID
 function Test-W003Dependencies {
     param([string]$File, [int]$ItemLine, [string[]]$AllIds)
     $content = Get-ApsWorkItemContent -FilePath $File -StartLine $ItemLine

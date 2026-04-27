@@ -1,8 +1,8 @@
 # Beta Module
 
-| ID | Owner | Status |
-|----|-------|--------|
-| BETA | @test | Ready |
+| ID   | Owner | Status |
+| ---- | ----- | ------ |
+| BETA | @test | Ready  |
 
 ## Purpose
 

@@ -1,12 +1,12 @@
 # Feature With Bad Task IDs
 
-| ID | Owner | Status |
-|----|-------|--------|
-| TEST | @test | Draft |
+| ID   | Owner | Status |
+| ---- | ----- | ------ |
+| TEST | @test | Draft  |
 
 ## Purpose
 
-Test detection of malformed task IDs.
+Test detection of malformed work item IDs.
 
 ## Work Items
 

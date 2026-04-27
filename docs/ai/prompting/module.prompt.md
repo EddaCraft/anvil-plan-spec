@@ -12,10 +12,10 @@ Name files with numeric prefix by dependency order: `01-core.aps.md`, `02-auth.a
 
 ## Objectives
 
-1) Define scope and boundaries precisely
-2) Define interfaces/contracts (inputs/outputs) where relevant
-3) Capture constraints, named patterns, and "must not" rules
-4) Draft tasks only if the module is "Ready"; otherwise list blockers
+1. Define scope and boundaries precisely
+2. Define interfaces/contracts (inputs/outputs) where relevant
+3. Capture constraints, named patterns, and "must not" rules
+4. Draft work items only if the module is "Ready"; otherwise list blockers
 
 ## Rules
 
@@ -34,13 +34,13 @@ Fill:
 - Acceptance criteria
 - Risks & mitigations
 - Open questions & decisions
-- Tasks:
-  - If Ready: 2-8 tasks maximum, each small and independently reviewable
-  - If Not Ready: "No tasks authorised" + list blockers
+- Work Items:
+  - If Ready: 2-8 work items maximum, each small and independently reviewable
+  - If Not Ready: "No work items authorised" + list blockers
 
-## Task drafting guidelines (if applicable)
+## Work item drafting guidelines (if applicable)
 
-Each task must include:
+Each work item must include:
 
 - Intent (one sentence)
 - Expected outcome (testable)

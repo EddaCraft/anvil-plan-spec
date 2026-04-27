@@ -1,8 +1,8 @@
 # Dup Module
 
-| ID | Owner | Status |
-|----|-------|--------|
-| DUP | @test | Ready |
+| ID  | Owner | Status |
+| --- | ----- | ------ |
+| DUP | @test | Ready  |
 
 ## Purpose
 

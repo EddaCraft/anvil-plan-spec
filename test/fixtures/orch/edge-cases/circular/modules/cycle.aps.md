@@ -1,8 +1,8 @@
 # Cycle Module
 
-| ID | Owner | Status |
-|----|-------|--------|
-| CYC | @test | Ready |
+| ID  | Owner | Status |
+| --- | ----- | ------ |
+| CYC | @test | Ready  |
 
 ## Purpose
 

@@ -1,8 +1,8 @@
 # Draft Module
 
-| ID | Owner | Status |
-|----|-------|--------|
-| DRAFT | @test | Draft |
+| ID    | Owner | Status |
+| ----- | ----- | ------ |
+| DRAFT | @test | Draft  |
 
 ## Purpose
 

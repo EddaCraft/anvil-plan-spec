@@ -1,8 +1,8 @@
 # Alpha Module
 
-| ID | Owner | Status |
-|----|-------|--------|
-| ALPHA | @test | Ready |
+| ID    | Owner | Status |
+| ----- | ----- | ------ |
+| ALPHA | @test | Ready  |
 
 ## Purpose
 

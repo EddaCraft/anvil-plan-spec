@@ -3,9 +3,9 @@
 
 # UI Module
 
-| Scope | Owner | Priority | Status |
-|-------|-------|----------|--------|
-| UI | @josh | high | Draft |
+| ID  | Owner | Priority | Status |
+| --- | ----- | -------- | ------ |
+| UI  | @josh | high     | Draft  |
 
 ## Purpose
 
@@ -47,16 +47,16 @@ Provide the visual interface for the companion app. Displays session history, co
 
 ## Risks & Mitigations
 
-| Risk | Mitigation |
-|------|------------|
-| Large session lists | Virtual scrolling |
+| Risk                           | Mitigation                        |
+| ------------------------------ | --------------------------------- |
+| Large session lists            | Virtual scrolling                 |
 | Tauri/React integration issues | Use official Tauri React template |
 
 ## Work Items
 
 > **Status: Draft** — Blocked on CORE module
 
-No tasks authorised. Blockers:
+No work items authorised. Blockers:
 
 - [ ] CORE-001 and CORE-002 must be complete
 - [ ] Design mockups needed

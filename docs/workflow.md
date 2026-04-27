@@ -14,12 +14,12 @@ Plan → Execute → Validate → Learn → Plan again
   └──────────────────────────────────────┘
 ```
 
-| Phase | What Happens | APS Artefacts | How It Serves Planning |
-|-------|--------------|---------------|------------------------|
-| **Plan** | Define scope and success | Designs, Index, Modules, Work Items | Reference past patterns and solutions |
-| **Execute** | Work against specs | Action Plans, status updates | Clean implementation from clear specs |
-| **Validate** | Check outcomes against spec | Review notes, checklist | Verify plan was correct, update if not |
-| **Learn** | Document solutions | Solution docs in `docs/solutions/` | Future plans start with known answers |
+| Phase        | What Happens                | APS Artefacts                       | How It Serves Planning                 |
+| ------------ | --------------------------- | ----------------------------------- | -------------------------------------- |
+| **Plan**     | Define scope and success    | Designs, Index, Modules, Work Items | Reference past patterns and solutions  |
+| **Execute**  | Work against specs          | Action Plans, status updates        | Clean implementation from clear specs  |
+| **Validate** | Check outcomes against spec | Review notes, checklist             | Verify plan was correct, update if not |
+| **Learn**    | Document solutions          | Solution docs in `docs/solutions/`  | Future plans start with known answers  |
 
 **The 80/20 principle:** Spend 80% of effort on planning and validation, 20% on
 execution. Thorough preparation means fast, clean implementation.
@@ -51,18 +51,21 @@ You've been asked to add user authentication to an existing app.
    # Add User Authentication
 
    ## Problem
+
    Users currently have no way to log in. All data is public.
 
    ## Success Criteria
+
    - [ ] Users can register and log in
    - [ ] Sessions persist across browser refresh
    - [ ] Password reset flow works
 
    ## Modules
-   | Module | Purpose | Status |
-   |--------|---------|--------|
-   | [auth](./modules/auth.aps.md) | Login, logout, registration | Draft |
-   | [session](./modules/session.aps.md) | Token management | Draft |
+
+   | Module                              | Purpose                     | Status |
+   | ----------------------------------- | --------------------------- | ------ |
+   | [auth](./modules/auth.aps.md)       | Login, logout, registration | Draft  |
+   | [session](./modules/session.aps.md) | Token management            | Draft  |
    ```
 
 4. **Draft the modules.** Create `auth.aps.md` with Purpose and Scope. Leave
@@ -77,6 +80,7 @@ You've been asked to add user authentication to an existing app.
    ## Work Items
 
    ### AUTH-001: Create registration endpoint
+
    - **Intent:** Allow new users to create accounts
    - **Expected Outcome:** POST /api/register creates user, returns token
    - **Validation:** curl test returns 201
@@ -94,6 +98,7 @@ You're halfway through AUTH-001 and realize you need database migrations.
 
    ```markdown
    ### AUTH-001: Create registration endpoint
+
    - **Status:** In Progress
    - **Blocked:** Needs AUTH-000 (db migration) first
    ```
@@ -102,16 +107,18 @@ You're halfway through AUTH-001 and realize you need database migrations.
 
    ```markdown
    ### AUTH-000: Add users table migration
+
    - **Intent:** Create database schema for users
    - **Expected Outcome:** users table exists with email, password_hash columns
    - **Validation:** `psql -c '\d users'` shows table
-   - **Status:** ✓ Complete
+   - **Status:** Complete
    ```
 
 2. **Handle blockers.** If you're blocked on something outside your control:
 
    ```markdown
    ### AUTH-002: Add OAuth login
+
    - **Status:** Blocked
    - **Blocked:** Waiting on Google API credentials from infra team
    ```
@@ -122,12 +129,12 @@ You're halfway through AUTH-001 and realize you need database migrations.
    ```markdown
    ### ISS-001: API rate limit lower than documented
 
-   | Field | Value |
-   |-------|-------|
-   | Status | Open |
-   | Severity | medium |
+   | Field      | Value    |
+   | ---------- | -------- |
+   | Status     | Open     |
+   | Severity   | medium   |
    | Discovered | AUTH-002 |
-   | Module | AUTH |
+   | Module     | AUTH     |
 
    **Context:** During OAuth testing, discovered the API rate-limits at 100 req/min, not 1000 as documented.
 
@@ -140,7 +147,7 @@ You're halfway through AUTH-001 and realize you need database migrations.
    - Remove status line = not started
    - `In Progress` = actively working
    - `Blocked` = waiting on something
-   - `✓ Complete` = done and validated
+   - `Complete` = done and validated
 
 ---
 
@@ -177,26 +184,26 @@ You've finished all work items in a module. Now what?
 2. **Mark module complete:**
 
    ```markdown
-   | ID | Owner | Status |
-   |----|-------|--------|
-   | AUTH | @you | Complete |
+   | ID   | Owner | Status   |
+   | ---- | ----- | -------- |
+   | AUTH | @you  | Complete |
    ```
 
 3. **Update the Index:**
 
    ```markdown
-   | Module | Purpose | Status |
-   |--------|---------|--------|
+   | Module                        | Purpose                     | Status   |
+   | ----------------------------- | --------------------------- | -------- |
    | [auth](./modules/auth.aps.md) | Login, logout, registration | Complete |
    ```
 
 4. **Decide on archival:**
 
-   | Approach | When to Use |
-   |----------|-------------|
-   | **Keep as-is** | Ongoing reference, may need updates |
+   | Approach             | When to Use                           |
+   | -------------------- | ------------------------------------- |
+   | **Keep as-is**       | Ongoing reference, may need updates   |
    | **Move to archive/** | Historical record, unlikely to change |
-   | **Delete** | Ephemeral work, no long-term value |
+   | **Delete**           | Ephemeral work, no long-term value    |
 
    Most teams keep specs indefinitely — they're lightweight and provide context
    for future work.
@@ -204,9 +211,9 @@ You've finished all work items in a module. Now what?
 5. **For completed initiatives.** When all modules are complete, update the Index:
 
    ```markdown
-   | Field | Value |
-   |-------|-------|
-   | Status | Complete |
+   | Field     | Value      |
+   | --------- | ---------- |
+   | Status    | Complete   |
    | Completed | 2025-01-15 |
    ```
 
@@ -216,6 +223,7 @@ You've finished all work items in a module. Now what?
    ## Notes
 
    Completed in 3 weeks. Key learnings:
+
    - OAuth took longer than expected due to credential delays
    - Session module was simpler than anticipated — could merge into auth next time
    ```
@@ -231,11 +239,11 @@ Update specs as you work, not after. Stale specs lose trust.
 Work Items describe **what**, not **how**. Implementation details belong in code
 and comments, not specs.
 
-### Use Steps sparingly
+### Use Action Plans Sparingly
 
-Most work items don't need a Action Plan file. Only create one when:
+Most work items don't need an Action Plan file. Only create one when:
 
-- Task has 5+ distinct actions
+- Work item has 5+ distinct actions
 - Multiple people might work on it
 - You want granular progress tracking
 
@@ -258,16 +266,19 @@ Before merging or deploying, verify:
 ## Review Checklist
 
 ### Functional
+
 - [ ] All work item validations pass
 - [ ] Edge cases handled
 - [ ] Error states covered
 
 ### Quality
+
 - [ ] Code follows existing patterns
 - [ ] Tests added for new functionality
 - [ ] No obvious security issues
 
 ### Documentation
+
 - [ ] Spec reflects what was built
 - [ ] README updated if needed
 - [ ] Comments explain non-obvious code
@@ -277,12 +288,12 @@ Before merging or deploying, verify:
 
 For complex changes, consider multiple review angles:
 
-| Perspective | Questions to Ask |
-|-------------|------------------|
-| **Developer** | Is this easy to understand and modify? |
-| **Operations** | How do I deploy and troubleshoot this? |
-| **End User** | Is the feature intuitive? Are errors helpful? |
-| **Security** | What's the attack surface? Is data protected? |
+| Perspective    | Questions to Ask                              |
+| -------------- | --------------------------------------------- |
+| **Developer**  | Is this easy to understand and modify?        |
+| **Operations** | How do I deploy and troubleshoot this?        |
+| **End User**   | Is the feature intuitive? Are errors helpful? |
+| **Security**   | What's the attack surface? Is data protected? |
 
 ### Review in Practice
 
@@ -304,12 +315,12 @@ For complex changes, consider multiple review angles:
    ```markdown
    ### ISS-002: Rate limiting needed on AUTH-002
 
-   | Field | Value |
-   |-------|-------|
-   | Status | Open |
-   | Severity | medium |
+   | Field      | Value       |
+   | ---------- | ----------- |
+   | Status     | Open        |
+   | Severity   | medium      |
    | Discovered | code review |
-   | Module | AUTH |
+   | Module     | AUTH        |
 
    **Context:** Review identified missing rate limiting on login endpoint.
 
@@ -321,12 +332,12 @@ For complex changes, consider multiple review angles:
    ```markdown
    ### Q-001: Should token expiry be configurable?
 
-   | Field | Value |
-   |-------|-------|
-   | Status | Open |
-   | Priority | low |
+   | Field      | Value       |
+   | ---------- | ----------- |
+   | Status     | Open        |
+   | Priority   | low         |
    | Discovered | code review |
-   | Assigned | @teamlead |
+   | Assigned   | @teamlead   |
 
    **Context:** Currently hardcoded to 1 hour. Some enterprise clients may need longer.
    ```
@@ -339,11 +350,11 @@ After solving problems, document solutions to inform future planning.
 
 ### Why Document Solutions?
 
-| First Occurrence | After Documenting |
-|------------------|-------------------|
-| 30+ minutes debugging | 2 minute lookup |
+| First Occurrence      | After Documenting       |
+| --------------------- | ----------------------- |
+| 30+ minutes debugging | 2 minute lookup         |
 | Research from scratch | Reference past solution |
-| Trial and error | Known working approach |
+| Trial and error       | Known working approach  |
 
 **Knowledge compounds.** Each documented solution makes future work faster.
 
@@ -386,6 +397,7 @@ docs/solutions/
 ## Symptom
 
 What you observed:
+
 - Error message (exact text)
 - Unexpected behavior
 - Performance issue
@@ -393,12 +405,14 @@ What you observed:
 ## Root Cause
 
 What was actually wrong:
+
 - Technical explanation
 - Why it happened
 
 ## Solution
 
 What fixed it:
+
 - Code changes
 - Configuration changes
 - Command to run
@@ -406,6 +420,7 @@ What fixed it:
 ## Prevention
 
 How to avoid in future:
+
 - Pattern to follow
 - Check to add
 - Test to write
@@ -456,11 +471,11 @@ grep -r "OAuth" docs/solutions/
 
 ### Knowledge Compounds
 
-| After 1 Month | After 6 Months | After 1 Year |
-|---------------|----------------|--------------|
-| 5-10 solutions | 30-50 solutions | 100+ solutions |
-| Occasional reference | Regular lookups | Comprehensive KB |
-| Individual knowledge | Team knowledge | Institutional knowledge |
+| After 1 Month        | After 6 Months  | After 1 Year            |
+| -------------------- | --------------- | ----------------------- |
+| 5-10 solutions       | 30-50 solutions | 100+ solutions          |
+| Occasional reference | Regular lookups | Comprehensive KB        |
+| Individual knowledge | Team knowledge  | Institutional knowledge |
 
 **Each solution documented makes future planning faster.** New team members
 ramp up faster. Recurring problems get solved in minutes. Plans start with

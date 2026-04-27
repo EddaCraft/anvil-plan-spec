@@ -14,7 +14,7 @@ $script:PlanFiles = @(
     "scaffold/plans/modules/.module.template.md"
     "scaffold/plans/modules/.simple.template.md"
     "scaffold/plans/modules/.index-monorepo.template.md"
-    "scaffold/plans/execution/.steps.template.md"
+    "scaffold/plans/execution/.actions.template.md"
 )
 
 # Files to download for the planning skill
@@ -349,7 +349,7 @@ function Invoke-ApsInit {
     Write-Host "  |   +-- .simple.template.md          <- Template for small features"
     Write-Host "  |   +-- .index-monorepo.template.md  <- Index for monorepos"
     Write-Host "  +-- execution/"
-    Write-Host "  |   +-- .steps.template.md           <- Template for steps"
+    Write-Host "  |   +-- .actions.template.md           <- Template for action plans"
     Write-Host "  +-- decisions/"
     Write-Host ""
     Write-Host "  aps-planning/"

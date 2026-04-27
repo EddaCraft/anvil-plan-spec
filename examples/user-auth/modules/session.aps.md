@@ -3,9 +3,9 @@
 
 # Session Module
 
-| Scope | Owner | Priority | Status |
-|-------|-------|----------|--------|
-| SESSION | @josh | high | Draft |
+| ID      | Owner | Priority | Status |
+| ------- | ----- | -------- | ------ |
+| SESSION | @josh | high     | Draft  |
 
 ## Purpose
 
@@ -49,16 +49,16 @@ Manage user sessions using JWT tokens. Issue access tokens on login, validate to
 
 ## Risks & Mitigations
 
-| Risk | Mitigation |
-|------|------------|
-| Token theft | Short access token expiry, httpOnly cookies |
-| Refresh token reuse | Rotate on each use, detect reuse |
+| Risk                | Mitigation                                  |
+| ------------------- | ------------------------------------------- |
+| Token theft         | Short access token expiry, httpOnly cookies |
+| Refresh token reuse | Rotate on each use, detect reuse            |
 
 ## Work Items
 
 > **Status: Draft** — Blocked on AUTH module completion
 
-No tasks authorised. Blockers:
+No work items authorised. Blockers:
 
 - [ ] AUTH-001 and AUTH-002 must be complete
 - [ ] Decision needed on refresh token storage schema

@@ -16,7 +16,7 @@ V2_PLAN_FILES=(
   "scaffold/plans/modules/.module.template.md"
   "scaffold/plans/modules/.simple.template.md"
   "scaffold/plans/modules/.index-monorepo.template.md"
-  "scaffold/plans/execution/.steps.template.md"
+  "scaffold/plans/execution/.actions.template.md"
 )
 
 # Skill files for .claude/skills/aps-planning/
@@ -79,7 +79,7 @@ PLAN_FILES=(
   "scaffold/plans/modules/.module.template.md"
   "scaffold/plans/modules/.simple.template.md"
   "scaffold/plans/modules/.index-monorepo.template.md"
-  "scaffold/plans/execution/.steps.template.md"
+  "scaffold/plans/execution/.actions.template.md"
 )
 
 SKILL_FILES=(

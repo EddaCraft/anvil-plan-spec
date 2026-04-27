@@ -5,7 +5,7 @@
 ## What This Skill Does
 
 This skill teaches you to use **APS (Anvil Plan Spec)** — a markdown-based
-planning format — as persistent memory for complex tasks. APS files live in
+planning format — as persistent memory for complex work. APS files live in
 `plans/` and survive context resets, session clears, and handoffs.
 
 **Core insight:** Your context window is RAM (volatile, limited). The filesystem
@@ -13,7 +13,7 @@ is disk (persistent, unlimited). Anything important gets written to APS files.
 
 ## Hard Rules
 
-1. **Plan before building.** Never start a complex task without an APS file.
+1. **Plan before building.** Never start complex work without an APS file.
    If `plans/` doesn't exist, create it. If no spec covers this work, create
    one before writing code.
 
@@ -162,7 +162,7 @@ For each work item:
 
 After completing work:
 
-- Mark work items complete: add `- **Status:** Complete` or checkmark
+- Mark work items complete: add `- **Status:** Complete`
 - Capture any new work discovered as Draft items
 - Update the module/index status if all items are done
 - Brief note on what completed and what's next

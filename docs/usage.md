@@ -31,28 +31,28 @@ Errors cause a non-zero exit code. Warnings are informational.
 
 #### Errors
 
-| Code | Scope | Description |
-|------|-------|-------------|
-| E001 | Module | Missing `## Purpose` section |
-| E002 | Module | Missing `## Work Items` section |
-| E003 | Module | Missing ID/Status metadata table |
-| E004 | Index | Missing `## Modules` section |
+| Code | Scope     | Description                                                                           |
+| ---- | --------- | ------------------------------------------------------------------------------------- |
+| E001 | Module    | Missing `## Purpose` section                                                          |
+| E002 | Module    | Missing `## Work Items` section                                                       |
+| E003 | Module    | Missing ID/Status metadata table                                                      |
+| E004 | Index     | Missing `## Modules` section                                                          |
 | E005 | Work Item | Missing required field (`**Intent:**`, `**Expected Outcome:**`, or `**Validation:**`) |
-| E010 | Issues | Missing `## Issues` section |
-| E011 | Issues | Missing `## Questions` section |
+| E010 | Issues    | Missing `## Issues` section                                                           |
+| E011 | Issues    | Missing `## Questions` section                                                        |
 
 #### Warnings
 
-| Code | Scope | Description |
-|------|-------|-------------|
-| W001 | Work Item | ID does not match `PREFIX-NNN` pattern (e.g., `AUTH-001`) |
-| W003 | Work Item | Dependency references a task ID not found in the same file |
+| Code | Scope          | Description                                                                                                             |
+| ---- | -------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| W001 | Work Item      | ID does not match `PREFIX-NNN` pattern (e.g., `AUTH-001`)                                                               |
+| W003 | Work Item      | Dependency references a work item ID not found in the same file                                                         |
 | W004 | Module / Index | Section exists but is empty (`## Purpose`, `## In Scope`, `## Overview`, `## Problem & Success Criteria`, `## Modules`) |
-| W005 | Module | Status is `Ready` but no work items are defined |
-| W010 | Issues | Issue entry missing `Status`, `Discovered`, or `Severity` field |
-| W011 | Issues | Question entry missing `Status`, `Discovered`, or `Priority` field |
-| W012 | Issues | Issue ID does not match `ISS-NNN` format or uses wrong casing |
-| W013 | Issues | Question ID does not match `Q-NNN` format or uses wrong casing |
+| W005 | Module         | Status is `Ready` but no work items are defined                                                                         |
+| W010 | Issues         | Issue entry missing `Status`, `Discovered`, or `Severity` field                                                         |
+| W011 | Issues         | Question entry missing `Status`, `Discovered`, or `Priority` field                                                      |
+| W012 | Issues         | Issue ID does not match `ISS-NNN` format or uses wrong casing                                                           |
+| W013 | Issues         | Question ID does not match `Q-NNN` format or uses wrong casing                                                          |
 
 ### JSON Output
 
@@ -104,12 +104,12 @@ name: Lint APS Documents
 on:
   push:
     paths:
-      - 'plans/**/*.aps.md'
-      - 'plans/**/*.actions.md'
+      - "plans/**/*.aps.md"
+      - "plans/**/*.actions.md"
   pull_request:
     paths:
-      - 'plans/**/*.aps.md'
-      - 'plans/**/*.actions.md'
+      - "plans/**/*.aps.md"
+      - "plans/**/*.actions.md"
 
 jobs:
   lint:
