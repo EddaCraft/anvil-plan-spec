@@ -145,3 +145,6 @@ aps-planning/
 .claude/commands/
 .claude/settings.local.json
 .claude/.aps-session-baseline
+
+# Local git worktrees
+.worktrees/
