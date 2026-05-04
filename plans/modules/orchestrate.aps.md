@@ -206,6 +206,7 @@ A rich agent definition (like BMAD's BMad Master) that:
   statuses and cross-module dependencies
 - **Confidence:** high
 - **Dependencies:** VAL (parser)
+- **Status:** In Progress
 
 ### ORCH-002: Implement `aps start` and `aps complete`
 

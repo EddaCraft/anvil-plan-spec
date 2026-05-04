@@ -8,6 +8,7 @@
 #   aps migrate [dir]     Convert v1 layout to v2
 #   aps lint [file|dir]   Validate APS documents (default: plans/)
 #   aps lint --json       Output as JSON
+#   aps next [module]     Show the next ready work item
 #   aps --help            Show this help
 #
 
@@ -33,6 +34,7 @@ source "$LIB_DIR/rules/issues.sh"
 source "$LIB_DIR/rules/design.sh"
 source "$LIB_DIR/lint.sh"
 source "$LIB_DIR/scaffold.sh"
+source "$LIB_DIR/orchestrate.sh"
 
 show_help() {
   cat <<EOF
@@ -44,6 +46,7 @@ Usage:
   aps migrate [dir]     Convert v1 layout to v2 (.aps/ consolidation)
   aps lint [file|dir]   Validate APS documents
   aps lint --json       Output results as JSON
+  aps next [module]     Show the next ready work item
   aps --help            Show this help
 
 Options:
@@ -62,6 +65,8 @@ Examples:
   aps lint                    # Lint plans/ directory
   aps lint plans/index.aps.md # Lint specific file
   aps lint . --json           # Lint current dir, JSON output
+  aps next                    # Show next ready item in plans/
+  aps next auth               # Show next ready item in auth module
 EOF
 }
 
@@ -84,6 +89,10 @@ main() {
     lint)
       shift
       cmd_lint "$@"
+      ;;
+    next)
+      shift
+      cmd_next "$@"
       ;;
     --help|-h|help|"")
       show_help
