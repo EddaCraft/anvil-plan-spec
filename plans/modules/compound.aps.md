@@ -97,6 +97,8 @@ learnings into a navigable corpus.
 - **Confidence:** high
 - **Files:** templates/solution.template.md, docs/workflow.md,
   docs/solutions/, plans/decisions/
+- **Status:** Complete: 2026-05-15 — solution template already existed;
+  Learn Phase docs now reference it and proof-of-concept solution doc added
 
 ### COMPOUND-002: Completed-work archive pattern
 
