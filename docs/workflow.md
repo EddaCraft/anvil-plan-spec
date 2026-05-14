@@ -388,44 +388,13 @@ docs/solutions/
     └── migration-column-order-issue.md
 ```
 
-### Solution Template
+Use [the solution template](../templates/solution.template.md) for the common
+shape: Symptom, Investigation, Root Cause, Solution, Prevention, Related, and
+Metadata.
 
-```markdown
-# [Brief Problem Description]
-
-## Symptom
-
-What you observed:
-- Error message (exact text)
-- Unexpected behavior
-- Performance issue
-
-## Root Cause
-
-What was actually wrong:
-- Technical explanation
-- Why it happened
-
-## Solution
-
-What fixed it:
-- Code changes
-- Configuration changes
-- Command to run
-
-## Prevention
-
-How to avoid in future:
-- Pattern to follow
-- Check to add
-- Test to write
-
-## Related
-
-- Work item: AUTH-001
-- PR: #123
-- Similar issue: [link to other solution]
-```
+Use a solution doc when the lesson is reusable across future work. Use an ADR
+in `plans/decisions/` when the important artifact is a one-off project decision.
+Cross-link both when a decision also produced a reusable implementation pattern.
 
 ### Learn Workflow in Practice
 
@@ -435,10 +404,13 @@ How to avoid in future:
 2. **Capture while fresh.** Context fades quickly. Document now, not later.
 
    ```bash
-   # Create solution doc
    mkdir -p docs/solutions/performance
-   # Write solution using the template
+   cp templates/solution.template.md docs/solutions/performance/n-plus-one-query.md
    ```
+
+   Inline learnings from `aps complete --learning "..."` are a good seed for a
+   solution doc. Expand the one-line learning into the root cause, durable fix,
+   and prevention checklist while the context is still fresh.
 
 3. **Cross-reference.** Link to related work items, PRs, and similar issues.
 
@@ -454,8 +426,8 @@ Over time, your `docs/solutions/` becomes a searchable knowledge base:
 
 ```bash
 # Find past solutions
-grep -r "timeout" docs/solutions/
-grep -r "OAuth" docs/solutions/
+rg "timeout" docs/solutions/
+rg "OAuth" docs/solutions/
 ```
 
 **Patterns emerge.** After documenting 3+ similar issues, consider:
