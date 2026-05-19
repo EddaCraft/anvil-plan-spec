@@ -23,12 +23,6 @@ $script:SkillFiles = @(
     "scaffold/aps-planning/reference.md"
     "scaffold/aps-planning/examples.md"
     "scaffold/aps-planning/hooks.md"
-    "scaffold/aps-planning/scripts/install-hooks.sh"
-    "scaffold/aps-planning/scripts/init-session.sh"
-    "scaffold/aps-planning/scripts/check-complete.sh"
-    "scaffold/aps-planning/scripts/pre-tool-check.sh"
-    "scaffold/aps-planning/scripts/post-tool-nudge.sh"
-    "scaffold/aps-planning/scripts/enforce-plan-update.sh"
     "scaffold/aps-planning/scripts/install-hooks.ps1"
     "scaffold/aps-planning/scripts/init-session.ps1"
     "scaffold/aps-planning/scripts/check-complete.ps1"
@@ -41,21 +35,6 @@ $script:SkillFiles = @(
 $script:CommandFiles = @(
     "scaffold/commands/plan.md"
     "scaffold/commands/plan-status.md"
-)
-
-# CLI files — bash (bin/ and lib/)
-$script:CliFilesBash = @(
-    "bin/aps"
-    "lib/output.sh"
-    "lib/lint.sh"
-    "lib/orchestrate.sh"
-    "lib/scaffold.sh"
-    "lib/rules/common.sh"
-    "lib/rules/module.sh"
-    "lib/rules/index.sh"
-    "lib/rules/workitem.sh"
-    "lib/rules/issues.sh"
-    "lib/rules/design.sh"
 )
 
 # CLI files — PowerShell (bin/ and lib/)
@@ -224,12 +203,9 @@ function Install-ApsCommands {
 function Install-ApsCli {
     <#
     .SYNOPSIS
-        Download CLI files (both bash and PowerShell) to the target directory.
+        Download CLI files (PowerShell runtime) to the target directory.
     #>
     param([string]$Target)
-    foreach ($f in $script:CliFilesBash) {
-        Invoke-ApsDownloadRoot -Source $f -Destination (Join-Path $Target $f)
-    }
     foreach ($f in $script:CliFilesPowerShell) {
         Invoke-ApsDownloadRoot -Source $f -Destination (Join-Path $Target $f)
     }
@@ -327,9 +303,9 @@ function Invoke-ApsInit {
     Write-ApsInfo "Initialising APS in $target"
     Write-Host ""
 
-    # CLI (bin/aps + lib/)
+    # CLI (bin/aps.ps1 + lib/)
     Install-ApsCli -Target $target
-    Write-ApsInfo "bin/aps + lib/ (CLI)"
+    Write-ApsInfo "bin/aps.ps1 + lib/ (CLI)"
 
     # Templates and rules
     Install-ApsPlans -Target $target
@@ -346,7 +322,7 @@ function Invoke-ApsInit {
 
     Write-Host ""
     Write-Host "  bin/"
-    Write-Host "  +-- aps                              <- CLI (lint, init, update)"
+    Write-Host "  +-- aps.ps1                          <- CLI (lint, init, update)"
     Write-Host ""
     Write-Host "  plans/"
     Write-Host "  +-- aps-rules.md                     <- Agent guidance (READ THIS)"
@@ -448,7 +424,7 @@ function Invoke-ApsUpdate {
 
     # CLI (always update -- this is how users get new features)
     Install-ApsCli -Target $target
-    Write-ApsInfo "bin/aps + lib/ (CLI)"
+    Write-ApsInfo "bin/aps.ps1 + lib/ (CLI)"
 
     # Templates and rules (preserves user specs)
     Install-ApsPlans -Target $target
@@ -497,16 +473,13 @@ function Update-ApsGlobal {
     Write-ApsInfo "Updating global APS CLI at $ApsHome"
     Write-Host ""
 
-    foreach ($f in $script:CliFilesBash) {
-        Invoke-ApsDownloadRoot -Source $f -Destination (Join-Path $ApsHome $f)
-    }
     foreach ($f in $script:CliFilesPowerShell) {
         Invoke-ApsDownloadRoot -Source $f -Destination (Join-Path $ApsHome $f)
     }
 
     Write-Host ""
     Write-ApsInfo "Global update complete"
-    Write-ApsInfo "bin/aps + lib/ updated at $ApsHome"
+    Write-ApsInfo "bin/aps.ps1 + lib/ updated at $ApsHome"
     Write-Host ""
 }
 

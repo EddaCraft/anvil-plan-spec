@@ -34,37 +34,21 @@ V2_SCRIPT_FILES=(
   "aps-planning/scripts/pre-tool-check.sh"
   "aps-planning/scripts/post-tool-nudge.sh"
   "aps-planning/scripts/enforce-plan-update.sh"
-  "aps-planning/scripts/install-hooks.ps1"
-  "aps-planning/scripts/init-session.ps1"
-  "aps-planning/scripts/check-complete.ps1"
-  "aps-planning/scripts/pre-tool-check.ps1"
-  "aps-planning/scripts/post-tool-nudge.ps1"
-  "aps-planning/scripts/enforce-plan-update.ps1"
 )
 
-# CLI files for .aps/bin/ and .aps/lib/
+# CLI files for .aps/bin/ and .aps/lib/ (bash runtime)
 V2_CLI_FILES=(
   "bin/aps"
-  "bin/aps.ps1"
   "lib/output.sh"
-  "lib/Output.psm1"
   "lib/lint.sh"
-  "lib/Lint.psm1"
   "lib/orchestrate.sh"
   "lib/scaffold.sh"
-  "lib/Scaffold.psm1"
   "lib/rules/common.sh"
-  "lib/rules/Common.psm1"
   "lib/rules/module.sh"
-  "lib/rules/Module.psm1"
   "lib/rules/index.sh"
-  "lib/rules/Index.psm1"
   "lib/rules/workitem.sh"
-  "lib/rules/WorkItem.psm1"
   "lib/rules/issues.sh"
-  "lib/rules/Issues.psm1"
   "lib/rules/design.sh"
-  "lib/rules/Design.psm1"
 )
 
 # Agent files (Claude Code)
@@ -95,12 +79,6 @@ SKILL_FILES=(
   "scaffold/aps-planning/scripts/pre-tool-check.sh"
   "scaffold/aps-planning/scripts/post-tool-nudge.sh"
   "scaffold/aps-planning/scripts/enforce-plan-update.sh"
-  "scaffold/aps-planning/scripts/install-hooks.ps1"
-  "scaffold/aps-planning/scripts/init-session.ps1"
-  "scaffold/aps-planning/scripts/check-complete.ps1"
-  "scaffold/aps-planning/scripts/pre-tool-check.ps1"
-  "scaffold/aps-planning/scripts/post-tool-nudge.ps1"
-  "scaffold/aps-planning/scripts/enforce-plan-update.ps1"
 )
 
 COMMAND_FILES=(
@@ -110,26 +88,16 @@ COMMAND_FILES=(
 
 CLI_FILES=(
   "bin/aps"
-  "bin/aps.ps1"
   "lib/output.sh"
-  "lib/Output.psm1"
   "lib/lint.sh"
-  "lib/Lint.psm1"
   "lib/orchestrate.sh"
   "lib/scaffold.sh"
-  "lib/Scaffold.psm1"
   "lib/rules/common.sh"
-  "lib/rules/Common.psm1"
   "lib/rules/module.sh"
-  "lib/rules/Module.psm1"
   "lib/rules/index.sh"
-  "lib/rules/Index.psm1"
   "lib/rules/workitem.sh"
-  "lib/rules/WorkItem.psm1"
   "lib/rules/issues.sh"
-  "lib/rules/Issues.psm1"
   "lib/rules/design.sh"
-  "lib/rules/Design.psm1"
 )
 
 # Canonical tool identifiers

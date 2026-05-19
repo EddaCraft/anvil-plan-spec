@@ -167,23 +167,23 @@ function Install-ApsGlobal {
     Write-Step "Installing APS CLI to $ApsHome"
 
     $cliAll = @(
-        "bin/aps", "bin/aps.ps1",
-        "lib/output.sh", "lib/Output.psm1",
-        "lib/lint.sh", "lib/Lint.psm1",
-        "lib/orchestrate.sh",
-        "lib/scaffold.sh", "lib/Scaffold.psm1",
-        "lib/rules/common.sh", "lib/rules/Common.psm1",
-        "lib/rules/module.sh", "lib/rules/Module.psm1",
-        "lib/rules/index.sh", "lib/rules/Index.psm1",
-        "lib/rules/workitem.sh", "lib/rules/WorkItem.psm1",
-        "lib/rules/issues.sh", "lib/rules/Issues.psm1"
+        "bin/aps.ps1",
+        "lib/Output.psm1",
+        "lib/Lint.psm1",
+        "lib/Scaffold.psm1",
+        "lib/rules/Common.psm1",
+        "lib/rules/Module.psm1",
+        "lib/rules/Index.psm1",
+        "lib/rules/WorkItem.psm1",
+        "lib/rules/Issues.psm1",
+        "lib/rules/Design.psm1"
     )
 
     foreach ($f in $cliAll) {
         Invoke-DownloadRoot -Path $f -Destination (Join-Path $ApsHome $f)
     }
 
-    Write-Info "bin/aps + bin/aps.ps1 + lib/ installed to $ApsHome"
+    Write-Info "bin/aps.ps1 + lib/ installed to $ApsHome"
 
     Set-ApsGlobalPath -ApsHome $ApsHome
 
@@ -191,7 +191,6 @@ function Install-ApsGlobal {
     Write-Step "Global installation complete"
     Write-Host ""
     Write-Host "  $ApsHome\"
-    Write-Host "  +-- bin\aps          <- CLI (bash/WSL)"
     Write-Host "  +-- bin\aps.ps1      <- CLI (PowerShell)"
     Write-Host "  +-- lib\             <- CLI libraries"
     Write-Host ""
@@ -228,23 +227,9 @@ if (Test-Path -LiteralPath $PlansDir -PathType Container) {
     exit 1
 }
 
-# --- Install CLI (bash + PowerShell) ---
+# --- Install CLI (PowerShell) ---
 
 Write-Step "Installing APS CLI"
-
-$cliFilesBash = @(
-    "bin/aps"
-    "lib/output.sh"
-    "lib/lint.sh"
-    "lib/orchestrate.sh"
-    "lib/scaffold.sh"
-    "lib/rules/common.sh"
-    "lib/rules/module.sh"
-    "lib/rules/index.sh"
-    "lib/rules/workitem.sh"
-    "lib/rules/issues.sh"
-    "lib/rules/design.sh"
-)
 
 $cliFilesPowerShell = @(
     "bin/aps.ps1"
@@ -259,14 +244,11 @@ $cliFilesPowerShell = @(
     "lib/rules/Design.psm1"
 )
 
-foreach ($f in $cliFilesBash) {
-    Invoke-DownloadRoot -Path $f -Destination (Join-Path $Target $f)
-}
 foreach ($f in $cliFilesPowerShell) {
     Invoke-DownloadRoot -Path $f -Destination (Join-Path $Target $f)
 }
 
-Write-Info "bin/aps + bin/aps.ps1 + lib/ (CLI)"
+Write-Info "bin/aps.ps1 + lib/ (CLI)"
 
 # --- Create directory structure ---
 
@@ -311,20 +293,11 @@ Write-Step "Installing APS planning skill"
 $SkillDir    = Join-Path $Target "aps-planning"
 $CommandsDir = Join-Path (Join-Path $Target ".claude") "commands"
 
-$skillFilesBash = @(
+$skillFilesPowerShell = @(
     "aps-planning/SKILL.md"
     "aps-planning/reference.md"
     "aps-planning/examples.md"
     "aps-planning/hooks.md"
-    "aps-planning/scripts/install-hooks.sh"
-    "aps-planning/scripts/init-session.sh"
-    "aps-planning/scripts/check-complete.sh"
-    "aps-planning/scripts/pre-tool-check.sh"
-    "aps-planning/scripts/post-tool-nudge.sh"
-    "aps-planning/scripts/enforce-plan-update.sh"
-)
-
-$skillFilesPowerShell = @(
     "aps-planning/scripts/install-hooks.ps1"
     "aps-planning/scripts/init-session.ps1"
     "aps-planning/scripts/check-complete.ps1"
@@ -333,9 +306,6 @@ $skillFilesPowerShell = @(
     "aps-planning/scripts/enforce-plan-update.ps1"
 )
 
-foreach ($f in $skillFilesBash) {
-    Invoke-Download -Path $f -Destination (Join-Path $Target $f)
-}
 foreach ($f in $skillFilesPowerShell) {
     Invoke-Download -Path $f -Destination (Join-Path $Target $f)
 }
@@ -354,7 +324,6 @@ Write-Host ""
 Write-Step "Installation complete"
 Write-Host ""
 Write-Host "  bin/"
-Write-Host "  +-- aps                              <- CLI (bash)"
 Write-Host "  +-- aps.ps1                          <- CLI (PowerShell)"
 Write-Host ""
 Write-Host "  designs/"
